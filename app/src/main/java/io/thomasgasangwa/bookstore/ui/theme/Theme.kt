@@ -78,6 +78,7 @@ import com.example.compose.tertiaryContainerLight
 import com.example.compose.tertiaryDark
 import com.example.compose.tertiaryLight
 import io.thomasgasangwa.bookstore.ui.theme.Shapes
+import io.thomasgasangwa.bookstore.ui.theme.Typography
 
 private val lightScheme = lightColorScheme(
     primary = primaryLight,

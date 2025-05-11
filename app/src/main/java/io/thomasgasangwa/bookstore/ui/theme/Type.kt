@@ -1,3 +1,4 @@
+package io.thomasgasangwa.bookstore.ui.theme
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -12,7 +13,7 @@ val Barlow = FontFamily(
     Font(R.font.Barlow_ExtraBold),
 )
 
-val Poppin = FontFamily(
+val Poppins = FontFamily(
     Font(R.font.Poppins_ExtraLight),
     Font(R.font.Poppins_Light),
 )
@@ -31,12 +32,12 @@ val Typography = Typography(
         fontSize = 16.sp
     ),
     labelMedium = TextStyle(
-        fontFamily = Poppin,
+        fontFamily = Poppins,
         fontWeight = FontWeight.Light,
         fontSize = 14.sp
     ),
     labelSmall = TextStyle(
-        fontFamily = Poppin,
+        fontFamily = Poppins,
         fontWeight = FontWeight.ExtraLight,
         fontSize = 12.sp
     )
