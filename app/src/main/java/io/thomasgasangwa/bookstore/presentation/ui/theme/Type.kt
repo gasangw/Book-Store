@@ -9,13 +9,13 @@ import io.thomasgasangwa.bookstore.R
 
 
 val Barlow = FontFamily(
-    Font(R.font.Barlow_Regular),
-    Font(R.font.Barlow_ExtraBold),
+    Font(R.font.barlow_regular),
+    Font(R.font.barlow_extrabold),
 )
 
 val Poppins = FontFamily(
-    Font(R.font.Poppins_ExtraLight),
-    Font(R.font.Poppins_Light),
+    Font(R.font.poppins_extralight),
+    Font(R.font.poppins_light),
 )
 
 
