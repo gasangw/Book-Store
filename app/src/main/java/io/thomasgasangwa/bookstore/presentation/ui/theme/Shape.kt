@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookstore.ui.theme
+package io.thomasgasangwa.bookstore.presentation.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Shapes
