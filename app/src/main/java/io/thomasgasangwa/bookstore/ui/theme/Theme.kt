@@ -173,7 +173,7 @@ fun BookStoreTheme(
 
   MaterialTheme(
     colorScheme = colorScheme,
-    typography = ,
+    typography = Typography,
       shapes = Shapes,
     content = content
   )
