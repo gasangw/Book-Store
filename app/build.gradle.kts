@@ -63,6 +63,9 @@ dependencies {
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.retrofit)
+    implementation(libs.javax.inject)
+    implementation(project.dependencies.platform(libs.koin.bom))
+    implementation(libs.koin.core)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
