@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookstore.presentation.components
+package io.thomasgasangwa.bookstore.presentation.view.components
 
 import BookStoreTheme
 import androidx.annotation.DrawableRes

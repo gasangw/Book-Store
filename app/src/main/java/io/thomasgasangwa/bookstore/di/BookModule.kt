@@ -1,28 +1,40 @@
 package io.thomasgasangwa.bookstore.di
 
-import io.thomasgasangwa.bookstore.common.Constants.BASE_URL
-import io.thomasgasangwa.bookstore.data.remote.BooksApi
+import androidx.room.Room
+import io.thomasgasangwa.bookstore.data.local.dao.BookDao
+import io.thomasgasangwa.bookstore.data.local.database.BookDatabase
 import io.thomasgasangwa.bookstore.data.repository.BookRepositoryImpl
-import io.thomasgasangwa.bookstore.domain.repository.BookRespository
-import io.thomasgasangwa.bookstore.domain.use_case.get_books.GetBooksUseCase
-import io.thomasgasangwa.bookstore.presentation.book_list.BookListViewModel
+import io.thomasgasangwa.bookstore.data.repository.BookRepository
+//import io.thomasgasangwa.bookstore.domain.use_case.get_books.GetBooksUseCase
+import io.thomasgasangwa.bookstore.presentation.viewmodel.BookListViewModel.BookListViewModel
+import org.koin.android.ext.koin.androidContext
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+//import retrofit2.Retrofit
+//import retrofit2.converter.gson.GsonConverterFactory
 
 val bookModule = module {
+
+//    single {
+//        Retrofit.Builder()
+//            .addConverterFactory(GsonConverterFactory.create())
+//            .baseUrl(BASE_URL)
+//            .build()
+//            .create(BooksApi::class.java)
+//    }
+
     single {
-        Retrofit.Builder()
-            .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(BASE_URL)
-            .build()
-            .create(BooksApi::class.java)
+        Room.databaseBuilder(
+            androidContext(),
+            BookDatabase::class.java,
+            "book_database"
+        ).fallbackToDestructiveMigrationOnDowngrade(true).build()
     }
 
-    single<BookRespository> { BookRepositoryImpl(get()) }
+    single<BookDao> { get<BookDatabase>().bookDao() }
 
-    single { GetBooksUseCase(get()) }
+    single<BookRepository> { BookRepositoryImpl(get()) }
+
 
      viewModel { BookListViewModel(get()) }
 }

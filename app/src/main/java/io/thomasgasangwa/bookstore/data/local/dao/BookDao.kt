@@ -6,7 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
-import io.thomasgasangwa.bookstore.data.local.entity.Book
+import io.thomasgasangwa.bookstore.data.model.Book
 import kotlinx.coroutines.flow.Flow
 
 @Dao

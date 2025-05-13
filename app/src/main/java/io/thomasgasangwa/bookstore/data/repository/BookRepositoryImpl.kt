@@ -1,8 +1,7 @@
 package io.thomasgasangwa.bookstore.data.repository
 
 import io.thomasgasangwa.bookstore.data.local.dao.BookDao
-import io.thomasgasangwa.bookstore.data.local.entity.Book
-import io.thomasgasangwa.bookstore.domain.repository.BookRepository
+import io.thomasgasangwa.bookstore.data.model.Book
 import kotlinx.coroutines.flow.Flow
 
 class BookRepositoryImpl (
