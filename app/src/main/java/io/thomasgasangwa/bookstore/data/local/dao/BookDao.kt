@@ -21,9 +21,8 @@ interface BookDao {
    suspend fun update(book: Book)
 
    @Query("SELECT * FROM books")
-   suspend fun getAllBooks(): List<Book>
+    fun getAllBooks(): List<Book>
 
    @Query("SELECT * FROM books WHERE id = :id")
-   suspend fun getBookById(id: Int): Book?
-
+    fun getBookById(id: Int): Book
 }
