@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import io.thomasgasangwa.bookstore.data.local.entity.Book
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface BookDao {
@@ -21,8 +22,8 @@ interface BookDao {
    suspend fun update(book: Book)
 
    @Query("SELECT * FROM books")
-    fun getAllBooks(): List<Book>
+    fun getAllBooks(): Flow<List<Book>>
 
    @Query("SELECT * FROM books WHERE id = :id")
-    fun getBookById(id: Int): Book
+    fun getBookById(id: Int): Flow<Book>
 }

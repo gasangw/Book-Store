@@ -9,7 +9,6 @@ class GetBooksUseCase (
     private val repository: BookRespository
 ) {
 
-
     suspend operator fun invoke(): Result<List<Book>, Exception> {
         return try {
             val books: List<Book> = repository.getAllBooks().map { it.toBook() }
