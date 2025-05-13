@@ -5,4 +5,3 @@ sealed interface Result<out D, out E: Exception> {
     data class Error<out E: Exception>(val error: E):
         Result<Nothing, E>
 }
-

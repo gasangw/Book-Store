@@ -21,15 +21,16 @@ val Poppins = FontFamily(
 
 
 val Typography = Typography(
-   displayLarge = TextStyle(
-       fontFamily = Barlow,
-       fontWeight = FontWeight.ExtraBold,
-       fontSize = 38.sp
-   ),
+
+    titleLarge = TextStyle(
+        fontFamily = Barlow,
+        fontWeight = FontWeight.ExtraBold,
+        fontSize = 28.sp
+    ),
     displayMedium = TextStyle(
         fontFamily = Barlow,
         fontWeight = FontWeight.Normal,
-        fontSize = 25.sp
+        fontSize = 20.sp
     ),
     labelMedium = TextStyle(
         fontFamily = Poppins,

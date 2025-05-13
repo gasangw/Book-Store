@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Book Store</string>
+    <string name="edit">edit</string>
+    <string name="delete">Delete</string>
 </resources>

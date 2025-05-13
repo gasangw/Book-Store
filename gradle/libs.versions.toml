@@ -16,6 +16,7 @@ converter-gson = "2.11.0"
 kotlinx-coroutines = "1.10.2"
 room = "2.7.1"
 ksp = "2.1.20-2.0.1"
+coil3 = "3.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -44,6 +45,9 @@ kotlinx-coroutines-core = { group = "org.jetbrains.kotlinx", name = "kotlinx-cor
 room-runtime  = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+coil-mp = { module = "io.coil-kt.coil3:coil", version.ref = "coil3" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil3" }
+coil-compose-core = { module = "io.coil-kt.coil3:coil-compose-core", version.ref = "coil3" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
