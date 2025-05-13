@@ -24,12 +24,12 @@ val Typography = Typography(
    displayLarge = TextStyle(
        fontFamily = Barlow,
        fontWeight = FontWeight.ExtraBold,
-       fontSize = 36.sp
+       fontSize = 38.sp
    ),
     displayMedium = TextStyle(
         fontFamily = Barlow,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontSize = 25.sp
     ),
     labelMedium = TextStyle(
         fontFamily = Poppins,

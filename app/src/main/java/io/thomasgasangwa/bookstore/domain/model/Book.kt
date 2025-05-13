@@ -1,6 +1,5 @@
 package io.thomasgasangwa.bookstore.domain.model
 
-import kotlinx.serialization.SerialName
 
 data class Book(
     val author: String,
