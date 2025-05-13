@@ -1,13 +1,16 @@
 package io.thomasgasangwa.bookstore.data.repository
 
-import io.thomasgasangwa.bookstore.data.remote.BooksApi
-import io.thomasgasangwa.bookstore.data.remote.dto.BookDto
-import io.thomasgasangwa.bookstore.domain.repository.BookRespository
+import io.thomasgasangwa.bookstore.data.local.dao.BookDao
+import io.thomasgasangwa.bookstore.data.local.entity.Book
+import io.thomasgasangwa.bookstore.domain.repository.BookRepository
+import kotlinx.coroutines.flow.Flow
 
 class BookRepositoryImpl (
-    private val api: BooksApi
-):  BookRespository{
-    override suspend fun getAllBooks(): List<BookDto> {
-        return api.getAllBooks()
-    }
+    private val itemDao: BookDao
+):  BookRepository {
+    override fun getAllBooksStream(): Flow<List<Book>> = itemDao.getAllBooks()
+    override fun getBookStream(id: Int): Flow<Book> = itemDao.getBookById(id)
+    override suspend fun insertBook(book: Book) = itemDao.insert(book)
+    override suspend fun deleteBook(book: Book) = itemDao.delete(book)
+    override suspend fun updateBook(book: Book) = itemDao.update(book)
 }
