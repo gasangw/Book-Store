@@ -1,6 +1,7 @@
-package io.thomasgasangwa.bookstore.data.repository
+package io.thomasgasangwa.bookstore.domain.repository
 
-import io.thomasgasangwa.bookstore.data.local.entity.Book
+import io.thomasgasangwa.bookstore.common.Resource
+import io.thomasgasangwa.bookstore.domain.model.Book
 import kotlinx.coroutines.flow.Flow
 
 interface BookRepository {
@@ -8,5 +9,5 @@ interface BookRepository {
      fun getBookStream(id: Int): Flow<Book>
      suspend fun insertBook(book: Book)
      suspend fun updateBook(book: Book)
-     suspend fun deleteBook(book: Book)
+     suspend fun deleteBookById(id: Int)
 }

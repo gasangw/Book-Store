@@ -2,4 +2,6 @@
     <string name="app_name">Book Store</string>
     <string name="edit">edit</string>
     <string name="delete">Delete</string>
+    <string name="booklistscreen_title">Book Store</string>
+    <string name="no_books_found">No books found</string>
 </resources>

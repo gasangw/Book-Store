@@ -13,7 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import io.thomasgasangwa.bookstore.presentation.view.book_list.BookListScreen
+import io.thomasgasangwa.bookstore.presentation.book_list.BookListScreen
 
 class MainActivity : ComponentActivity() {
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
@@ -23,7 +23,8 @@ class MainActivity : ComponentActivity() {
         setContent {
             BookStoreTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    BookListScreen(modifier = Modifier.padding(innerPadding))
+                    BookListScreen(modifier = Modifier.padding(innerPadding)
+                    )
                 }
             }
         }

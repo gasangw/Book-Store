@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookstore.presentation.view.components
+package io.thomasgasangwa.bookstore.presentation.book_list.components
 
 import BookStoreTheme
 import androidx.compose.foundation.layout.Box
@@ -27,16 +27,16 @@ import io.thomasgasangwa.bookstore.domain.model.Book
 @Composable
 fun BookCard(
     modifier: Modifier = Modifier,
-    book: Book
-
+    title: String,
+    bookCoverUrl: String
 ) {
     Card(modifier = modifier, shape = MaterialTheme.shapes.large){
         BookCardCoverImage(
             modifier = Modifier.fillMaxWidth().aspectRatio(ratio = 2f),
-            bookCoverUrl = book.bookCoverUrl
+            bookCoverUrl = bookCoverUrl
         )
         Text(
-            text = book.title,
+            text = title,
             style = MaterialTheme.typography.titleLarge,
             maxLines = 2,
             overflow = TextOverflow.Ellipsis,
@@ -75,9 +75,9 @@ private fun BookCardPreview() {
             title = "The Alchemist",
             author = "Paulo Coelho",
             bookCoverUrl = "",
-            contentUrl = "",
+            genre = "",
             content = null
         )
-        BookCard(book = myBook)
+        BookCard(bookCoverUrl = "", title = myBook.title)
     }
 }
