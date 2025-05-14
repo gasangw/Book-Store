@@ -27,6 +27,7 @@ class BookListViewModel(
        _state.value = BookListState.Loading(value = true)
        viewModelScope.launch {
            val books = bookRepository.getAllBooksStream()
+
            books.collect {
                _state.value = BookListState.Success(it)
            }
