@@ -27,6 +27,11 @@ val Typography = Typography(
         fontWeight = FontWeight.ExtraBold,
         fontSize = 28.sp
     ),
+    titleMedium = TextStyle(
+        fontFamily = Barlow,
+        fontWeight = FontWeight.ExtraBold,
+        fontSize = 20.sp
+    ),
     displayMedium = TextStyle(
         fontFamily = Barlow,
         fontWeight = FontWeight.Normal,

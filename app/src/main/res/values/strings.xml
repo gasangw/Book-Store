@@ -4,4 +4,5 @@
     <string name="delete">Delete</string>
     <string name="booklistscreen_title">Book Store</string>
     <string name="no_books_found">No books found</string>
+    <string name="add_book_icon">Add Book Icon</string>
 </resources>
