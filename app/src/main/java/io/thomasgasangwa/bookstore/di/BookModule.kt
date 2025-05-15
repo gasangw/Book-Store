@@ -13,6 +13,7 @@ val bookModule = module {
 
    single { BookDatabase.getDatabase(get())}
 
+
     single<BookDao> { get<BookDatabase>().bookDao() }
 
     single<BookRepository> { BookRepositoryImpl(get()) }
