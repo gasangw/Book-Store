@@ -2,8 +2,7 @@ package io.thomasgasangwa.bookstore.presentation.book_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import io.thomasgasangwa.bookstore.common.Resource
-import io.thomasgasangwa.bookstore.domain.repository.BookRepository
+import io.thomasgasangwa.bookstore.domain.repository.LocalRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -12,7 +11,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 
 class BookListViewModel(
-    private val bookRepository: BookRepository
+    private val bookRepository: LocalRepository
 ): ViewModel()  {
 
     private val _state = MutableStateFlow<BookListState>(BookListState.Success(emptyList()))

@@ -2,7 +2,8 @@ package io.thomasgasangwa.bookstore
 
 import android.app.Application
 
-import io.thomasgasangwa.bookstore.di.bookModule
+import io.thomasgasangwa.bookstore.di.localBookModule
+import io.thomasgasangwa.bookstore.di.remoteBookModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.core.context.GlobalContext.startKoin
 
@@ -12,7 +13,7 @@ class BookStoreApp: Application() {
 
         startKoin {
            androidContext(this@BookStoreApp)
-            modules(bookModule)
+            modules(localBookModule, remoteBookModule)
         }
 
     }

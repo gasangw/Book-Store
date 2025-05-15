@@ -1,22 +1,20 @@
 package io.thomasgasangwa.bookstore.di
-
 import io.thomasgasangwa.bookstore.data.local.dao.BookDao
 import io.thomasgasangwa.bookstore.data.local.database.BookDatabase
-import io.thomasgasangwa.bookstore.data.repository.BookRepositoryImpl
-import io.thomasgasangwa.bookstore.domain.repository.BookRepository
+import io.thomasgasangwa.bookstore.data.repository.LocalRepositoryImpl
+import io.thomasgasangwa.bookstore.domain.repository.LocalRepository
 
 import io.thomasgasangwa.bookstore.presentation.book_list.BookListViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
-val bookModule = module {
+val localBookModule = module {
 
    single { BookDatabase.getDatabase(get())}
 
-
     single<BookDao> { get<BookDatabase>().bookDao() }
 
-    single<BookRepository> { BookRepositoryImpl(get()) }
+    single<LocalRepository> { LocalRepositoryImpl(get()) }
 
 
      viewModel { BookListViewModel(get()) }
