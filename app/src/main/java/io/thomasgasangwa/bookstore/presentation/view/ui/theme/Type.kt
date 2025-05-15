@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookstore.presentation.ui.theme
+package io.thomasgasangwa.bookstore.presentation.view.ui.theme
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -21,15 +21,21 @@ val Poppins = FontFamily(
 
 
 val Typography = Typography(
-   displayLarge = TextStyle(
-       fontFamily = Barlow,
-       fontWeight = FontWeight.ExtraBold,
-       fontSize = 36.sp
-   ),
+
+    titleLarge = TextStyle(
+        fontFamily = Barlow,
+        fontWeight = FontWeight.ExtraBold,
+        fontSize = 28.sp
+    ),
+    titleMedium = TextStyle(
+        fontFamily = Barlow,
+        fontWeight = FontWeight.ExtraBold,
+        fontSize = 20.sp
+    ),
     displayMedium = TextStyle(
         fontFamily = Barlow,
         fontWeight = FontWeight.Normal,
-        fontSize = 16.sp
+        fontSize = 20.sp
     ),
     labelMedium = TextStyle(
         fontFamily = Poppins,
