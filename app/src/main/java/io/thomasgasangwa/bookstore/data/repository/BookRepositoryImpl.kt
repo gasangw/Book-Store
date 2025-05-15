@@ -1,11 +1,11 @@
 package io.thomasgasangwa.bookstore.data.repository
 
 import io.thomasgasangwa.bookstore.data.local.dao.BookDao
-import io.thomasgasangwa.bookstore.data.mapper.toBook
-import io.thomasgasangwa.bookstore.data.mapper.toBookEntity
+import io.thomasgasangwa.bookstore.data.local.mapper.toBook
+import io.thomasgasangwa.bookstore.data.local.mapper.toBookEntity
 import io.thomasgasangwa.bookstore.domain.repository.BookRepository
 import io.thomasgasangwa.bookstore.domain.model.Book
-import io.thomasgasangwa.bookstore.data.mapper.toBookList
+import io.thomasgasangwa.bookstore.data.local.mapper.toBookList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
