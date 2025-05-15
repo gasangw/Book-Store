@@ -12,7 +12,9 @@ import kotlinx.coroutines.flow.map
 class LocalRepositoryImpl (
     private val itemDao: BookDao
 ): LocalRepository {
-    override fun getAllBooksStream(): Flow<List<Book>> =  itemDao.getAllBooks().map { it.toBookList() }
+    override fun getAllBooksStream(): Flow<List<Book>> {
+        return itemDao.getAllBooks().map { it.toBookList() }
+    }
     override fun getBookStream(id: Int): Flow<Book> = itemDao.getBookById(id).map { it.toBook() }
     override suspend fun insertBook(book: Book) = itemDao.insert(book.toBookEntity())
     override suspend fun deleteBookById(id: Int) = itemDao.deleteBookById(id)
