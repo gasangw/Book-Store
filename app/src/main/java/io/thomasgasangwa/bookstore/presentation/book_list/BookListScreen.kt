@@ -20,27 +20,28 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import io.thomasgasangwa.bookstore.presentation.book_list.components.BookCard
-import org.koin.androidx.compose.koinViewModel
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookstore.R
+import io.thomasgasangwa.bookstore.presentation.book_list.components.BookCard
+import org.koin.androidx.compose.koinViewModel
 
 
 @Composable
 fun BookListScreen(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onAddBookButtonClicked: () -> Unit
 ) {
     val bookViewModel: BookListViewModel = koinViewModel()
-     val booksState by bookViewModel.state.collectAsStateWithLifecycle()
+    val booksState by bookViewModel.state.collectAsStateWithLifecycle()
 
     Scaffold(
         floatingActionButton = {
-            LargeFloatingActionButton(onClick = {}) {
+            LargeFloatingActionButton(onClick = onAddBookButtonClicked) {
                 Icon(
                     imageVector = Icons.Default.Add,
                     contentDescription = stringResource(R.string.add_book_icon),
@@ -50,17 +51,22 @@ fun BookListScreen(
         },
         floatingActionButtonPosition = FabPosition.End,
         modifier = Modifier
-    ){ innerPadding ->
+    ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
-            when(booksState){
+            when (booksState) {
                 is BookListState.Loading -> {
-                    Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally) {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
                         CircularProgressIndicator()
                     }
                 }
+
                 is BookListState.Success -> {
                     val books = (booksState as BookListState.Success).books
-                    if(books.isEmpty()) {
+                    if (books.isEmpty()) {
                         Text(
                             text = stringResource(R.string.no_books_found),
                             modifier = modifier.align(Alignment.CenterHorizontally),
@@ -74,17 +80,17 @@ fun BookListScreen(
                             verticalArrangement = Arrangement.spacedBy(15.dp),
                             horizontalArrangement = Arrangement.spacedBy(15.dp)
                         ) {
-                            items(books) {book ->
-                                BookCard(title = book.title, bookCoverUrl = book.bookCoverUrl)
+                            items(books) { book ->
+                                BookCard(title = book.title, bookCoverUrl = book.cover ?: "")
                             }
                         }
                     }
 
                 }
+
                 is BookListState.Error -> {
-                    val exception = (booksState as BookListState.Error).exception
                     Text(
-                        text = "Error: ${exception.message}",
+                        text = "Error occured while loading the books",
                         modifier = Modifier.background(color = MaterialTheme.colorScheme.error)
                     )
                 }

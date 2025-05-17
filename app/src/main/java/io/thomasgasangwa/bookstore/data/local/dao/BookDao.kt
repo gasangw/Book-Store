@@ -1,7 +1,6 @@
 package io.thomasgasangwa.bookstore.data.local.dao
 
 import androidx.room.Dao
-import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -12,18 +11,22 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface BookDao {
 
-   @Insert(onConflict = OnConflictStrategy.REPLACE)
-   suspend fun insert(book: BookEntity)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(book: BookEntity)
 
-   @Update
-   suspend fun update(book: BookEntity)
+    @Update
+    suspend fun update(book: BookEntity)
 
-   @Query("SELECT * FROM books")
+    @Query("SELECT * FROM books")
     fun getAllBooks(): Flow<List<BookEntity>>
 
-   @Query("SELECT * FROM books WHERE id = :id")
+    @Query("SELECT * FROM books WHERE id = :id")
     fun getBookById(id: Int): Flow<BookEntity>
 
     @Query("DELETE FROM books WHERE id = :id")
     suspend fun deleteBookById(id: Int)
+//
+//    @Query("SELECT COUNT(*) FROM books")
+//    suspend fun getBookCount(): Int
+
 }

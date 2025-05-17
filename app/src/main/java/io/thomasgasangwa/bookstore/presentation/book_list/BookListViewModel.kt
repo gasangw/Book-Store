@@ -6,46 +6,44 @@ import io.thomasgasangwa.bookstore.domain.repository.LocalRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class BookListViewModel(
-    private val bookRepository: LocalRepository
-): ViewModel()  {
-
+    private val localRepository: LocalRepository
+) : ViewModel() {
     private val _state = MutableStateFlow<BookListState>(BookListState.Success(emptyList()))
-
-    val state: StateFlow<BookListState> = _state.onStart { getAllBooks() }.stateIn(
+    val state: StateFlow<BookListState> = _state.stateIn(
         scope = viewModelScope,
-        started = SharingStarted.Companion.WhileSubscribed(5000),
+        started = SharingStarted.WhileSubscribed(5000),
         initialValue = BookListState.Success(emptyList())
     )
 
-   private fun getAllBooks() {
-       _state.value = BookListState.Loading(value = true)
-       viewModelScope.launch {
-           val books = bookRepository.getAllBooksStream()
+    init {
+        getAllBooks()
+    }
 
-           books.collect {
-               _state.value = BookListState.Success(it)
-           }
+    private fun getAllBooks() {
+        _state.update { BookListState.Loading(value = true) }
+        Timber.d("getting all books")
+        viewModelScope.launch {
+            localRepository.getAllBooksStream().collect { result ->
+                try {
+                    Timber.d("books are $result")
+                    _state.update { BookListState.Success(books = result) }
+                } catch (e: Exception) {
+                    _state.update { BookListState.Error(exception = e) }
+                }
+            }
 
-//          _state.value = when (books) {
-//              is Resource.Success -> BookListState.Success(books.data ?: emptyList())
-//              is Resource.Error -> BookListState.Error(Exception(books.message))
-//              else -> {
-//
-//              }
-//          }
-           _state.value = BookListState.Loading(value = false)
-       }
-   }
-
-
+        }
+        _state.update { BookListState.Loading(value = false) }
+    }
 }
 
-// 1. debbug the code
+// 1. debug the code
 // 2. Introduce logging
 
 // learn more about flows and implement it.

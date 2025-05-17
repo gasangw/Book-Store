@@ -71,12 +71,13 @@ private fun BookCardCoverImage(modifier: Modifier = Modifier, bookCoverUrl: Stri
 private fun BookCardPreview() {
     BookStoreTheme {
         val myBook = Book(
-            id = 1,
-            title = "The Alchemist",
-            author = "Paulo Coelho",
-            bookCoverUrl = "",
-            genre = "",
-            content = null
+            id = 0,
+          title = "thomas",
+          releaseDate = "2025",
+        description = "hello this is my new book",
+        pages = 223,
+        cover = "",
+        likes = 0,
         )
         BookCard(bookCoverUrl = "", title = myBook.title)
     }

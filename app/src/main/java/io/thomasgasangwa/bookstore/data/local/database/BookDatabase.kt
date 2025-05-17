@@ -7,6 +7,7 @@ import androidx.room.RoomDatabase
 import io.thomasgasangwa.bookstore.data.local.dao.BookDao
 import io.thomasgasangwa.bookstore.data.local.entity.BookEntity
 
+
 @Database(entities = [BookEntity::class], version = 1, exportSchema = false)
 abstract class BookDatabase: RoomDatabase() {
     abstract fun bookDao(): BookDao
@@ -27,3 +28,6 @@ abstract class BookDatabase: RoomDatabase() {
 
     }
 }
+
+
+

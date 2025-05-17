@@ -8,5 +8,4 @@ data class Book(
     val pages: Int,
     val cover: String?,
     val likes: Int?,
-    val comments: List<String?>?
 )

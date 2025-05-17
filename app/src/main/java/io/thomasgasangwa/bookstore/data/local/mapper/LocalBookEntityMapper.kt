@@ -4,15 +4,14 @@ import io.thomasgasangwa.bookstore.data.local.entity.BookEntity
 import io.thomasgasangwa.bookstore.domain.model.Book
 
 fun BookEntity.toBook() = Book(
-        id = id,
-        title = title,
-        releaseDate = releaseDate,
-        description = description,
-        pages = pages,
-        cover = cover,
-        likes = likes,
-        comments = comments
-    )
+    id = id,
+    title = title,
+    releaseDate = releaseDate,
+    description = description,
+    pages = pages,
+    cover = cover,
+    likes = likes
+)
 
 fun List<BookEntity>.toBookList() = map { it.toBook() }
 
@@ -24,5 +23,4 @@ fun Book.toBookEntity() = BookEntity(
     pages = pages,
     cover = cover,
     likes = likes,
-    comments = comments
 )
