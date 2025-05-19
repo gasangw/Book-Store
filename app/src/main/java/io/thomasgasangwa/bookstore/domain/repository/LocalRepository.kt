@@ -9,5 +9,4 @@ interface LocalRepository {
     suspend fun insertBook(book: Book)
     suspend fun updateBook(book: Book)
     suspend fun deleteBookById(id: Int)
-//     suspend fun getTotalBooks(): Int
 }

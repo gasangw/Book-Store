@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class BookListViewModel(
     private val localRepository: LocalRepository
@@ -27,11 +26,9 @@ class BookListViewModel(
 
     private fun getAllBooks() {
         _state.update { BookListState.Loading(value = true) }
-        Timber.d("getting all books")
         viewModelScope.launch {
             localRepository.getAllBooksStream().collect { result ->
                 try {
-                    Timber.d("books are $result")
                     _state.update { BookListState.Success(books = result) }
                 } catch (e: Exception) {
                     _state.update { BookListState.Error(exception = e) }
@@ -41,10 +38,10 @@ class BookListViewModel(
         }
         _state.update { BookListState.Loading(value = false) }
     }
+
+    fun deleteBook(id: Int) {
+        viewModelScope.launch {
+            localRepository.deleteBookById(id)
+        }
+    }
 }
-
-// 1. debug the code
-// 2. Introduce logging
-
-// learn more about flows and implement it.
-// introduce logging (logger)

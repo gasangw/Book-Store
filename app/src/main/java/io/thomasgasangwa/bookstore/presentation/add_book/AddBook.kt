@@ -16,10 +16,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookstore.presentation.view.components.TextFieldElement
+import org.koin.androidx.compose.koinViewModel
+import androidx.compose.runtime.getValue
 
 @Composable
-fun AddBook(modifier: Modifier = Modifier, onAddBook: () -> Unit, onCancel: () -> Unit) {
+fun AddBook(modifier: Modifier = Modifier, onCancel: () -> Unit) {
+
+    val addBookViewModel: AddBookViewModel = koinViewModel()
+    val formState by addBookViewModel.formState.collectAsStateWithLifecycle()
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -29,46 +36,55 @@ fun AddBook(modifier: Modifier = Modifier, onAddBook: () -> Unit, onCancel: () -
 
         Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(10.dp)) {
             TextFieldElement(
-                textValue = "",
+                textValue = formState.title,
                 label = "Title",
-                onValueChange = {},
-                textFieldHasError = false,
+                onValueChange = { addBookViewModel.onTitleChanged(it) },
+                textFieldHasError = formState.title.isEmpty(),
                 singleLine = true,
                 placeholder = "e.g Rich Dad Poor Dad",
                 textErrorMessage = "Title cannot be empty.."
             )
             TextFieldElement(
-                textValue = "",
+                textValue = formState.description,
                 label = "description",
-                onValueChange = {},
-                textFieldHasError = false,
+                onValueChange = { addBookViewModel.onDescriptionChanged(it) },
+                textFieldHasError = formState.description.isEmpty(),
                 singleLine = true,
                 placeholder = "e.g this book is about money",
                 textErrorMessage = "description cannot be empty.."
             )
             TextFieldElement(
-                textValue = "",
+                textValue = formState.releaseDate,
                 label = "Release Date",
-                onValueChange = {},
-                singleLine = false,
+                onValueChange = { addBookViewModel.onReleaseDateChanged(it) },
+                singleLine = true,
                 placeholder = "2020",
                 textErrorMessage = "Release Date cannot be empty..",
-                textFieldHasError = false
+                textFieldHasError = formState.releaseDate.isEmpty()
 
             )
-            TextFieldElement(textValue = "", label = "Pages", onValueChange = {},
-                textFieldHasError = false,
+            TextFieldElement(
+                textValue = formState.pages.toString(),
+                label = "Pages",
+                onValueChange = { addBookViewModel.onPagesChanged(it) },
+                textFieldHasError =  formState.pages <= 0,
                 singleLine = true,
                 placeholder = "e.g 200",
-                textErrorMessage = "Pages cannot be empty.."
+                textErrorMessage = "Pages cannot be empty and they should be above 0"
             )
-            TextFieldElement(textValue = "", label = "Cover", onValueChange = {},
+            TextFieldElement(
+                textValue = formState.cover ?: "",
+                label = "Cover",
+                onValueChange = { addBookViewModel.onCoverChanged(it) },
                 textFieldHasError = false,
-                singleLine = true,
+                singleLine = false,
                 placeholder = "e.g https://picsum.photos/200",
                 textErrorMessage = ""
             )
-            TextFieldElement(textValue = "", label = "Likes", onValueChange = {},
+            TextFieldElement(
+                textValue = formState.likes.toString(),
+                label = "Likes",
+                onValueChange = { addBookViewModel.onLikesChanged(it) },
                 textFieldHasError = false,
                 singleLine = true,
                 placeholder = "e.g 100",
@@ -85,32 +101,9 @@ fun AddBook(modifier: Modifier = Modifier, onAddBook: () -> Unit, onCancel: () -
             ) {
                 Text(text = "Cancel")
             }
-            Button(onClick = onAddBook, modifier = modifier.weight(1f)) {
+            Button(onClick = { addBookViewModel.addBook() }, modifier = modifier.weight(1f)) {
                 Text(text = "Add")
             }
         }
-    }
-}
-
-
-data class Book(
-    val id: Int,
-    val title: String,
-    val releaseDate: String,
-    val description: String,
-    val pages: Int,
-    val cover: String?,
-    val likes: Int?,
-)
-
-
-@PreviewLightDark
-@Composable
-private fun AddBookPreview() {
-    BookStoreTheme {
-        AddBook(
-            onAddBook = {},
-            onCancel = {}
-        )
     }
 }

@@ -7,4 +7,5 @@
     <string name="add_book_icon">Add Book Icon</string>
     <string name="add_book">Add Book</string>
     <string name="back_arrow">Back arrow</string>
+    <string name="book_details">Details</string>
 </resources>

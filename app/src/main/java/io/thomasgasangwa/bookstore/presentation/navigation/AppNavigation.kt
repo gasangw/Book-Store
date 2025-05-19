@@ -8,11 +8,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import io.thomasgasangwa.bookstore.R
 import io.thomasgasangwa.bookstore.presentation.add_book.AddBook
+import io.thomasgasangwa.bookstore.presentation.book_details.BookDetails
 import io.thomasgasangwa.bookstore.presentation.tab.Tabs
 
 enum class AppNavigationScreens(@StringRes val title: Int) {
     Tabs(title = R.string.app_name),
-    AddBook(title = R.string.add_book)
+    AddBook(title = R.string.add_book),
+    BookDetails(title = R.string.book_details)
 }
 
 @Composable
@@ -28,15 +30,18 @@ fun AppNavigation(
     ) {
         composable(route = AppNavigationScreens.Tabs.name) {
             Tabs(
-                onAddBookButtonClicked = { navController.navigate(AppNavigationScreens.AddBook.name) }
+                onAddBookButtonClicked = { navController.navigate(AppNavigationScreens.AddBook.name) },
+                onBookClicked = { navController.navigate(AppNavigationScreens.BookDetails.name) },
             )
         }
         composable(route = AppNavigationScreens.AddBook.name) {
             AddBook(
-                onAddBook = {},
                 onCancel = {},
                 modifier = Modifier
             )
+        }
+        composable(route = AppNavigationScreens.BookDetails.name) {
+            BookDetails()
         }
     }
 }

@@ -34,7 +34,8 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun BookListScreen(
     modifier: Modifier = Modifier,
-    onAddBookButtonClicked: () -> Unit
+    onAddBookButtonClicked: () -> Unit,
+    onBookClicked: () -> Unit
 ) {
     val bookViewModel: BookListViewModel = koinViewModel()
     val booksState by bookViewModel.state.collectAsStateWithLifecycle()
@@ -81,7 +82,16 @@ fun BookListScreen(
                             horizontalArrangement = Arrangement.spacedBy(15.dp)
                         ) {
                             items(books) { book ->
-                                BookCard(title = book.title, bookCoverUrl = book.cover ?: "")
+                                BookCard(
+                                    title = book.title,
+                                    bookCoverUrl = book.cover,
+                                    id = book.id,
+                                    deleteBook = { id ->
+                                        bookViewModel.deleteBook(id)
+                                    },
+                                    likes = book.likes,
+                                    onBookClicked = onBookClicked
+                                )
                             }
                         }
                     }

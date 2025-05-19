@@ -11,6 +11,6 @@ data class BookEntity(
     val releaseDate: String,
     val description: String,
     val pages: Int,
-    val cover: String?,
-    val likes: Int?,
+    val cover: String,
+    val likes: Int,
 )

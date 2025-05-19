@@ -4,6 +4,7 @@ import io.thomasgasangwa.bookstore.data.local.dao.BookDao
 import io.thomasgasangwa.bookstore.data.local.database.BookDatabase
 import io.thomasgasangwa.bookstore.data.repository.LocalRepositoryImpl
 import io.thomasgasangwa.bookstore.domain.repository.LocalRepository
+import io.thomasgasangwa.bookstore.presentation.add_book.AddBookViewModel
 
 import io.thomasgasangwa.bookstore.presentation.book_list.BookListViewModel
 import org.koin.core.module.dsl.viewModel
@@ -26,4 +27,5 @@ val localBookModule = module {
     single<LocalRepository> { LocalRepositoryImpl(get()) }
 
     viewModel { BookListViewModel(get()) }
+    viewModel { AddBookViewModel(get()) }
 }
