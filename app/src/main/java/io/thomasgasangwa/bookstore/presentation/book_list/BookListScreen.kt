@@ -90,6 +90,8 @@ fun BookListScreen(
                                         bookViewModel.deleteBook(id)
                                     },
                                     likes = book.likes,
+                                    pages = book.pages,
+                                    description = book.description,
                                     onBookClicked = onBookClicked
                                 )
                             }

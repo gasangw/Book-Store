@@ -42,10 +42,12 @@ fun BookCard(
     bookCoverUrl: String,
     deleteBook: (Int) -> Unit,
     likes: Int,
+    pages: Int,
+    description: String,
     onBookClicked: () -> Unit
 ) {
     //Timber.d(bookCoverUrl)
-
+    val context = LocalContext.current
     Card(
         modifier = modifier,
         shape = MaterialTheme.shapes.large,
@@ -71,7 +73,14 @@ fun BookCard(
                 }
                 Text(text = likes.toString(), style = MaterialTheme.typography.displayMedium)
             }
-            IconButton(onClick = { }) {
+            IconButton(onClick = {
+                shareBook(
+                    context = context,
+                    subject = "Check out this book: $title",
+                    summary = description,
+                    pages = pages
+                )
+            }) {
                 Icon(
                     imageVector = Icons.Filled.Share,
                     contentDescription = "share"
@@ -128,6 +137,8 @@ private fun BookCardPreview() {
             id = myBook.id,
             deleteBook = {},
             likes = myBook.likes,
+            pages = myBook.pages,
+            description = myBook.description,
             onBookClicked = {}
         )
     }

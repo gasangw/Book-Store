@@ -4,8 +4,10 @@ import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import io.thomasgasangwa.bookstore.R
 import io.thomasgasangwa.bookstore.presentation.add_book.AddBook
 import io.thomasgasangwa.bookstore.presentation.book_details.BookDetails
@@ -31,7 +33,7 @@ fun AppNavigation(
         composable(route = AppNavigationScreens.Tabs.name) {
             Tabs(
                 onAddBookButtonClicked = { navController.navigate(AppNavigationScreens.AddBook.name) },
-                onBookClicked = { navController.navigate(AppNavigationScreens.BookDetails.name) },
+                onBookClicked = { navController.navigate("${AppNavigationScreens.BookDetails.name}/$id") },
             )
         }
         composable(route = AppNavigationScreens.AddBook.name) {
@@ -40,8 +42,14 @@ fun AppNavigation(
                 modifier = Modifier
             )
         }
-        composable(route = AppNavigationScreens.BookDetails.name) {
-            BookDetails()
+        composable(
+            route = "${AppNavigationScreens.BookDetails.name}/{id}",
+            arguments = listOf(navArgument("id") {
+                type = NavType.IntType
+            })
+        ) { backStackEntry ->
+            val bookId = backStackEntry.arguments?.getInt("id")
+            BookDetails(bookId = bookId)
         }
     }
 }

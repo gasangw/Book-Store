@@ -1,12 +1,13 @@
 package io.thomasgasangwa.bookstore.presentation.book_details
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import timber.log.Timber
 
 @Composable
-fun BookDetails(modifier: Modifier = Modifier) {
+fun BookDetails(modifier: Modifier = Modifier, bookId: Int?) {
 //    Column(modifier = modifier) {}
+    Timber.d("Book id $bookId")
     Text(text = "Book Details")
 }
