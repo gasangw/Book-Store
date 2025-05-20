@@ -19,7 +19,7 @@ fun BookApp(modifier: Modifier = Modifier) {
 
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = AppNavigationScreens.valueOf(
-        backStackEntry?.destination?.route ?: AppNavigationScreens.Tabs.name
+        backStackEntry?.destination?.route?.split("/")[0] ?: AppNavigationScreens.Tabs.name
     )
 
     Scaffold(

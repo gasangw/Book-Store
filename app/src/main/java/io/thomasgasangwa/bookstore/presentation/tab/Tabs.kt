@@ -22,7 +22,7 @@ import io.thomasgasangwa.bookstore.presentation.favorites.Favorites
 fun Tabs(
     modifier: Modifier = Modifier,
     onAddBookButtonClicked: () -> Unit,
-    onBookClicked: () -> Unit
+    onBookClicked: (Int) -> Unit
 ) {
 
     var state by rememberSaveable { mutableIntStateOf(0) }
@@ -40,7 +40,7 @@ fun Tabs(
         when (state) {
             0 -> BookListScreen(
                 onAddBookButtonClicked = onAddBookButtonClicked,
-                onBookClicked = onBookClicked
+                onBookClicked = { id -> onBookClicked(id) }
             )
 
             1 -> Favorites()

@@ -44,14 +44,14 @@ fun BookCard(
     likes: Int,
     pages: Int,
     description: String,
-    onBookClicked: () -> Unit
+    onBookClicked: (Int) -> Unit
 ) {
     //Timber.d(bookCoverUrl)
     val context = LocalContext.current
     Card(
         modifier = modifier,
         shape = MaterialTheme.shapes.large,
-        onClick = { onBookClicked() }
+        onClick = { onBookClicked(id) }
     ) {
         BookCardCoverImage(
             modifier = Modifier
