@@ -1,16 +1,14 @@
 package io.thomasgasangwa.bookstore.presentation.book_list.components
 
 import BookStoreTheme
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.FavoriteBorder
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,19 +17,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil3.compose.AsyncImage
-import coil3.request.ImageRequest
-import coil3.request.crossfade
 import io.thomasgasangwa.bookstore.R
 import io.thomasgasangwa.bookstore.domain.model.Book
-
-//import timber.log.Timber
+import io.thomasgasangwa.bookstore.presentation.view.components.BookCover
 
 
 @Composable
@@ -46,14 +39,13 @@ fun BookCard(
     description: String,
     onBookClicked: (Int) -> Unit
 ) {
-    //Timber.d(bookCoverUrl)
     val context = LocalContext.current
     Card(
         modifier = modifier,
         shape = MaterialTheme.shapes.large,
         onClick = { onBookClicked(id) }
     ) {
-        BookCardCoverImage(
+        BookCover(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(ratio = 2f),
@@ -69,7 +61,11 @@ fun BookCard(
         Row {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 IconButton(onClick = { }) {
-                    Icon(imageVector = Icons.Filled.FavoriteBorder, contentDescription = "like")
+                    Icon(
+                        imageVector = Icons.Outlined.ThumbUp, contentDescription = stringResource(
+                            R.string.like
+                        )
+                    )
                 }
                 Text(text = likes.toString(), style = MaterialTheme.typography.displayMedium)
             }
@@ -94,27 +90,6 @@ fun BookCard(
                 )
             }
         }
-    }
-}
-
-@Composable
-private fun BookCardCoverImage(modifier: Modifier = Modifier, bookCoverUrl: String) {
-    val context = LocalContext.current
-    val imageRequest = ImageRequest.Builder(context)
-        .data(bookCoverUrl)
-        .crossfade(true)
-        .build()
-
-
-    Box(modifier = modifier) {
-        AsyncImage(
-            modifier = modifier.fillMaxSize(),
-            model = imageRequest,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
-            placeholder = painterResource(R.drawable.placeholder),
-            error = painterResource(R.drawable.placeholder)
-        )
     }
 }
 

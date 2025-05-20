@@ -9,4 +9,6 @@
     <string name="back_arrow">Back arrow</string>
     <string name="book_details">Details</string>
     <string name="share_book">Share Book</string>
+    <string name="favorite">favorite</string>
+    <string name="like">like</string>
 </resources>

@@ -12,7 +12,6 @@ import io.thomasgasangwa.bookstore.R
 import io.thomasgasangwa.bookstore.presentation.add_book.AddBook
 import io.thomasgasangwa.bookstore.presentation.book_details.BookDetails
 import io.thomasgasangwa.bookstore.presentation.tab.Tabs
-import timber.log.Timber
 
 enum class AppNavigationScreens(@StringRes val title: Int) {
     Tabs(title = R.string.app_name),
@@ -50,7 +49,6 @@ fun AppNavigation(
             })
         ) { backStackEntry ->
             val bookId = backStackEntry.arguments?.getInt("id")
-            Timber.d("Book id $bookId")
             BookDetails(bookId = bookId)
         }
     }
