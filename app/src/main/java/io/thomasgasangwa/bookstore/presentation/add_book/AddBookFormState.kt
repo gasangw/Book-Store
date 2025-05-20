@@ -6,5 +6,6 @@ data class AddBookFormState(
     val releaseDate: String = "",
     val pages: Int = 0,
     val cover: String = "",
-    val likes: Int = 0
+    val likes: Int = 0,
+    val isFavorite: Boolean = false
 )

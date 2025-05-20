@@ -16,6 +16,12 @@ class LocalRepositoryImpl(
         itemDao.getAllBooks().map { it.toBookList() }
 
     override fun getBookStream(id: Int): Flow<Book> = itemDao.getBookById(id).map { it.toBook() }
+    override fun getFavoriteBooksStream(): Flow<List<Book>> =
+        itemDao.getFavoriteBooks().map { it.toBookList() }
+
+    override suspend fun updateFavoriteStatus(id: Int, isFavorite: Boolean) =
+        itemDao.updateFavoriteStatus(id, isFavorite)
+
     override suspend fun insertBook(book: Book) = itemDao.insert(book.toBookEntity())
     override suspend fun deleteBookById(id: Int) = itemDao.deleteBookById(id)
     override suspend fun updateBook(book: Book) = itemDao.update(book.toBookEntity())

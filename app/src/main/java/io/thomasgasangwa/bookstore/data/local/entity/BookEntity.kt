@@ -13,4 +13,5 @@ data class BookEntity(
     val pages: Int,
     val cover: String,
     val likes: Int,
+    val isFavorite: Boolean,
 )

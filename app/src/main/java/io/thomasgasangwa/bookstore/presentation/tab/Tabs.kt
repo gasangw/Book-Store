@@ -43,7 +43,9 @@ fun Tabs(
                 onBookClicked = { id -> onBookClicked(id) }
             )
 
-            1 -> Favorites()
+            1 -> Favorites(
+                onBookClicked = { id -> onBookClicked(id) }
+            )
         }
     }
 }

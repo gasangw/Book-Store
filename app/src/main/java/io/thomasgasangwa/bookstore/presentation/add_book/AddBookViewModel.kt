@@ -67,12 +67,12 @@ class AddBookViewModel(
                 releaseDate = _formState.value.releaseDate,
                 pages = _formState.value.pages,
                 cover = _formState.value.cover,
-                likes = _formState.value.likes
+                likes = _formState.value.likes,
+                isFavorite = false
             )
             viewModelScope.launch {
                 try {
                     localRepository.insertBook(book)
-                    Timber.d("Book added successfully")
                 } catch (e: Exception) {
                     Timber.e(e)
                 }

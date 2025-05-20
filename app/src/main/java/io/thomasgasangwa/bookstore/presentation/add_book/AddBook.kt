@@ -1,6 +1,5 @@
 package io.thomasgasangwa.bookstore.presentation.add_book
 
-import BookStoreTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -13,13 +12,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookstore.presentation.view.components.TextFieldElement
 import org.koin.androidx.compose.koinViewModel
-import androidx.compose.runtime.getValue
 
 @Composable
 fun AddBook(modifier: Modifier = Modifier, onCancel: () -> Unit) {
@@ -67,7 +65,7 @@ fun AddBook(modifier: Modifier = Modifier, onCancel: () -> Unit) {
                 textValue = formState.pages.toString(),
                 label = "Pages",
                 onValueChange = { addBookViewModel.onPagesChanged(it) },
-                textFieldHasError =  formState.pages <= 0,
+                textFieldHasError = formState.pages <= 0,
                 singleLine = true,
                 placeholder = "e.g 200",
                 textErrorMessage = "Pages cannot be empty and they should be above 0"

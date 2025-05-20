@@ -19,7 +19,7 @@ import androidx.compose.ui.unit.dp
 import io.thomasgasangwa.bookstore.presentation.view.components.TextFieldElement
 
 @Composable
-fun UpdateBook(modifier: Modifier = Modifier, onUpdateBook: () -> Unit, onCancel: () -> Unit) {
+fun UpdateBook(modifier: Modifier = Modifier, onCancel: () -> Unit) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -88,7 +88,7 @@ fun UpdateBook(modifier: Modifier = Modifier, onUpdateBook: () -> Unit, onCancel
             ) {
                 Text(text = "Cancel")
             }
-            Button(onClick = onUpdateBook, modifier = modifier.weight(1f)) {
+            Button(onClick = {}, modifier = modifier.weight(1f)) {
                 Text(text = "Update")
             }
         }
@@ -101,7 +101,6 @@ fun UpdateBook(modifier: Modifier = Modifier, onUpdateBook: () -> Unit, onCancel
 private fun UpdateBookPreview() {
     BookStoreTheme {
         UpdateBook(
-            onUpdateBook = {},
             onCancel = {}
         )
     }

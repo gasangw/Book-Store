@@ -26,4 +26,9 @@ interface BookDao {
     @Query("DELETE FROM books WHERE id = :id")
     suspend fun deleteBookById(id: Int)
 
+    @Query("UPDATE books SET isFavorite = :isFavorite WHERE id = :id")
+    suspend fun updateFavoriteStatus(id: Int, isFavorite: Boolean)
+
+    @Query("SELECT * FROM books WHERE isFavorite = true")
+    fun getFavoriteBooks(): Flow<List<BookEntity>>
 }

@@ -12,11 +12,13 @@ import io.thomasgasangwa.bookstore.R
 import io.thomasgasangwa.bookstore.presentation.add_book.AddBook
 import io.thomasgasangwa.bookstore.presentation.book_details.BookDetails
 import io.thomasgasangwa.bookstore.presentation.tab.Tabs
+import io.thomasgasangwa.bookstore.presentation.update_book.UpdateBook
 
 enum class AppNavigationScreens(@StringRes val title: Int) {
     Tabs(title = R.string.app_name),
     AddBook(title = R.string.add_book),
-    BookDetails(title = R.string.book_details)
+    BookDetails(title = R.string.book_details),
+    EditBook(title = R.string.edit_book)
 }
 
 @Composable
@@ -49,7 +51,17 @@ fun AppNavigation(
             })
         ) { backStackEntry ->
             val bookId = backStackEntry.arguments?.getInt("id")
-            BookDetails(bookId = bookId)
+            BookDetails(
+                bookId = bookId,
+                onEditBook = { navController.navigate(AppNavigationScreens.EditBook.name) },
+            )
+        }
+
+        composable(route = AppNavigationScreens.EditBook.name) {
+            UpdateBook(
+                onCancel = {},
+                modifier = Modifier
+            )
         }
     }
 }

@@ -37,8 +37,9 @@ fun BookCard(
     likes: Int,
     pages: Int,
     description: String,
-    onBookClicked: (Int) -> Unit
-) {
+    onBookClicked: (Int) -> Unit,
+
+    ) {
     val context = LocalContext.current
     Card(
         modifier = modifier,
@@ -105,6 +106,7 @@ private fun BookCardPreview() {
             pages = 223,
             cover = "",
             likes = 0,
+            isFavorite = false
         )
         BookCard(
             bookCoverUrl = "",

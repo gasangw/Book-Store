@@ -8,6 +8,7 @@ import io.thomasgasangwa.bookstore.presentation.add_book.AddBookViewModel
 import io.thomasgasangwa.bookstore.presentation.book_details.BookDetailsViewModel
 
 import io.thomasgasangwa.bookstore.presentation.book_list.BookListViewModel
+import io.thomasgasangwa.bookstore.presentation.favorites.FavoriteViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
@@ -30,4 +31,5 @@ val localBookModule = module {
     viewModel { BookListViewModel(get()) }
     viewModel { AddBookViewModel(get()) }
     viewModel { (bookId: Int) -> BookDetailsViewModel(bookId, get()) }
+    viewModel { FavoriteViewModel(get()) }
 }

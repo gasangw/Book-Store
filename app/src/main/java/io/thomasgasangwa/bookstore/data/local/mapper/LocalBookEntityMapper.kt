@@ -10,7 +10,8 @@ fun BookEntity.toBook() = Book(
     description = description,
     pages = pages,
     cover = cover,
-    likes = likes
+    likes = likes,
+    isFavorite = isFavorite
 )
 
 fun List<BookEntity>.toBookList() = map { it.toBook() }
@@ -23,4 +24,5 @@ fun Book.toBookEntity() = BookEntity(
     pages = pages,
     cover = cover,
     likes = likes,
+    isFavorite = isFavorite
 )

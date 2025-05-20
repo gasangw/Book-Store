@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
@@ -27,12 +28,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookstore.R
+import io.thomasgasangwa.bookstore.presentation.favorites.FavoriteViewModel
 import io.thomasgasangwa.bookstore.presentation.view.components.BookCover
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
-fun BookDetails(modifier: Modifier = Modifier, bookId: Int?) {
+fun BookDetails(modifier: Modifier = Modifier, bookId: Int?, onEditBook: () -> Unit) {
+
+    val favoriteViewModel: FavoriteViewModel = koinViewModel()
 
     val bookDetailsViewModel: BookDetailsViewModel =
         koinViewModel(parameters = { parametersOf(bookId) })
@@ -64,16 +68,16 @@ fun BookDetails(modifier: Modifier = Modifier, bookId: Int?) {
             is BookDetailsState.Success -> {
                 val book = (bookDetailState as BookDetailsState.Success).book
                 Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                    IconButton(onClick = { }, modifier = modifier.scale(1.5f)) {
+                    IconButton(onClick = { favoriteViewModel.updateFavoriteStatus(id = book.id, isFavorite = !book.isFavorite)}, modifier = modifier.scale(1.5f)) {
                         Icon(
-                            imageVector = Icons.Outlined.FavoriteBorder,
+                            imageVector = if(book.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                             contentDescription = stringResource(R.string.favorite),
                             tint = MaterialTheme.colorScheme.error,
                             modifier = Modifier
                                 .padding(10.dp)
                         )
                     }
-                    IconButton(onClick = { }, modifier = modifier.scale(1.5f)) {
+                    IconButton(onClick = onEditBook, modifier = modifier.scale(1.5f)) {
                         Icon(
                             imageVector = Icons.Filled.Edit,
                             contentDescription = "edit",
