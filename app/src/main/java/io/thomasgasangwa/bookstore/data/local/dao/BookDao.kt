@@ -31,4 +31,8 @@ interface BookDao {
 
     @Query("SELECT * FROM books WHERE isFavorite = true")
     fun getFavoriteBooks(): Flow<List<BookEntity>>
+
+    @Query("UPDATE books SET likes = :likes  WHERE id = :id")
+    suspend fun updateLikes(id: Int, likes: Int)
+
 }

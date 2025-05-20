@@ -25,6 +25,7 @@ class LocalRepositoryImpl(
     override suspend fun insertBook(book: Book) = itemDao.insert(book.toBookEntity())
     override suspend fun deleteBookById(id: Int) = itemDao.deleteBookById(id)
     override suspend fun updateBook(book: Book) = itemDao.update(book.toBookEntity())
+    override suspend fun updateLikes(id: Int, likes: Int) = itemDao.updateLikes(id, likes)
 }
 
 

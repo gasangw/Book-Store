@@ -44,4 +44,19 @@ class BookListViewModel(
             localRepository.deleteBookById(id)
         }
     }
+
+    fun updateLikes(id: Int, likes: Int, nowLiked: Boolean) {
+        if (nowLiked) {
+            viewModelScope.launch {
+                localRepository.updateLikes(id, likes + 1)
+            }
+        } else {
+            if (likes == 0) return
+            viewModelScope.launch {
+                localRepository.updateLikes(id, likes - 1)
+            }
+        }
+
+    }
+
 }

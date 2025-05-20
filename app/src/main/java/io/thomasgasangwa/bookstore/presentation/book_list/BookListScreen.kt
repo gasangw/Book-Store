@@ -94,6 +94,10 @@ fun BookListScreen(
                                     description = book.description,
                                     onBookClicked = { id ->
                                         onBookClicked(id)
+                                    },
+                                    updateLikes = { id, likes, isLiked ->
+                                        bookViewModel.updateLikes(id, likes, isLiked)
+
                                     }
                                 )
                             }

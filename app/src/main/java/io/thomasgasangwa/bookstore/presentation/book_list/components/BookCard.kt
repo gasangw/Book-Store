@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.filled.ThumbUp
 import androidx.compose.material.icons.outlined.ThumbUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
@@ -15,6 +16,10 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -38,9 +43,11 @@ fun BookCard(
     pages: Int,
     description: String,
     onBookClicked: (Int) -> Unit,
-
-    ) {
+    updateLikes: ((Int, Int, Boolean) -> Unit)? = null,
+) {
     val context = LocalContext.current
+    var isLiked: Boolean by rememberSaveable { mutableStateOf(false) }
+
     Card(
         modifier = modifier,
         shape = MaterialTheme.shapes.large,
@@ -61,9 +68,13 @@ fun BookCard(
         )
         Row {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                IconButton(onClick = { }) {
+                IconButton(onClick = {
+                    isLiked = !isLiked
+                    updateLikes?.invoke(id, likes, isLiked)
+                }) {
                     Icon(
-                        imageVector = Icons.Outlined.ThumbUp, contentDescription = stringResource(
+                        imageVector = if (isLiked) Icons.Filled.ThumbUp else Icons.Outlined.ThumbUp,
+                        contentDescription = stringResource(
                             R.string.like
                         )
                     )
@@ -116,7 +127,8 @@ private fun BookCardPreview() {
             likes = myBook.likes,
             pages = myBook.pages,
             description = myBook.description,
-            onBookClicked = {}
+            onBookClicked = {},
+            updateLikes = { _, _, _ -> }
         )
     }
 }
