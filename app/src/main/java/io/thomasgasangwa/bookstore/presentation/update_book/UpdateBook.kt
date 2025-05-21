@@ -1,5 +1,6 @@
 package io.thomasgasangwa.bookstore.presentation.update_book
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookstore.presentation.view.components.TextFieldElement
@@ -33,6 +35,8 @@ fun UpdateBook(
     val updateBookState by updateBookViewModel.state.collectAsStateWithLifecycle()
 
     val bookState = (updateBookState as UpdateBookState.Success).book
+
+    val context = LocalContext.current
 
     Column(
         modifier = modifier
@@ -107,7 +111,11 @@ fun UpdateBook(
                 Text(text = "Cancel")
             }
             Button(
-                onClick = { updateBookViewModel.updateBook(); onUpdateBook() },
+                onClick = {
+                    updateBookViewModel.updateBook()
+                    Toast.makeText(context, "Book updated successfully", Toast.LENGTH_SHORT).show()
+                    onUpdateBook()
+                },
                 modifier = modifier.weight(1f)
             ) {
                 Text(text = "Update")

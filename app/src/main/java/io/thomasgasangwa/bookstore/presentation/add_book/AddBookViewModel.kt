@@ -36,13 +36,8 @@ class AddBookViewModel(
         _formState.value = _formState.value.copy(pages = pages)
     }
 
-    fun onCoverChanged(cover: String) {
-        if (cover.isNotEmpty()) {
-            _formState.value = _formState.value.copy(cover = cover)
-        } else {
-            _formState.value = _formState.value.copy(cover = DEFAULT_COVER)
-        }
-
+    fun onCoverChanged(coverUrl: String) {
+        _formState.value = _formState.value.copy(cover = coverUrl)
     }
 
     fun onLikesChanged(likes: String?) {
@@ -52,12 +47,10 @@ class AddBookViewModel(
 
     fun addBook() {
 
-
         if (_formState.value.title.isNotEmpty() &&
             _formState.value.description.isNotEmpty() &&
             _formState.value.releaseDate.isNotEmpty() &&
             _formState.value.pages > 0 &&
-            _formState.value.cover.isNotEmpty() &&
             _formState.value.likes >= 0
         ) {
             val book = Book(
@@ -66,10 +59,11 @@ class AddBookViewModel(
                 description = _formState.value.description,
                 releaseDate = _formState.value.releaseDate,
                 pages = _formState.value.pages,
-                cover = _formState.value.cover,
+                cover = if (_formState.value.cover.isBlank()) DEFAULT_COVER else _formState.value.cover,
                 likes = _formState.value.likes,
                 isFavorite = false
             )
+
             viewModelScope.launch {
                 try {
                     localRepository.insertBook(book)

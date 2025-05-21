@@ -1,5 +1,6 @@
 package io.thomasgasangwa.bookstore.presentation.add_book
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookstore.presentation.view.components.TextFieldElement
@@ -28,6 +30,7 @@ fun AddBook(
 
     val addBookViewModel: AddBookViewModel = koinViewModel()
     val formState by addBookViewModel.formState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     Column(
         modifier = modifier
@@ -104,7 +107,11 @@ fun AddBook(
                 Text(text = "Cancel")
             }
             Button(
-                onClick = { addBookViewModel.addBook(); onAddBook() },
+                onClick = {
+                    addBookViewModel.addBook()
+                    onAddBook()
+                    Toast.makeText(context, "Book added successfully", Toast.LENGTH_SHORT).show()
+                },
                 modifier = modifier.weight(1f)
             ) {
                 Text(text = "Add")
