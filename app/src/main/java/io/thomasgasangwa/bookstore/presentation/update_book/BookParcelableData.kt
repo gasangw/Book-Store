@@ -1,8 +1,11 @@
-package io.thomasgasangwa.bookstore.domain.model
+package io.thomasgasangwa.bookstore.presentation.update_book
 
-import io.thomasgasangwa.bookstore.presentation.update_book.BookParcelableData
+import android.os.Parcelable
+import io.thomasgasangwa.bookstore.domain.model.Book
+import kotlinx.android.parcel.Parcelize
 
-data class Book(
+@Parcelize
+data class BookParcelableData(
     val id: Int,
     val title: String,
     val releaseDate: String,
@@ -11,9 +14,10 @@ data class Book(
     val cover: String,
     val likes: Int,
     val isFavorite: Boolean
-)
+) : Parcelable
 
-fun Book.toBookParcelableData(): BookParcelableData = BookParcelableData(
+
+fun BookParcelableData.toBook(): Book = Book(
     id = id,
     title = title,
     releaseDate = releaseDate,

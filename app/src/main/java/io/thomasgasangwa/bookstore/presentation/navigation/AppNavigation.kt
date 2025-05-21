@@ -12,6 +12,7 @@ import io.thomasgasangwa.bookstore.R
 import io.thomasgasangwa.bookstore.presentation.add_book.AddBook
 import io.thomasgasangwa.bookstore.presentation.book_details.BookDetails
 import io.thomasgasangwa.bookstore.presentation.tab.Tabs
+import io.thomasgasangwa.bookstore.presentation.update_book.BookParcelableData
 import io.thomasgasangwa.bookstore.presentation.update_book.UpdateBook
 
 enum class AppNavigationScreens(@StringRes val title: Int) {
@@ -56,26 +57,33 @@ fun AppNavigation(
             })
         ) { backStackEntry ->
             val bookId = backStackEntry.arguments?.getInt("id")
-            BookDetails( book -> {
-            bookId = bookId,
-            navController.currentBackStack?.savedStateHandle?.set("book", book),
-            onEditBook = { navController.navigate(AppNavigationScreens.EditBook.name) }
-        }
-
-
+            BookDetails(
+                bookId = bookId,
+                onEditBook = { book: BookParcelableData ->
+                    navController.currentBackStackEntry?.savedStateHandle?.set<BookParcelableData>(
+                        "book",
+                        book
+                    )
+                    navController.navigate(AppNavigationScreens.EditBook.name)
+                },
             )
         }
 
         composable(route = AppNavigationScreens.EditBook.name) {
-            UpdateBook(
-                onCancel = {
-                    navController.popBackStack(
-                        AppNavigationScreens.Tabs.name,
-                        inclusive = false
-                    )
-                },
-                modifier = Modifier
-            )
+            val book =
+                navController.previousBackStackEntry?.savedStateHandle?.get<BookParcelableData>("book")
+            if (book != null) {
+                UpdateBook(
+                    onCancel = {
+                        navController.popBackStack(
+                            AppNavigationScreens.Tabs.name,
+                            inclusive = false
+                        )
+                    },
+                    book = book,
+                    modifier = Modifier
+                )
+            }
         }
     }
 }

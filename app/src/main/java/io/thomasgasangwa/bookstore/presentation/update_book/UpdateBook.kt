@@ -1,6 +1,5 @@
 package io.thomasgasangwa.bookstore.presentation.update_book
 
-import BookStoreTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -14,12 +13,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import io.thomasgasangwa.bookstore.presentation.view.components.TextFieldElement
 
 @Composable
-fun UpdateBook(modifier: Modifier = Modifier, onCancel: () -> Unit) {
+fun UpdateBook(
+    book: BookParcelableData,
+    modifier: Modifier = Modifier,
+    onCancel: () -> Unit
+) {
+    val originalBookType = book.toBook()
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -29,7 +33,7 @@ fun UpdateBook(modifier: Modifier = Modifier, onCancel: () -> Unit) {
 
         Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(20.dp)) {
             TextFieldElement(
-                textValue = "",
+                textValue = originalBookType.title,
                 label = "Title",
                 onValueChange = {},
                 textFieldHasError = false,
@@ -38,7 +42,7 @@ fun UpdateBook(modifier: Modifier = Modifier, onCancel: () -> Unit) {
                 textErrorMessage = "Title cannot be empty.."
             )
             TextFieldElement(
-                textValue = "",
+                textValue = originalBookType.description,
                 label = "description",
                 onValueChange = {},
                 textFieldHasError = false,
@@ -47,7 +51,7 @@ fun UpdateBook(modifier: Modifier = Modifier, onCancel: () -> Unit) {
                 textErrorMessage = "description cannot be empty.."
             )
             TextFieldElement(
-                textValue = "",
+                textValue = originalBookType.releaseDate,
                 label = "Release Date",
                 onValueChange = {},
                 singleLine = false,
@@ -57,21 +61,21 @@ fun UpdateBook(modifier: Modifier = Modifier, onCancel: () -> Unit) {
 
             )
             TextFieldElement(
-                textValue = "", label = "Pages", onValueChange = {},
+                textValue = originalBookType.pages.toString(), label = "Pages", onValueChange = {},
                 textFieldHasError = false,
                 singleLine = true,
                 placeholder = "e.g 200",
                 textErrorMessage = "Pages cannot be empty.."
             )
             TextFieldElement(
-                textValue = "", label = "Cover", onValueChange = {},
+                textValue = originalBookType.cover, label = "Cover", onValueChange = {},
                 textFieldHasError = false,
                 singleLine = true,
                 placeholder = "e.g https://picsum.photos/200",
                 textErrorMessage = ""
             )
             TextFieldElement(
-                textValue = "", label = "Likes", onValueChange = {},
+                textValue = originalBookType.likes.toString(), label = "Likes", onValueChange = {},
                 textFieldHasError = false,
                 singleLine = true,
                 placeholder = "e.g 100",
@@ -96,12 +100,14 @@ fun UpdateBook(modifier: Modifier = Modifier, onCancel: () -> Unit) {
 }
 
 
-@PreviewLightDark
-@Composable
-private fun UpdateBookPreview() {
-    BookStoreTheme {
-        UpdateBook(
-            onCancel = {}
-        )
-    }
-}
+//@PreviewLightDark
+//@Composable
+//private fun UpdateBookPreview() {
+//    BookStoreTheme {
+//        val
+//        UpdateBook(
+//            onCancel = {}
+//            book = BookParcelableData
+//        )
+//    }
+//}

@@ -28,13 +28,19 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookstore.R
+import io.thomasgasangwa.bookstore.domain.model.toBookParcelableData
 import io.thomasgasangwa.bookstore.presentation.favorites.FavoriteViewModel
+import io.thomasgasangwa.bookstore.presentation.update_book.BookParcelableData
 import io.thomasgasangwa.bookstore.presentation.view.components.BookCover
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
 
 @Composable
-fun BookDetails(modifier: Modifier = Modifier, bookId: Int?, onEditBook: () -> Unit) {
+fun BookDetails(
+    modifier: Modifier = Modifier,
+    bookId: Int?,
+    onEditBook: (BookParcelableData) -> Unit
+) {
 
     val favoriteViewModel: FavoriteViewModel = koinViewModel()
 
@@ -67,6 +73,7 @@ fun BookDetails(modifier: Modifier = Modifier, bookId: Int?, onEditBook: () -> U
 
             is BookDetailsState.Success -> {
                 val book = (bookDetailState as BookDetailsState.Success).book
+
                 Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
                     IconButton(onClick = {
                         favoriteViewModel.updateFavoriteStatus(
@@ -82,7 +89,10 @@ fun BookDetails(modifier: Modifier = Modifier, bookId: Int?, onEditBook: () -> U
                                 .padding(10.dp)
                         )
                     }
-                    IconButton(onClick = onEditBook, modifier = modifier.scale(1.5f)) {
+                    IconButton(
+                        onClick = { onEditBook(book.toBookParcelableData()) },
+                        modifier = modifier.scale(1.5f)
+                    ) {
                         Icon(
                             imageVector = Icons.Filled.Edit,
                             contentDescription = "edit",
@@ -128,3 +138,4 @@ fun BookDetails(modifier: Modifier = Modifier, bookId: Int?, onEditBook: () -> U
         }
     }
 }
+
