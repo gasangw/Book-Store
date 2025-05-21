@@ -20,7 +20,11 @@ import io.thomasgasangwa.bookstore.presentation.view.components.TextFieldElement
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun AddBook(modifier: Modifier = Modifier, onCancel: () -> Unit) {
+fun AddBook(
+    modifier: Modifier = Modifier,
+    onCancel: () -> Unit,
+    onAddBook: () -> Unit
+) {
 
     val addBookViewModel: AddBookViewModel = koinViewModel()
     val formState by addBookViewModel.formState.collectAsStateWithLifecycle()
@@ -99,7 +103,10 @@ fun AddBook(modifier: Modifier = Modifier, onCancel: () -> Unit) {
             ) {
                 Text(text = "Cancel")
             }
-            Button(onClick = { addBookViewModel.addBook() }, modifier = modifier.weight(1f)) {
+            Button(
+                onClick = { addBookViewModel.addBook(); onAddBook() },
+                modifier = modifier.weight(1f)
+            ) {
                 Text(text = "Add")
             }
         }

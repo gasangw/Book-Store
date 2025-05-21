@@ -47,6 +47,12 @@ fun AppNavigation(
                         inclusive = false
                     )
                 },
+                onAddBook = {
+                    navController.popBackStack(
+                        AppNavigationScreens.Tabs.name,
+                        inclusive = false
+                    )
+                },
                 modifier = Modifier
             )
         }
@@ -75,6 +81,12 @@ fun AppNavigation(
             if (book != null) {
                 UpdateBook(
                     onCancel = {
+                        navController.popBackStack(
+                            AppNavigationScreens.Tabs.name,
+                            inclusive = false
+                        )
+                    },
+                    onUpdateBook = {
                         navController.popBackStack(
                             AppNavigationScreens.Tabs.name,
                             inclusive = false

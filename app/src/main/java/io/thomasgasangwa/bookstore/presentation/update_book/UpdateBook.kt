@@ -12,17 +12,27 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookstore.presentation.view.components.TextFieldElement
+import org.koin.androidx.compose.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 @Composable
 fun UpdateBook(
     book: BookParcelableData,
     modifier: Modifier = Modifier,
-    onCancel: () -> Unit
+    onCancel: () -> Unit,
+    onUpdateBook: () -> Unit
 ) {
     val originalBookType = book.toBook()
+    val updateBookViewModel: UpdateBookViewModel =
+        koinViewModel(parameters = { parametersOf(originalBookType) })
+    val updateBookState by updateBookViewModel.state.collectAsStateWithLifecycle()
+
+    val bookState = (updateBookState as UpdateBookState.Success).book
 
     Column(
         modifier = modifier
@@ -33,49 +43,52 @@ fun UpdateBook(
 
         Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(20.dp)) {
             TextFieldElement(
-                textValue = originalBookType.title,
+                textValue = bookState.title,
                 label = "Title",
-                onValueChange = {},
-                textFieldHasError = false,
+                onValueChange = { updateBookViewModel.updateTitle(it) },
+                textFieldHasError = bookState.title.isEmpty(),
                 singleLine = true,
                 placeholder = "e.g Rich Dad Poor Dad",
                 textErrorMessage = "Title cannot be empty.."
             )
             TextFieldElement(
-                textValue = originalBookType.description,
+                textValue = bookState.description,
                 label = "description",
-                onValueChange = {},
-                textFieldHasError = false,
+                onValueChange = { updateBookViewModel.updateDescription(it) },
+                textFieldHasError = bookState.description.isEmpty(),
                 singleLine = true,
                 placeholder = "e.g this book is about money",
                 textErrorMessage = "description cannot be empty.."
             )
             TextFieldElement(
-                textValue = originalBookType.releaseDate,
+                textValue = bookState.releaseDate,
                 label = "Release Date",
-                onValueChange = {},
+                onValueChange = { updateBookViewModel.updateReleaseDate(it) },
                 singleLine = false,
-                placeholder = "2020",
+                placeholder = "July 23, 2020",
                 textErrorMessage = "Release Date cannot be empty..",
-                textFieldHasError = false
+                textFieldHasError = bookState.releaseDate.isEmpty()
 
             )
             TextFieldElement(
-                textValue = originalBookType.pages.toString(), label = "Pages", onValueChange = {},
-                textFieldHasError = false,
+                textValue = bookState.pages.toString(), label = "Pages",
+                onValueChange = { updateBookViewModel.updatePages(it) },
+                textFieldHasError = bookState.pages <= 0,
                 singleLine = true,
                 placeholder = "e.g 200",
                 textErrorMessage = "Pages cannot be empty.."
             )
             TextFieldElement(
-                textValue = originalBookType.cover, label = "Cover", onValueChange = {},
+                textValue = bookState.cover, label = "Cover",
+                onValueChange = { updateBookViewModel.updateCover(it) },
                 textFieldHasError = false,
                 singleLine = true,
                 placeholder = "e.g https://picsum.photos/200",
                 textErrorMessage = ""
             )
             TextFieldElement(
-                textValue = originalBookType.likes.toString(), label = "Likes", onValueChange = {},
+                textValue = bookState.likes.toString(), label = "Likes",
+                onValueChange = { updateBookViewModel.updateLikes(it) },
                 textFieldHasError = false,
                 singleLine = true,
                 placeholder = "e.g 100",
@@ -92,7 +105,10 @@ fun UpdateBook(
             ) {
                 Text(text = "Cancel")
             }
-            Button(onClick = {}, modifier = modifier.weight(1f)) {
+            Button(
+                onClick = { updateBookViewModel.updateBook(); onUpdateBook() },
+                modifier = modifier.weight(1f)
+            ) {
                 Text(text = "Update")
             }
         }
