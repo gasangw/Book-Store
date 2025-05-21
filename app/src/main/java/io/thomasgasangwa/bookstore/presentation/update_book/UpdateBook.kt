@@ -79,7 +79,8 @@ fun UpdateBook(
                 textErrorMessage = "Pages cannot be empty.."
             )
             TextFieldElement(
-                textValue = bookState.cover, label = "Cover",
+                textValue = bookState.cover,
+                label = "Cover",
                 onValueChange = { updateBookViewModel.updateCover(it) },
                 textFieldHasError = false,
                 singleLine = true,

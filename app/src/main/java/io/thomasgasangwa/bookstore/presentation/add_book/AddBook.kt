@@ -75,7 +75,7 @@ fun AddBook(
                 textErrorMessage = "Pages cannot be empty and they should be above 0"
             )
             TextFieldElement(
-                textValue = formState.cover ?: "",
+                textValue = formState.cover,
                 label = "Cover",
                 onValueChange = { addBookViewModel.onCoverChanged(it) },
                 textFieldHasError = false,
