@@ -56,7 +56,7 @@ fun AddBook(modifier: Modifier = Modifier, onCancel: () -> Unit) {
                 label = "Release Date",
                 onValueChange = { addBookViewModel.onReleaseDateChanged(it) },
                 singleLine = true,
-                placeholder = "2020",
+                placeholder = "May 12, 2020",
                 textErrorMessage = "Release Date cannot be empty..",
                 textFieldHasError = formState.releaseDate.isEmpty()
 

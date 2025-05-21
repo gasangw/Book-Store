@@ -1,7 +1,6 @@
 package io.thomasgasangwa.bookstore.presentation.view.components
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -23,7 +22,7 @@ fun BookCover(modifier: Modifier = Modifier, bookCoverUrl: String) {
 
     Box(modifier = modifier) {
         AsyncImage(
-            modifier = modifier.fillMaxSize(),
+            modifier = modifier,
             model = imageRequest,
             contentDescription = null,
             contentScale = ContentScale.Crop,

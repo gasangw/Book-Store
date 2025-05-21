@@ -40,7 +40,12 @@ fun AppNavigation(
         }
         composable(route = AppNavigationScreens.AddBook.name) {
             AddBook(
-                onCancel = {},
+                onCancel = {
+                    navController.popBackStack(
+                        AppNavigationScreens.Tabs.name,
+                        inclusive = false
+                    )
+                },
                 modifier = Modifier
             )
         }
@@ -51,15 +56,24 @@ fun AppNavigation(
             })
         ) { backStackEntry ->
             val bookId = backStackEntry.arguments?.getInt("id")
-            BookDetails(
-                bookId = bookId,
-                onEditBook = { navController.navigate(AppNavigationScreens.EditBook.name) },
+            BookDetails( book -> {
+            bookId = bookId,
+            navController.currentBackStack?.savedStateHandle?.set("book", book),
+            onEditBook = { navController.navigate(AppNavigationScreens.EditBook.name) }
+        }
+
+
             )
         }
 
         composable(route = AppNavigationScreens.EditBook.name) {
             UpdateBook(
-                onCancel = {},
+                onCancel = {
+                    navController.popBackStack(
+                        AppNavigationScreens.Tabs.name,
+                        inclusive = false
+                    )
+                },
                 modifier = Modifier
             )
         }

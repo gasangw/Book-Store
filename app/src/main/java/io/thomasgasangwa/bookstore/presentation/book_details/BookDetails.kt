@@ -68,9 +68,14 @@ fun BookDetails(modifier: Modifier = Modifier, bookId: Int?, onEditBook: () -> U
             is BookDetailsState.Success -> {
                 val book = (bookDetailState as BookDetailsState.Success).book
                 Row(modifier = modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-                    IconButton(onClick = { favoriteViewModel.updateFavoriteStatus(id = book.id, isFavorite = !book.isFavorite)}, modifier = modifier.scale(1.5f)) {
+                    IconButton(onClick = {
+                        favoriteViewModel.updateFavoriteStatus(
+                            id = book.id,
+                            isFavorite = !book.isFavorite
+                        )
+                    }, modifier = modifier.scale(1.5f)) {
                         Icon(
-                            imageVector = if(book.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                            imageVector = if (book.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
                             contentDescription = stringResource(R.string.favorite),
                             tint = MaterialTheme.colorScheme.error,
                             modifier = Modifier
@@ -81,7 +86,7 @@ fun BookDetails(modifier: Modifier = Modifier, bookId: Int?, onEditBook: () -> U
                         Icon(
                             imageVector = Icons.Filled.Edit,
                             contentDescription = "edit",
-                            tint = MaterialTheme.colorScheme.error,
+                            tint = MaterialTheme.colorScheme.primary,
                             modifier = Modifier
                                 .padding(10.dp)
                                 .size(20.dp)
@@ -89,9 +94,7 @@ fun BookDetails(modifier: Modifier = Modifier, bookId: Int?, onEditBook: () -> U
                     }
                 }
                 BookCover(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f),
+                    modifier = Modifier.height(400.dp),
                     bookCoverUrl = book.cover
                 )
                 Text(
@@ -108,7 +111,7 @@ fun BookDetails(modifier: Modifier = Modifier, bookId: Int?, onEditBook: () -> U
                         style = MaterialTheme.typography.displayMedium
                     )
                     Text(
-                        text = "Release Date: ${book.releaseDate},",
+                        text = "Date: ${book.releaseDate},",
                         style = MaterialTheme.typography.displayMedium
                     )
                     Text(
