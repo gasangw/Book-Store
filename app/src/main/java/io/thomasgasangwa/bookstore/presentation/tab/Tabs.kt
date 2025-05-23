@@ -80,7 +80,7 @@ private fun TabsPreview() {
             titles = titles,
             onTabClicked = { index, -> },
             onAddBookButtonClicked = {},
-            onBookClicked = { _, -> },
+            onBookClicked = {_, ->},
             modifier = Modifier
         )
     }
