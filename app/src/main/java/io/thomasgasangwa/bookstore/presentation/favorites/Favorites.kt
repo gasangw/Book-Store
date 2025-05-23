@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookstore.R
+import io.thomasgasangwa.bookstore.domain.model.Book
 import io.thomasgasangwa.bookstore.presentation.book_list.BookListViewModel
 import io.thomasgasangwa.bookstore.presentation.book_list.components.BookCard
 import org.koin.androidx.compose.koinViewModel
@@ -33,11 +34,21 @@ fun Favorites(modifier: Modifier = Modifier, onBookClicked: (Int) -> Unit) {
     val bookViewModel: BookListViewModel = koinViewModel()
     val favoriteState by favoriteViewModel.state.collectAsStateWithLifecycle()
 
-
+    FavoriteBooks(
+        favoriteState = favoriteState,
+        deleteBook = {it -> bookViewModel.deleteBook(it)},
+        onBookClicked = {it -> onBookClicked(it) },
+        modifier = modifier
+    )
 }
 
 @Composable
-fun FavoriteBooks(modifier: Modifier = Modifier) {
+fun FavoriteBooks(
+    favoriteState:FavoriteBookState,
+    deleteBook: (Int) -> Unit,
+    onBookClicked: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(modifier = Modifier) {
         when (favoriteState) {
             is FavoriteBookState.Loading -> {
@@ -51,7 +62,7 @@ fun FavoriteBooks(modifier: Modifier = Modifier) {
             }
 
             is FavoriteBookState.Success -> {
-                val books = (favoriteState as FavoriteBookState.Success).books
+                val books = favoriteState.books
                 if (books.isEmpty()) {
                     Text(
                         text = stringResource(R.string.no_favorite_books),
@@ -73,7 +84,7 @@ fun FavoriteBooks(modifier: Modifier = Modifier) {
                                 bookCoverUrl = book.cover,
                                 id = book.id,
                                 deleteBook = { id ->
-                                    bookViewModel.deleteBook(id)
+                                    deleteBook(id)
                                 },
                                 likes = book.likes,
                                 description = book.description,
@@ -100,7 +111,22 @@ fun FavoriteBooks(modifier: Modifier = Modifier) {
 @Preview
 @Composable
 private fun FavoritePreviewScreen() {
+    val favoriteBookList = listOf( Book(
+        id = 1,
+        title = "Sample Book",
+        cover = "sample_cover_url",
+        pages = 300,
+        releaseDate = "2023-01-01",
+        description = "Sample description",
+        likes = 20,
+        isFavorite = true
+    ))
     BookStoreTheme {
-        Favorites(onBookClicked = {})
+        FavoriteBooks(
+            onBookClicked = {_, ->},
+            favoriteState = FavoriteBookState.Success(favoriteBookList),
+            deleteBook = {_, ->},
+        modifier = Modifier
+        )
     }
 }
