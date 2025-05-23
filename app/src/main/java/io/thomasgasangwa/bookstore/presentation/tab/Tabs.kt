@@ -17,7 +17,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import io.thomasgasangwa.bookstore.presentation.book_list.BookListScreen
 import io.thomasgasangwa.bookstore.presentation.favorites.Favorites
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Tabs(
     modifier: Modifier = Modifier,
@@ -28,11 +27,31 @@ fun Tabs(
     var state by rememberSaveable { mutableIntStateOf(0) }
     val titles = listOf("Books", "Favorites")
 
+    TabsDisplay(
+        state = state,
+        titles = titles,
+        onTabClicked = { index -> state = if (index == 0) 0 else 1 },
+        onAddBookButtonClicked = onAddBookButtonClicked,
+        onBookClicked = { it -> onBookClicked(it) },
+        modifier = modifier
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TabsDisplay(
+    state: Int,
+    titles: List<String>,
+    onTabClicked: (Int) -> Unit,
+    onAddBookButtonClicked: () -> Unit,
+    onBookClicked: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(modifier = modifier) {
         SecondaryTabRow(selectedTabIndex = state) {
             titles.forEachIndexed { index, title ->
                 Tab(
-                    selected = (state == index), onClick = { state = if (index == 0) 0 else 1 },
+                    selected = (state == index), onClick = { onTabClicked(index) },
                     text = { Text(text = title, color = MaterialTheme.colorScheme.onSurface) }
                 )
             }
@@ -53,10 +72,16 @@ fun Tabs(
 @Preview
 @Composable
 private fun TabsPreview() {
+    var state = 0
+    var titles = listOf("Books", "Favorites")
     BookStoreTheme {
-        Tabs(
+        TabsDisplay(
+            state = state,
+            titles = titles,
+            onTabClicked = { index, -> },
             onAddBookButtonClicked = {},
-            onBookClicked = {}
+            onBookClicked = { _, -> },
+            modifier = Modifier
         )
     }
 }

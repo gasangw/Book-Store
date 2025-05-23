@@ -1,7 +1,9 @@
 package io.thomasgasangwa.bookstore.presentation.update_book
 
 import BookStoreTheme
+import android.content.Context
 import android.widget.Toast
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,91 +38,135 @@ fun UpdateBook(
         koinViewModel(parameters = { parametersOf(originalBookType) })
     val updateBookState by updateBookViewModel.state.collectAsStateWithLifecycle()
 
-    val bookState = (updateBookState as UpdateBookState.Success).book
-
     val context = LocalContext.current
 
+    UpdateBookDisplay(
+        updateBookState = updateBookState,
+        onUpdateBook = onUpdateBook,
+        onCancel = onCancel,
+        context = context,
+        updateTitle = {it -> updateBookViewModel.updateTitle(it)},
+        updateDescription = {it -> updateBookViewModel.updateDescription(it)},
+        updateReleaseDate = {it -> updateBookViewModel.updateReleaseDate(it)},
+        updatePages = {it -> updateBookViewModel.updatePages(it)},
+        updateCover = {it -> updateBookViewModel.updateCover(it)},
+        updateLikes = {it  -> updateBookViewModel.updateLikes(it)},
+        updateBook = {updateBookViewModel.updateBook()},
+        modifier = modifier
+    )
+
+}
+
+@Composable
+fun UpdateBookDisplay(
+    updateBookState: UpdateBookState,
+    onUpdateBook: () -> Unit,
+    onCancel: () -> Unit,
+    context: Context,
+    updateTitle: (String) -> Unit,
+    updateDescription: (String) -> Unit,
+    updateReleaseDate: (String) -> Unit,
+    updatePages: (String) -> Unit,
+    updateCover: (String) -> Unit,
+    updateLikes: (String) -> Unit,
+    updateBook: () -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
             .padding(10.dp),
         verticalArrangement = Arrangement.Center
     ) {
+        when (updateBookState) {
+            is UpdateBookState.Success -> {
+                val updateBook = updateBookState.book
+                Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(20.dp)) {
+                    TextFieldElement(
+                        textValue = updateBook.title,
+                        label = "Title",
+                        onValueChange = {
+                            updateTitle(it) },
+                        textFieldHasError = updateBook.title.isEmpty(),
+                        singleLine = true,
+                        placeholder = "e.g Rich Dad Poor Dad",
+                        textErrorMessage = "Title cannot be empty.."
+                    )
+                    TextFieldElement(
+                        textValue = updateBook.description,
+                        label = "description",
+                        onValueChange = { updateDescription(it) },
+                        textFieldHasError = updateBook.description.isEmpty(),
+                        singleLine = true,
+                        placeholder = "e.g this book is about money",
+                        textErrorMessage = "description cannot be empty.."
+                    )
+                    TextFieldElement(
+                        textValue = updateBook.releaseDate,
+                        label = "Release Date",
+                        onValueChange = { updateReleaseDate(it) },
+                        singleLine = false,
+                        placeholder = "July 23, 2020",
+                        textErrorMessage = "Release Date cannot be empty..",
+                        textFieldHasError = updateBook.releaseDate.isEmpty()
 
-        Column(modifier = modifier, verticalArrangement = Arrangement.spacedBy(20.dp)) {
-            TextFieldElement(
-                textValue = bookState.title,
-                label = "Title",
-                onValueChange = { updateBookViewModel.updateTitle(it) },
-                textFieldHasError = bookState.title.isEmpty(),
-                singleLine = true,
-                placeholder = "e.g Rich Dad Poor Dad",
-                textErrorMessage = "Title cannot be empty.."
-            )
-            TextFieldElement(
-                textValue = bookState.description,
-                label = "description",
-                onValueChange = { updateBookViewModel.updateDescription(it) },
-                textFieldHasError = bookState.description.isEmpty(),
-                singleLine = true,
-                placeholder = "e.g this book is about money",
-                textErrorMessage = "description cannot be empty.."
-            )
-            TextFieldElement(
-                textValue = bookState.releaseDate,
-                label = "Release Date",
-                onValueChange = { updateBookViewModel.updateReleaseDate(it) },
-                singleLine = false,
-                placeholder = "July 23, 2020",
-                textErrorMessage = "Release Date cannot be empty..",
-                textFieldHasError = bookState.releaseDate.isEmpty()
+                    )
+                    TextFieldElement(
+                        textValue = updateBook.pages.toString(), label = "Pages",
+                        onValueChange = { updatePages(it) },
+                        textFieldHasError = updateBook.pages <= 0,
+                        singleLine = true,
+                        placeholder = "e.g 200",
+                        textErrorMessage = "Pages cannot be empty.."
+                    )
+                    TextFieldElement(
+                        textValue = updateBook.cover,
+                        label = "Cover",
+                        onValueChange = { updateCover(it) },
+                        textFieldHasError = false,
+                        singleLine = true,
+                        placeholder = "e.g https://picsum.photos/200",
+                        textErrorMessage = ""
+                    )
+                    TextFieldElement(
+                        textValue = updateBook.likes.toString(), label = "Likes",
+                        onValueChange = { updateLikes(it) },
+                        textFieldHasError = false,
+                        singleLine = true,
+                        placeholder = "e.g 100",
+                        textErrorMessage = ""
+                    )
+                }
+                Spacer(modifier = Modifier.height(50.dp))
 
-            )
-            TextFieldElement(
-                textValue = bookState.pages.toString(), label = "Pages",
-                onValueChange = { updateBookViewModel.updatePages(it) },
-                textFieldHasError = bookState.pages <= 0,
-                singleLine = true,
-                placeholder = "e.g 200",
-                textErrorMessage = "Pages cannot be empty.."
-            )
-            TextFieldElement(
-                textValue = bookState.cover,
-                label = "Cover",
-                onValueChange = { updateBookViewModel.updateCover(it) },
-                textFieldHasError = false,
-                singleLine = true,
-                placeholder = "e.g https://picsum.photos/200",
-                textErrorMessage = ""
-            )
-            TextFieldElement(
-                textValue = bookState.likes.toString(), label = "Likes",
-                onValueChange = { updateBookViewModel.updateLikes(it) },
-                textFieldHasError = false,
-                singleLine = true,
-                placeholder = "e.g 100",
-                textErrorMessage = ""
-            )
-        }
-        Spacer(modifier = Modifier.height(50.dp))
-
-        Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            Button(
-                onClick = onCancel,
-                modifier = modifier.weight(1f),
-                colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
-            ) {
-                Text(text = "Cancel")
+                Row(modifier = modifier, horizontalArrangement = Arrangement.spacedBy(16.dp)) {
+                    Button(
+                        onClick = onCancel,
+                        modifier = modifier.weight(1f),
+                        colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.tertiary)
+                    ) {
+                        Text(text = "Cancel")
+                    }
+                    Button(
+                        onClick = {
+                            updateBook()
+                            Toast.makeText(context, "Book updated successfully", Toast.LENGTH_SHORT)
+                                .show()
+                            onUpdateBook()
+                        },
+                        modifier = modifier.weight(1f)
+                    ) {
+                        Text(text = "Update")
+                    }
+                }
             }
-            Button(
-                onClick = {
-                    updateBookViewModel.updateBook()
-                    Toast.makeText(context, "Book updated successfully", Toast.LENGTH_SHORT).show()
-                    onUpdateBook()
-                },
-                modifier = modifier.weight(1f)
-            ) {
-                Text(text = "Update")
+
+            is UpdateBookState.Error -> {
+                val error = updateBookState.exception
+                Text(
+                    text = "Error $error occurred while updating the books",
+                    modifier = Modifier.background(color = MaterialTheme.colorScheme.error)
+                )
             }
         }
     }
@@ -130,6 +176,7 @@ fun UpdateBook(
 @Preview
 @Composable
 private fun UpdateBookPreview() {
+    val context = LocalContext.current
     val sampleBook = BookParcelableData(
         id = 1,
         title = "Sample Book",
@@ -141,10 +188,19 @@ private fun UpdateBookPreview() {
         isFavorite = false
     )
     BookStoreTheme {
-        UpdateBook(
-            book = sampleBook,
+        UpdateBookDisplay(
             onCancel = {},
-            onUpdateBook = {}
+            onUpdateBook = {},
+            updateBookState = UpdateBookState.Success(sampleBook.toBook()),
+        context = context,
+        updateTitle = {_, ->},
+        updateDescription = {_, ->},
+        updateReleaseDate = {_, ->},
+        updatePages = {_, ->},
+        updateCover = {_, ->},
+        updateLikes = {_, ->},
+        updateBook = {},
+        modifier = Modifier
         )
 
     }
