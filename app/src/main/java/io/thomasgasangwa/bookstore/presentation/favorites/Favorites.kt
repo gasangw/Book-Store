@@ -33,6 +33,11 @@ fun Favorites(modifier: Modifier = Modifier, onBookClicked: (Int) -> Unit) {
     val bookViewModel: BookListViewModel = koinViewModel()
     val favoriteState by favoriteViewModel.state.collectAsStateWithLifecycle()
 
+
+}
+
+@Composable
+fun FavoriteBooks(modifier: Modifier = Modifier) {
     Column(modifier = Modifier) {
         when (favoriteState) {
             is FavoriteBookState.Loading -> {
