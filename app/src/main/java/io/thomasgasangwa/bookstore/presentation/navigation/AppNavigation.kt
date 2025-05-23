@@ -53,7 +53,6 @@ fun AppNavigation(
                         inclusive = false
                     )
                 },
-                modifier = Modifier
             )
         }
         composable(

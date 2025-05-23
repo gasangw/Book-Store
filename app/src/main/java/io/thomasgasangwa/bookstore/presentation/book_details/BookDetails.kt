@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,6 +26,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookstore.R
@@ -52,40 +52,19 @@ fun BookDetails(
 
     val bookDetailState by bookDetailsViewModel.state.collectAsStateWithLifecycle()
 
-
-        when (bookDetailState) {
-            is BookDetailsState.Loading -> {
-                Column(
-                    modifier = modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
-
-            is BookDetailsState.Error -> {
-                val bookError = (bookDetailState as BookDetailsState.Error).exception
-                Text(text = "Something went wrong $bookError")
-            }
-
-            is BookDetailsState.Success -> {
-                val book = (bookDetailState as BookDetailsState.Success).book
-                BookDetailsContent(
-                    book = book,
-                    updateFavoriteStatus = {id, isFavorite ->
-                        favoriteViewModel.updateFavoriteStatus(id, isFavorite) },
-                    onEditBook = onEditBook,
-                    modifier = modifier
-                )
-
-            }
-        }
+    BookDetailsContent(
+        bookDetailState = bookDetailState,
+        updateFavoriteStatus = { id, isFavorite ->
+            favoriteViewModel.updateFavoriteStatus(id, isFavorite)
+        },
+        onEditBook = onEditBook,
+        modifier = modifier
+    )
 }
 
 @Composable
 fun BookDetailsContent(
-    book: Book,
+    bookDetailState: BookDetailsState,
     updateFavoriteStatus: (Int, Boolean) -> Unit,
     onEditBook: (BookParcelableData) -> Unit,
     modifier: Modifier = Modifier,
@@ -95,66 +74,82 @@ fun BookDetailsContent(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.End) {
-            IconButton(
-                onClick = { updateFavoriteStatus(book.id, !book.isFavorite) },
-                modifier = Modifier.scale(1.5f)
-            ) {
-                Icon(
-                    imageVector = if (book.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
-                    contentDescription = stringResource(R.string.favorite),
-                    tint = MaterialTheme.colorScheme.error,
+        when (bookDetailState) {
+            is BookDetailsState.Loading -> CircularProgressIndicator()
+            is BookDetailsState.Success -> {
+                val book = bookDetailState.book
+                Row(
                     modifier = Modifier
-                        .padding(10.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.End
+                ) {
+                    IconButton(
+                        onClick = { updateFavoriteStatus(book.id, !book.isFavorite) },
+                        modifier = Modifier.scale(1.5f)
+                    ) {
+                        Icon(
+                            imageVector = if (book.isFavorite) Icons.Filled.Favorite else Icons.Outlined.FavoriteBorder,
+                            contentDescription = stringResource(R.string.favorite),
+                            tint = MaterialTheme.colorScheme.error,
+                            modifier = Modifier
+                                .padding(10.dp)
+                        )
+                    }
+                    IconButton(
+                        onClick = { onEditBook(book.toBookParcelableData()) },
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.Edit,
+                            contentDescription = "edit",
+                            tint = MaterialTheme.colorScheme.primary,
+                            modifier = Modifier
+                                .padding(10.dp)
+                                .size(20.dp)
+                        )
+                    }
+                }
+
+                BookCover(
+                    modifier = Modifier.height(400.dp),
+                    bookCoverUrl = book.cover
+                )
+                Text(
+                    text = book.title,
+                    style = MaterialTheme.typography.titleLarge,
+                    modifier = Modifier.padding(10.dp)
+                )
+                Row(
+                    modifier = Modifier, verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(10.dp)
+                ) {
+                    Text(
+                        text = "Pages: ${book.pages},",
+                        style = MaterialTheme.typography.displayMedium
+                    )
+                    Text(
+                        text = "Date: ${book.releaseDate},",
+                        style = MaterialTheme.typography.displayMedium
+                    )
+                    Text(
+                        text = "Likes: ${book.likes}",
+                        style = MaterialTheme.typography.displayMedium
+                    )
+                }
+                Spacer(modifier = Modifier.height(18.dp))
+                Text(
+                    text = book.description, style = MaterialTheme.typography.labelMedium,
+                    modifier = Modifier, textAlign = TextAlign.Justify
                 )
             }
-            IconButton(
-                onClick = { onEditBook(book.toBookParcelableData()) },
-                modifier = Modifier.scale(1.5f)
-            ) {
-                Icon(
-                    imageVector = Icons.Filled.Edit,
-                    contentDescription = "edit",
-                    tint = MaterialTheme.colorScheme.primary,
-                    modifier = Modifier
-                        .padding(10.dp)
-                        .size(20.dp)
-                )
+
+            is BookDetailsState.Error -> {
+                val bookError = bookDetailState.exception
+                Text(text = "Something went wrong $bookError")
             }
         }
-    }
-    BookCover(
-        modifier = Modifier.height(400.dp),
-        bookCoverUrl = book.cover
-    )
-    Text(
-        text = book.title,
-        style = MaterialTheme.typography.titleLarge,
-        modifier = Modifier.padding(10.dp)
-    )
-    Row(
-        modifier = Modifier, verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(10.dp)
-    ) {
-        Text(
-            text = "Pages: ${book.pages},",
-            style = MaterialTheme.typography.displayMedium
-        )
-        Text(
-            text = "Date: ${book.releaseDate},",
-            style = MaterialTheme.typography.displayMedium
-        )
-        Text(
-            text = "Likes: ${book.likes}",
-            style = MaterialTheme.typography.displayMedium
-        )
-    }
-    Spacer(modifier = Modifier.height(18.dp))
-    Text(
-        text = book.description, style = MaterialTheme.typography.labelMedium,
-        modifier = Modifier, textAlign = TextAlign.Justify
-    )
 
+
+    }
 }
 
 
@@ -162,21 +157,21 @@ fun BookDetailsContent(
 @Composable
 private fun BookDetailsPreview() {
     BookStoreTheme {
-        val sampleBook = Book(
+        val sampleBook =  BookDetailsState.Success(Book(
             id = 1,
             title = "Sample Book",
             cover = "sample_cover_url",
             pages = 300,
             releaseDate = "2023-01-01",
             description = "Sample description",
-            likes = 100,
+            likes = 0,
             isFavorite = false
+        ))
+        BookDetailsContent(
+            bookDetailState = sampleBook,
+            updateFavoriteStatus = { bookId, isFavorite -> },
+            onEditBook = {},
+            modifier = Modifier
         )
-            BookDetailsContent(
-                book = sampleBook,
-                updateFavoriteStatus = {bookId, isFavorite ->},
-                onEditBook = {},
-                modifier = Modifier
-            )
     }
 }
