@@ -1,5 +1,6 @@
 package io.thomasgasangwa.bookstore.presentation.favorites
 
+import BookStoreTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookstore.R
@@ -69,7 +71,6 @@ fun Favorites(modifier: Modifier = Modifier, onBookClicked: (Int) -> Unit) {
                                     bookViewModel.deleteBook(id)
                                 },
                                 likes = book.likes,
-                                pages = book.pages,
                                 description = book.description,
                                 onBookClicked = { id ->
                                     onBookClicked(id)
@@ -88,5 +89,13 @@ fun Favorites(modifier: Modifier = Modifier, onBookClicked: (Int) -> Unit) {
                 )
             }
         }
+    }
+}
+
+@Preview
+@Composable
+private fun FavoritePreviewScreen() {
+    BookStoreTheme {
+        Favorites(onBookClicked = {})
     }
 }

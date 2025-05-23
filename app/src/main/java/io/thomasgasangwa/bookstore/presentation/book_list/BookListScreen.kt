@@ -1,5 +1,6 @@
 package io.thomasgasangwa.bookstore.presentation.book_list
 
+import BookStoreTheme
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookstore.R
@@ -61,7 +63,12 @@ fun BookListScreen(
                         verticalArrangement = Arrangement.Center,
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .size(100.dp),
+                            color = MaterialTheme.colorScheme.tertiary
+                        )
                     }
                 }
 
@@ -90,7 +97,6 @@ fun BookListScreen(
                                         bookViewModel.deleteBook(id)
                                     },
                                     likes = book.likes,
-                                    pages = book.pages,
                                     description = book.description,
                                     onBookClicked = { id ->
                                         onBookClicked(id)
@@ -117,3 +123,14 @@ fun BookListScreen(
     }
 }
 
+
+@Preview
+@Composable
+private fun BookListScreenPreview() {
+    BookStoreTheme {
+        BookListScreen(
+            onAddBookButtonClicked = {},
+            onBookClicked = {}
+        )
+    }
+}

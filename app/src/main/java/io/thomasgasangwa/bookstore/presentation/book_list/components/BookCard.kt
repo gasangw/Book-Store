@@ -40,7 +40,6 @@ fun BookCard(
     bookCoverUrl: String,
     deleteBook: (Int) -> Unit,
     likes: Int,
-    pages: Int,
     description: String,
     onBookClicked: (Int) -> Unit,
     updateLikes: ((Int, Int, Boolean) -> Unit)? = null,
@@ -84,9 +83,9 @@ fun BookCard(
             IconButton(onClick = {
                 shareBook(
                     context = context,
-                    subject = "Check out this book: $title",
+                    title = title,
                     summary = description,
-                    pages = pages
+                    coverUrl = bookCoverUrl
                 )
             }) {
                 Icon(
@@ -125,7 +124,6 @@ private fun BookCardPreview() {
             id = myBook.id,
             deleteBook = {},
             likes = myBook.likes,
-            pages = myBook.pages,
             description = myBook.description,
             onBookClicked = {},
             updateLikes = { _, _, _ -> }

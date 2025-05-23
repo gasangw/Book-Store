@@ -8,9 +8,9 @@
     <string name="add_book">Add Book</string>
     <string name="back_arrow">Back arrow</string>
     <string name="book_details">Details</string>
-    <string name="share_book">Share Book</string>
     <string name="favorite">favorite</string>
     <string name="like">like</string>
     <string name="edit_book">Edit</string>
     <string name="no_favorite_books">No favorite books</string>
+    <string name="book_shared">Best book to read</string>
 </resources>

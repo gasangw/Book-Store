@@ -25,8 +25,7 @@ class UpdateBookViewModel(
     }
 
     fun updateTitle(title: String) {
-        val currentBook = getCurrentBook()
-        _state.value = UpdateBookState.Success(currentBook.copy(title = title))
+        _state.value = UpdateBookState.Success(getCurrentBook().copy(title = title))
     }
 
     fun updateDescription(description: String) {

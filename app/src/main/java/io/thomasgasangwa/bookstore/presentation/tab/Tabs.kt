@@ -54,6 +54,9 @@ fun Tabs(
 @Composable
 private fun TabsPreview() {
     BookStoreTheme {
-//        Tabs()
+        Tabs(
+            onAddBookButtonClicked = {},
+            onBookClicked = {}
+        )
     }
 }

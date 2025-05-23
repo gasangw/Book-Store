@@ -1,5 +1,6 @@
 package io.thomasgasangwa.bookstore.presentation.update_book
 
+import BookStoreTheme
 import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookstore.presentation.view.components.TextFieldElement
@@ -125,14 +127,25 @@ fun UpdateBook(
 }
 
 
-//@PreviewLightDark
-//@Composable
-//private fun UpdateBookPreview() {
-//    BookStoreTheme {
-//        val
-//        UpdateBook(
-//            onCancel = {}
-//            book = BookParcelableData
-//        )
-//    }
-//}
+@Preview
+@Composable
+private fun UpdateBookPreview() {
+    val sampleBook = BookParcelableData(
+        id = 1,
+        title = "Sample Book",
+        cover = "sample_cover_url",
+        pages = 300,
+        releaseDate = "2023-01-01",
+        description = "Sample description",
+        likes = 100,
+        isFavorite = false
+    )
+    BookStoreTheme {
+        UpdateBook(
+            book = sampleBook,
+            onCancel = {},
+            onUpdateBook = {}
+        )
+
+    }
+}
