@@ -2,17 +2,13 @@ package io.thomasgasangwa.bookstore.presentation.favorites
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.thomasgasangwa.bookstore.common.Result
 import io.thomasgasangwa.bookstore.domain.repository.LocalRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.onCompletion
-import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class FavoriteViewModel(
@@ -32,29 +28,21 @@ class FavoriteViewModel(
 
     fun getFavoriteBooks() {
 
-        localRepository.getFavoriteBooksStream().map { favoriteBooksList ->
-            FavoriteBookState.Success(favoriteBooksList) as FavoriteBookState
-        }.onStart {
-            _state.value = FavoriteBookState.Loading(value = true)
-        }.onEach { favoriteBookState ->
-            _state.value = favoriteBookState
-        }.onCompletion {
-            _state.value = FavoriteBookState.Loading(value = false)
-        }.catch {
-            _state.value = FavoriteBookState.Error(it as Exception)
-        }.launchIn(viewModelScope)
+        _state.update { FavoriteBookState.Loading(value = true) }
+        viewModelScope.launch {
+            localRepository.getFavoriteBooksStream().collect { result ->
+                when (result) {
+                    is Result.Success -> {
+                        _state.update { FavoriteBookState.Success(books = result.value) }
+                    }
 
-//        _state.update { FavoriteBookState.Loading(value = true) }
-//        viewModelScope.launch {
-//            localRepository.getFavoriteBooksStream().collect { result ->
-//                try {
-//                    _state.update { FavoriteBookState.Success(books = result) }
-//                } catch (e: Exception) {
-//                    _state.update { FavoriteBookState.Error(exception = e) }
-//                }
-//            }
-//        }
-//        _state.update { FavoriteBookState.Loading(value = false) }
+                    is Result.Failure -> {
+                        _state.update { FavoriteBookState.Error(exception = result.exception as Exception) }
+                    }
+                }
+            }
+        }
+        _state.update { FavoriteBookState.Loading(value = false) }
     }
 
     fun updateFavoriteStatus(id: Int, isFavorite: Boolean) {

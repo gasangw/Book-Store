@@ -123,9 +123,9 @@ private fun FavoritePreviewScreen() {
     ))
     BookStoreTheme {
         FavoriteBooks(
-            onBookClicked = {_, ->},
+            onBookClicked = {_ ->},
             favoriteState = FavoriteBookState.Success(favoriteBookList),
-            deleteBook = {_, ->},
+            deleteBook = {_ ->},
         modifier = Modifier
         )
     }

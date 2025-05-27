@@ -2,6 +2,7 @@ package io.thomasgasangwa.bookstore.presentation.book_details
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.thomasgasangwa.bookstore.common.Result
 import io.thomasgasangwa.bookstore.domain.repository.LocalRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -28,12 +29,16 @@ class BookDetailsViewModel(
     fun fetchBook() {
         _state.value = BookDetailsState.Loading(value = true)
         viewModelScope.launch {
-            try {
-                localRepository.getBookStream(bookId).collect { book ->
-                    _state.value = BookDetailsState.Success(book)
+            localRepository.getBookStream(bookId).collect { book ->
+                when (book) {
+                    is Result.Success -> {
+                        _state.value = BookDetailsState.Success(book.value)
+                    }
+
+                    is Result.Failure -> {
+                        _state.value = BookDetailsState.Error(book.exception as Exception)
+                    }
                 }
-            } catch (e: Exception) {
-                _state.value = BookDetailsState.Error(e)
             }
         }
         _state.value = BookDetailsState.Loading(value = false)

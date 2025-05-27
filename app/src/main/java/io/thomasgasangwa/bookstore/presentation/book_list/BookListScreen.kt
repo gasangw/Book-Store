@@ -171,9 +171,9 @@ private fun BookListScreenPreview() {
     BookStoreTheme {
         BookListDisplay(
             onAddBookButtonClicked = {},
-            onBookClicked = {_, ->},
+            onBookClicked = {_ ->},
         booksState = BookListState.Success(bookList),
-        deleteBook = {_, ->},
+        deleteBook = {_ ->},
         updateLikes = {_,_,_, ->},
         modifier = Modifier
         )

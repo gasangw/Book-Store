@@ -193,12 +193,12 @@ private fun UpdateBookPreview() {
             onUpdateBook = {},
             updateBookState = UpdateBookState.Success(sampleBook.toBook()),
         context = context,
-        updateTitle = {_, ->},
-        updateDescription = {_, ->},
-        updateReleaseDate = {_, ->},
-        updatePages = {_, ->},
-        updateCover = {_, ->},
-        updateLikes = {_, ->},
+        updateTitle = {_ ->},
+        updateDescription = {_ ->},
+        updateReleaseDate = {_ ->},
+        updatePages = {_ ->},
+        updateCover = {_ ->},
+        updateLikes = {_ ->},
         updateBook = {},
         modifier = Modifier
         )

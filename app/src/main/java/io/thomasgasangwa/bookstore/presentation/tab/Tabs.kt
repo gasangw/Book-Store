@@ -78,9 +78,9 @@ private fun TabsPreview() {
         TabsDisplay(
             state = state,
             titles = titles,
-            onTabClicked = { index, -> },
+            onTabClicked = { index -> },
             onAddBookButtonClicked = {},
-            onBookClicked = {_, ->},
+            onBookClicked = {_ ->},
             modifier = Modifier
         )
     }
