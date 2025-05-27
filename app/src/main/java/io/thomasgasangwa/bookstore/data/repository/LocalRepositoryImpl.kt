@@ -1,5 +1,7 @@
 package io.thomasgasangwa.bookstore.data.repository
 
+import io.thomasgasangwa.bookstore.common.RepositoryException
+import io.thomasgasangwa.bookstore.common.Result
 import io.thomasgasangwa.bookstore.data.local.dao.BookDao
 import io.thomasgasangwa.bookstore.data.local.mapper.toBook
 import io.thomasgasangwa.bookstore.data.local.mapper.toBookEntity
@@ -9,55 +11,70 @@ import io.thomasgasangwa.bookstore.domain.repository.LocalRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
-import timber.log.Timber
 
 class LocalRepositoryImpl(
     private val itemDao: BookDao
 ) : LocalRepository {
-    override fun getAllBooksStream(): Flow<List<Book>> =
-        itemDao.getAllBooks().map { it.toBookList() }.catch { cause ->
-            Timber.e("Error thrown: $cause")
+    override fun getAllBooksStream(): Flow<Result<List<Book>>> =
+        itemDao.getAllBooks().map { it ->
+            Result.Success(it.toBookList())
+        }.catch { cause ->
+            Result.Failure(RepositoryException.DatabaseException("failed to fetch books", cause))
         }
 
-    override fun getBookStream(id: Int): Flow<Book> =
-        itemDao.getBookById(id).map { it.toBook() }.catch { cause ->
-            Timber.e("error thrown $cause")
+    override fun getBookStream(id: Int): Flow<Result<Book>> =
+        itemDao.getBookById(id).map { it ->
+            Result.Success(it.toBook())
+        }.catch { cause ->
+            Result.Failure(RepositoryException.NotFoundException("Book $id not found"))
         }
 
-    override fun getFavoriteBooksStream(): Flow<List<Book>> =
-        itemDao.getFavoriteBooks().map { it.toBookList() }.catch { cause ->
-            Timber.e("error thrown $cause")
+    override fun getFavoriteBooksStream(): Flow<Result<List<Book>>> =
+        itemDao.getFavoriteBooks().map { it ->
+            Result.Success(it.toBookList())
+        }.catch { cause ->
+            Result.Failure(
+                RepositoryException.DatabaseException(
+                    "Error occurred while getting favorite books",
+                    cause
+                )
+            )
         }
 
-    override suspend fun updateFavoriteStatus(id: Int, isFavorite: Boolean) =
+    override suspend fun updateFavoriteStatus(id: Int, isFavorite: Boolean): Result<Unit> =
         try {
             itemDao.updateFavoriteStatus(id, isFavorite)
+            Result.Success(Unit)
         } catch (e: Exception) {
-            Timber.e("error thrown $e")
+            Result.Failure(RepositoryException.DatabaseException("Failed to update favorite", e))
         }
 
-    override suspend fun insertBook(book: Book) = try {
+    override suspend fun insertBook(book: Book): Result<Unit> = try {
         itemDao.insert(book.toBookEntity())
+        Result.Success(Unit)
     } catch (e: Exception) {
-        Timber.e("error thrown $e")
+        Result.Failure(RepositoryException.DatabaseException("Failed to insert a book", e))
     }
 
-    override suspend fun deleteBookById(id: Int) = try {
+    override suspend fun deleteBookById(id: Int): Result<Unit> = try {
         itemDao.deleteBookById(id)
+        Result.Success(Unit)
     } catch (e: Exception) {
-        Timber.e("error thrown $e")
+        Result.Failure(RepositoryException.DatabaseException("Failed to delete a book", e))
     }
 
-    override suspend fun updateBook(book: Book) = try {
+    override suspend fun updateBook(book: Book): Result<Unit> = try {
         itemDao.update(book.toBookEntity())
+        Result.Success(Unit)
     } catch (e: Exception) {
-        Timber.e("error thrown $e")
+        Result.Failure(RepositoryException.DatabaseException("Failed to update a book", e))
     }
 
-    override suspend fun updateLikes(id: Int, likes: Int) = try {
+    override suspend fun updateLikes(id: Int, likes: Int): Result<Unit> = try {
         itemDao.updateLikes(id, likes)
+        Result.Success(Unit)
     } catch (e: Exception) {
-        Timber.e("error thrown $e")
+        Result.Failure(RepositoryException.DatabaseException("Failed to update likes of a book", e))
     }
 }
 
