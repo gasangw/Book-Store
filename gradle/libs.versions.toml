@@ -1,6 +1,7 @@
 [versions]
 agp = "8.10.1"
 kotlin = "2.1.21"
+kotlin-test = "2.1.21"
 coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -20,7 +21,10 @@ coil3 = "3.2.0"
 timber = "5.0.1"
 navigationComposeAndroid = "2.9.0"
 lifecycle = "2.6.1"
-mockito-kotlin = "5.4.0"
+mockk = "1.14.2"
+turbine = "1.2.0"
+androidx-arch-core-testing = "2.0.0-alpha1"
+kotlinx-coroutines-test = "1.10.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -56,7 +60,11 @@ timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "tim
 androidx-navigation-compose-android = { group = "androidx.navigation", name = "navigation-compose-android", version.ref = "navigationComposeAndroid" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil3" }
 lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycle" }
-mockito-kotlin = { module = "org.mockito.kotlin:mockito-kotlin", version.ref = "mockito-kotlin" }
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
+kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinx-coroutines-test" }
+androidx-arch-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "androidx-arch-core-testing" }
+kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin-test" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

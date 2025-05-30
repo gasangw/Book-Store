@@ -52,6 +52,9 @@ android {
     buildFeatures {
         compose = true
     }
+    tasks.withType<Test> {
+        jvmArgs("-XX:+EnableDynamicAgentLoading")
+    }
 }
 
 dependencies {
@@ -84,9 +87,12 @@ dependencies {
     implementation(libs.coil.network.okhttp)
     implementation(libs.lifecycle.viewmodel.compose)
 
-
+    testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
-    testImplementation(libs.mockito.kotlin)
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
+    testImplementation(libs.kotlin.test)
+    androidTestImplementation(libs.androidx.arch.core.testing)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

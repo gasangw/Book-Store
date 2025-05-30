@@ -42,7 +42,6 @@ class BookListViewModel(
             }
 
         }
-        _state.update { BookListState.Loading(value = false) }
     }
 
     fun deleteBook(id: Int) {

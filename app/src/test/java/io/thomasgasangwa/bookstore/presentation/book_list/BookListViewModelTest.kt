@@ -1,12 +1,85 @@
-//package io.thomasgasangwa.bookstore.presentation.book_list
-//
-//import io.thomasgasangwa.bookstore.domain.repository.LocalRepository
-//import org.mockito.Mock
-//
-//
-//class BookListViewModelTest {
-//    //private val testDispatcher = StandardDisptacher
-//
-//    @Mock
-//    lateinit var localRespository: LocalRepository
-//}
+package io.thomasgasangwa.bookstore.presentation.book_list
+
+import io.mockk.MockKAnnotations
+import io.mockk.coEvery
+import io.mockk.impl.annotations.MockK
+import io.thomasgasangwa.bookstore.common.Result
+import io.thomasgasangwa.bookstore.domain.model.Book
+import io.thomasgasangwa.bookstore.domain.repository.LocalRepository
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.TestDispatcher
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runTest
+import kotlinx.coroutines.test.setMain
+import org.junit.After
+import org.junit.Assert.assertEquals
+import org.junit.Before
+import org.junit.Test
+
+class BookListViewModelTest {
+    @MockK
+    lateinit var fakeLocalRepository: LocalRepository
+
+    private lateinit var viewModel: BookListViewModel
+
+    private lateinit var testDispatcher: TestDispatcher
+
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Before
+    fun setup() {
+        MockKAnnotations.init(this, relaxUnitFun = true)
+        testDispatcher = UnconfinedTestDispatcher()
+        Dispatchers.setMain(testDispatcher)
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @After
+    fun tearDown() {
+        Dispatchers.resetMain()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `getAllBooks returns all books in the database`() = runTest {
+        val books = listOf(
+            Book(
+                id = 1,
+                title = "business",
+                releaseDate = "May 23, 1993",
+                description = "Learn how to start a business",
+                pages = 22,
+                cover = "",
+                likes = 30,
+                isFavorite = false
+            ),
+            Book(
+                id = 2,
+                title = "business2",
+                releaseDate = "May 2, 1973",
+                description = "Learn how to start a business with less capital",
+                pages = 900,
+                cover = "",
+                likes = 90,
+                isFavorite = false
+            )
+        )
+
+        coEvery { fakeLocalRepository.getAllBooksStream() } returns flowOf(Result.Success(books))
+        viewModel = BookListViewModel(fakeLocalRepository)
+
+        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+            viewModel.state.collect {}
+        }
+        testDispatcher.scheduler.advanceUntilIdle()
+        val actualBooks = viewModel.state.value
+        assert(actualBooks is BookListState.Success)
+        assertEquals(books, (actualBooks as BookListState.Success).books)
+
+
+    }
+}
