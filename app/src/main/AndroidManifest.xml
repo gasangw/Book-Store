@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    
+
     <application
         android:name=".BookStoreApp"
         android:allowBackup="true"
@@ -13,12 +13,12 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BookStore"
+        android:theme="@style/Theme.BookStore.Starting"
         tools:targetApi="31">
         <activity
             android:name=".presentation.view.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.BookStore">
+            android:theme="@style/Theme.BookStore.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

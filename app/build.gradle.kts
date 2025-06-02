@@ -86,6 +86,7 @@ dependencies {
     implementation(libs.timber)
     implementation(libs.coil.network.okhttp)
     implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.core.splashscreen)
 
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)

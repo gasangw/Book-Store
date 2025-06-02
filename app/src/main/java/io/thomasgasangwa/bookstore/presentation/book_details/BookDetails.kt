@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -13,6 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,6 +46,8 @@ fun BookDetails(
     bookId: Int?,
     onEditBook: (BookParcelableData) -> Unit
 ) {
+    // this should be remove when the logic for booking is implemented
+    val isBooked: Boolean = false
 
     val favoriteViewModel: FavoriteViewModel = koinViewModel()
 
@@ -58,6 +62,7 @@ fun BookDetails(
             favoriteViewModel.updateFavoriteStatus(id, isFavorite)
         },
         onEditBook = onEditBook,
+        isBooked = isBooked,
         modifier = modifier
     )
 }
@@ -67,6 +72,7 @@ fun BookDetailsContent(
     bookDetailState: BookDetailsState,
     updateFavoriteStatus: (Int, Boolean) -> Unit,
     onEditBook: (BookParcelableData) -> Unit,
+    isBooked: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -140,6 +146,30 @@ fun BookDetailsContent(
                     text = book.description, style = MaterialTheme.typography.labelMedium,
                     modifier = Modifier, textAlign = TextAlign.Justify
                 )
+                Spacer(modifier = Modifier.height(20.dp))
+
+                Row(
+                    modifier = Modifier.fillMaxSize(),
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.Bottom
+
+                    ) {
+                    if(isBooked){
+                        Text(
+                            text = "This book has been borrowed and will be returned on 2023-01-01",
+                            style = MaterialTheme.typography.labelMedium,
+                            color = MaterialTheme.colorScheme.error,
+                            textAlign = TextAlign.Center
+                        )
+                    } else {
+                        Button(
+                            onClick = {},
+                            modifier = modifier
+                        ) {
+                            Text(text = "Borrow Now")
+                        }
+                    }
+                }
             }
 
             is BookDetailsState.Error -> {
@@ -171,6 +201,7 @@ private fun BookDetailsPreview() {
             bookDetailState = sampleBook,
             updateFavoriteStatus = { bookId, isFavorite -> },
             onEditBook = {},
+            isBooked = false,
             modifier = Modifier
         )
     }

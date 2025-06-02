@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.thomasgasangwa.bookstore.common.Result
 import io.thomasgasangwa.bookstore.domain.repository.LocalRepository
+import io.thomasgasangwa.bookstore.domain.usecase.GetAllBooksUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -12,7 +13,8 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class BookListViewModel(
-    private val localRepository: LocalRepository
+    private val localRepository: LocalRepository,
+    private val getAllBooksUseCase: GetAllBooksUseCase
 ) : ViewModel() {
     private val _state = MutableStateFlow<BookListState>(BookListState.Success(emptyList()))
     val state: StateFlow<BookListState> = _state.stateIn(
@@ -29,6 +31,7 @@ class BookListViewModel(
 
         _state.update { BookListState.Loading(value = true) }
         viewModelScope.launch {
+            getAllBooksUseCase()
             localRepository.getAllBooksStream().collect { result ->
                 when (result) {
                     is Result.Success -> {
