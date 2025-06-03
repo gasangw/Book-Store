@@ -15,8 +15,8 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import io.thomasgasangwa.bookstore.R
-import io.thomasgasangwa.bookstore.presentation.book_list.components.BookStatusDisplay
-import io.thomasgasangwa.bookstore.presentation.book_list.components.BookingStatus
+import io.thomasgasangwa.bookstore.presentation.view_models.components.BookStatusDisplay
+import io.thomasgasangwa.bookstore.presentation.view_models.components.BookingStatus
 
 @Composable
 fun BookCover(modifier: Modifier = Modifier, bookCoverUrl: String) {
@@ -38,8 +38,11 @@ fun BookCover(modifier: Modifier = Modifier, bookCoverUrl: String) {
         )
         BookStatusDisplay(
             status = BookingStatus.AVAILABLE,
-            modifier = Modifier.align(
-                alignment = Alignment.TopEnd).padding(10.dp)
+            modifier = Modifier
+                .align(
+                    alignment = Alignment.TopEnd
+                )
+                .padding(10.dp)
 
         )
     }
@@ -48,7 +51,7 @@ fun BookCover(modifier: Modifier = Modifier, bookCoverUrl: String) {
 @Preview
 @Composable
 private fun BookCoverPreview() {
-    BookStoreTheme{
+    BookStoreTheme {
         BookCover(bookCoverUrl = "")
     }
 }

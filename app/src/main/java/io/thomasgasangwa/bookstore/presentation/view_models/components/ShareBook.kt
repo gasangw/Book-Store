@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookstore.presentation.book_list.components
+package io.thomasgasangwa.bookstore.presentation.view_models.components
 
 import android.content.Context
 import android.content.Intent

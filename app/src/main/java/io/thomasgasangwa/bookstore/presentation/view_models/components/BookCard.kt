@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookstore.presentation.book_list.components
+package io.thomasgasangwa.bookstore.presentation.view_models.components
 
 import BookStoreTheme
 import androidx.compose.foundation.layout.Row

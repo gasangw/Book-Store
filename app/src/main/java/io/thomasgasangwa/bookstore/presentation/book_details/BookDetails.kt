@@ -10,6 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Favorite
@@ -22,18 +24,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewLightDark
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookstore.R
 import io.thomasgasangwa.bookstore.domain.model.Book
 import io.thomasgasangwa.bookstore.domain.model.toBookParcelableData
+import io.thomasgasangwa.bookstore.presentation.borrow_dialog.BorrowDialog
 import io.thomasgasangwa.bookstore.presentation.favorites.FavoriteViewModel
 import io.thomasgasangwa.bookstore.presentation.update_book.BookParcelableData
 import io.thomasgasangwa.bookstore.presentation.view.components.BookCover
@@ -46,8 +51,10 @@ fun BookDetails(
     bookId: Int?,
     onEditBook: (BookParcelableData) -> Unit
 ) {
+
+    var showDialog by rememberSaveable { mutableStateOf(false) }
     // this should be remove when the logic for booking is implemented
-    val isBooked: Boolean = false
+    var isBooked: Boolean = false
 
     val favoriteViewModel: FavoriteViewModel = koinViewModel()
 
@@ -63,6 +70,8 @@ fun BookDetails(
         },
         onEditBook = onEditBook,
         isBooked = isBooked,
+        showDialog = showDialog,
+        onShowDialogChange = { it -> showDialog = it },
         modifier = modifier
     )
 }
@@ -73,10 +82,13 @@ fun BookDetailsContent(
     updateFavoriteStatus: (Int, Boolean) -> Unit,
     onEditBook: (BookParcelableData) -> Unit,
     isBooked: Boolean,
+    showDialog: Boolean,
+    onShowDialogChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.padding(10.dp),
+        modifier = modifier.padding(10.dp)
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -153,8 +165,8 @@ fun BookDetailsContent(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.Bottom
 
-                    ) {
-                    if(isBooked){
+                ) {
+                    if (isBooked) {
                         Text(
                             text = "This book has been borrowed and will be returned on 2023-01-01",
                             style = MaterialTheme.typography.labelMedium,
@@ -163,12 +175,19 @@ fun BookDetailsContent(
                         )
                     } else {
                         Button(
-                            onClick = {},
+                            onClick = { onShowDialogChange(!showDialog) },
                             modifier = modifier
                         ) {
                             Text(text = "Borrow Now")
                         }
                     }
+                }
+
+                if (showDialog) {
+                    BorrowDialog(
+                        onDismiss = {  onShowDialogChange(!showDialog) },
+                        onConfirm = {}
+                    )
                 }
             }
 
@@ -187,21 +206,25 @@ fun BookDetailsContent(
 @Composable
 private fun BookDetailsPreview() {
     BookStoreTheme {
-        val sampleBook =  BookDetailsState.Success(Book(
-            id = 1,
-            title = "Sample Book",
-            cover = "sample_cover_url",
-            pages = 300,
-            releaseDate = "2023-01-01",
-            description = "Sample description",
-            likes = 0,
-            isFavorite = false
-        ))
+        val sampleBook = BookDetailsState.Success(
+            Book(
+                id = 1,
+                title = "Sample Book",
+                cover = "sample_cover_url",
+                pages = 300,
+                releaseDate = "2023-01-01",
+                description = "Sample description",
+                likes = 0,
+                isFavorite = false
+            )
+        )
         BookDetailsContent(
             bookDetailState = sampleBook,
             updateFavoriteStatus = { bookId, isFavorite -> },
             onEditBook = {},
             isBooked = false,
+            showDialog = true,
+            onShowDialogChange = {},
             modifier = Modifier
         )
     }

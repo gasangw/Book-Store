@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookstore.presentation.book_list
+package io.thomasgasangwa.bookstore.presentation.view_models
 
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -45,6 +45,7 @@ class BookDetailsViewModelTest {
         Dispatchers.resetMain()
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `get details of the book`() = runTest {
         val book = Book(

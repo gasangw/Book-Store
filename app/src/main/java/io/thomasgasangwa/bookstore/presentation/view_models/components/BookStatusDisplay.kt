@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookstore.presentation.book_list.components
+package io.thomasgasangwa.bookstore.presentation.view_models.components
 
 import BookStoreTheme
 import androidx.compose.foundation.background
@@ -17,17 +17,17 @@ fun BookStatusDisplay(modifier: Modifier = Modifier, status: BookingStatus) {
         text = status.name.lowercase(),
         modifier
             .clip(shape = MaterialTheme.shapes.medium)
-            .background(color = if(status == BookingStatus.AVAILABLE) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.errorContainer)
+            .background(color = if (status == BookingStatus.AVAILABLE) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.errorContainer)
             .padding(horizontal = 8.dp, vertical = 4.dp),
         style = MaterialTheme.typography.labelMedium,
-        color = if(status == BookingStatus.AVAILABLE) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.error
+        color = if (status == BookingStatus.AVAILABLE) MaterialTheme.colorScheme.onBackground else MaterialTheme.colorScheme.error
     )
 }
 
 @Preview
 @Composable
 private fun BookStatusDisplayPreview() {
-    BookStoreTheme{
+    BookStoreTheme {
         BookStatusDisplay(status = BookingStatus.AVAILABLE)
 
     }

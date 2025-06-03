@@ -12,9 +12,9 @@ import io.thomasgasangwa.bookstore.domain.repository.RemoteRepository
 import io.thomasgasangwa.bookstore.domain.usecase.GetAllBooksUseCase
 import io.thomasgasangwa.bookstore.presentation.add_book.AddBookViewModel
 import io.thomasgasangwa.bookstore.presentation.book_details.BookDetailsViewModel
-import io.thomasgasangwa.bookstore.presentation.book_list.BookListViewModel
 import io.thomasgasangwa.bookstore.presentation.favorites.FavoriteViewModel
 import io.thomasgasangwa.bookstore.presentation.update_book.UpdateBookViewModel
+import io.thomasgasangwa.bookstore.presentation.view_models.BookListViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit

@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookstore.R
 import io.thomasgasangwa.bookstore.domain.model.Book
-import io.thomasgasangwa.bookstore.presentation.book_list.BookListViewModel
-import io.thomasgasangwa.bookstore.presentation.book_list.components.BookCard
+import io.thomasgasangwa.bookstore.presentation.view_models.BookListViewModel
+import io.thomasgasangwa.bookstore.presentation.view_models.components.BookCard
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -36,15 +36,15 @@ fun Favorites(modifier: Modifier = Modifier, onBookClicked: (Int) -> Unit) {
 
     FavoriteBooks(
         favoriteState = favoriteState,
-        deleteBook = {it -> bookViewModel.deleteBook(it)},
-        onBookClicked = {it -> onBookClicked(it) },
+        deleteBook = { it -> bookViewModel.deleteBook(it) },
+        onBookClicked = { it -> onBookClicked(it) },
         modifier = modifier
     )
 }
 
 @Composable
 fun FavoriteBooks(
-    favoriteState:FavoriteBookState,
+    favoriteState: FavoriteBookState,
     deleteBook: (Int) -> Unit,
     onBookClicked: (Int) -> Unit,
     modifier: Modifier = Modifier
@@ -111,22 +111,24 @@ fun FavoriteBooks(
 @Preview
 @Composable
 private fun FavoritePreviewScreen() {
-    val favoriteBookList = listOf( Book(
-        id = 1,
-        title = "Sample Book",
-        cover = "sample_cover_url",
-        pages = 300,
-        releaseDate = "2023-01-01",
-        description = "Sample description",
-        likes = 20,
-        isFavorite = true
-    ))
+    val favoriteBookList = listOf(
+        Book(
+            id = 1,
+            title = "Sample Book",
+            cover = "sample_cover_url",
+            pages = 300,
+            releaseDate = "2023-01-01",
+            description = "Sample description",
+            likes = 20,
+            isFavorite = true
+        )
+    )
     BookStoreTheme {
         FavoriteBooks(
-            onBookClicked = {_ ->},
+            onBookClicked = { _ -> },
             favoriteState = FavoriteBookState.Success(favoriteBookList),
-            deleteBook = {_ ->},
-        modifier = Modifier
+            deleteBook = { _ -> },
+            modifier = Modifier
         )
     }
 }

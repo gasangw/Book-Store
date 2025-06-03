@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookstore.presentation.book_list
+package io.thomasgasangwa.bookstore.presentation.view_models
 
 import io.thomasgasangwa.bookstore.domain.model.Book
 

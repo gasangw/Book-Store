@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookstore.presentation.book_list
+package io.thomasgasangwa.bookstore.presentation.view_models
 
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
@@ -7,6 +7,7 @@ import io.thomasgasangwa.bookstore.common.RepositoryException
 import io.thomasgasangwa.bookstore.common.Result
 import io.thomasgasangwa.bookstore.domain.model.Book
 import io.thomasgasangwa.bookstore.domain.repository.LocalRepository
+import io.thomasgasangwa.bookstore.domain.usecase.GetAllBooksUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
@@ -24,6 +25,9 @@ import org.junit.Test
 class BookListViewModelTest {
     @MockK
     lateinit var fakeLocalRepository: LocalRepository
+
+    @MockK
+    lateinit var getAllBooksUseCase: GetAllBooksUseCase
 
     private lateinit var viewModel: BookListViewModel
 
@@ -70,8 +74,10 @@ class BookListViewModelTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `getAllBooks returns all books in the database`() = runTest {
-        coEvery { fakeLocalRepository.getAllBooksStream() } returns flowOf(Result.Success(books))
-        viewModel = BookListViewModel(fakeLocalRepository)
+        coEvery { getAllBooksUseCase(); fakeLocalRepository.getAllBooksStream() } returns flowOf(
+            Result.Success(books)
+        )
+        viewModel = BookListViewModel(fakeLocalRepository, getAllBooksUseCase)
 
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.state.collect {}
@@ -82,14 +88,15 @@ class BookListViewModelTest {
         assertEquals(books, (actualBooks as BookListState.Success).books)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `throws an error on database failure`() = runTest {
-        coEvery { fakeLocalRepository.getAllBooksStream() } returns flowOf(
+        coEvery { getAllBooksUseCase(); fakeLocalRepository.getAllBooksStream() } returns flowOf(
             Result.Failure(
                 RepositoryException.DatabaseException("Database Exception, failed to getAllBooks")
             )
         )
-        viewModel = BookListViewModel(fakeLocalRepository)
+        viewModel = BookListViewModel(fakeLocalRepository, getAllBooksUseCase)
 
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.state.collect {}
@@ -99,13 +106,16 @@ class BookListViewModelTest {
         assert(error is BookListState.Error)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `delete a book with a given Id`() = runTest {
 
         coEvery { fakeLocalRepository.deleteBookById(1) } returns Result.Success(Unit)
-        coEvery { fakeLocalRepository.getAllBooksStream() } returns flowOf(Result.Success(books.filter { it.id != 1 }))
+        coEvery { getAllBooksUseCase(); fakeLocalRepository.getAllBooksStream() } returns flowOf(
+            Result.Success(books.filter { it.id != 1 })
+        )
 
-        viewModel = BookListViewModel(fakeLocalRepository)
+        viewModel = BookListViewModel(fakeLocalRepository, getAllBooksUseCase)
 
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.state.collect {}

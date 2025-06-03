@@ -1,0 +1,3 @@
+package io.thomasgasangwa.bookstore.presentation.view_models
+
+class AddBookViewModelTest

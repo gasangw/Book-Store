@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookstore.presentation.book_list
+package io.thomasgasangwa.bookstore.presentation.view_models
 
 import BookStoreTheme
 import androidx.compose.foundation.background
@@ -30,9 +30,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookstore.R
 import io.thomasgasangwa.bookstore.domain.model.Book
-import io.thomasgasangwa.bookstore.presentation.book_list.components.BookCard
+import io.thomasgasangwa.bookstore.presentation.view_models.components.BookCard
 import org.koin.androidx.compose.koinViewModel
-import kotlin.Int
 
 
 @Composable
@@ -115,7 +114,7 @@ fun BookListDisplay(
                                     bookCoverUrl = book.cover,
                                     id = book.id,
                                     deleteBook = { id ->
-                                       deleteBook(id)
+                                        deleteBook(id)
                                     },
                                     likes = book.likes,
                                     description = book.description,
@@ -148,34 +147,36 @@ fun BookListDisplay(
 @Preview
 @Composable
 private fun BookListScreenPreview() {
-    val bookList = listOf( Book(
-        id = 1,
-        title = "Sample Book",
-        cover = "sample_cover_url",
-        pages = 300,
-        releaseDate = "2023-01-01",
-        description = "Sample description",
-        likes = 20,
-        isFavorite = false
-    ),      Book(
-        id = 2,
-        title = "Trying Book",
-        cover = "sample_cover_url",
-        pages = 100,
-        releaseDate = "2024-01-01",
-        description = "Sample description",
-        likes = 12,
-        isFavorite = false
-    ))
+    val bookList = listOf(
+        Book(
+            id = 1,
+            title = "Sample Book",
+            cover = "sample_cover_url",
+            pages = 300,
+            releaseDate = "2023-01-01",
+            description = "Sample description",
+            likes = 20,
+            isFavorite = false
+        ), Book(
+            id = 2,
+            title = "Trying Book",
+            cover = "sample_cover_url",
+            pages = 100,
+            releaseDate = "2024-01-01",
+            description = "Sample description",
+            likes = 12,
+            isFavorite = false
+        )
+    )
 
     BookStoreTheme {
         BookListDisplay(
             onAddBookButtonClicked = {},
-            onBookClicked = {_ ->},
-        booksState = BookListState.Success(bookList),
-        deleteBook = {_ ->},
-        updateLikes = {_,_,_, ->},
-        modifier = Modifier
+            onBookClicked = { _ -> },
+            booksState = BookListState.Success(bookList),
+            deleteBook = { _ -> },
+            updateLikes = { _, _, _ -> },
+            modifier = Modifier
         )
     }
 }

@@ -42,7 +42,6 @@ class FavoriteViewModel(
                 }
             }
         }
-        // _state.update { FavoriteBookState.Loading(value = false) }
     }
 
     fun updateFavoriteStatus(id: Int, isFavorite: Boolean) {
