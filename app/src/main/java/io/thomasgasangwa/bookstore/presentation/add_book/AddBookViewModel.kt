@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class AddBookViewModel(
     private val localRepository: LocalRepository
@@ -65,11 +64,7 @@ class AddBookViewModel(
             )
 
             viewModelScope.launch {
-                try {
-                    localRepository.insertBook(book)
-                } catch (e: Exception) {
-                    Timber.e(e)
-                }
+                localRepository.insertBook(book)
             }
 
         }
