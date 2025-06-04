@@ -15,7 +15,6 @@ class AddBookViewModel(
 ) : ViewModel() {
 
     private val _formState = MutableStateFlow<AddBookFormState>(AddBookFormState())
-
     val formState: StateFlow<AddBookFormState> = _formState.asStateFlow()
 
     fun onTitleChanged(title: String) {
@@ -44,31 +43,38 @@ class AddBookViewModel(
         _formState.value = _formState.value.copy(likes = likes)
     }
 
-    fun addBook() {
-
-        if (_formState.value.title.isNotEmpty() &&
-            _formState.value.description.isNotEmpty() &&
-            _formState.value.releaseDate.isNotEmpty() &&
-            _formState.value.pages > 0 &&
-            _formState.value.likes >= 0
+    fun addBook():Boolean {
+        val state = _formState.value
+        if (state.title.isNotEmpty() &&
+            state.description.isNotEmpty() &&
+            state.releaseDate.isNotEmpty() &&
+            state.pages > 0 &&
+            state.likes >= 0
         ) {
             val book = Book(
                 id = 0,
-                title = _formState.value.title,
-                description = _formState.value.description,
-                releaseDate = _formState.value.releaseDate,
-                pages = _formState.value.pages,
-                cover = if (_formState.value.cover.isBlank()) DEFAULT_COVER else _formState.value.cover,
-                likes = _formState.value.likes,
+                title = state.title,
+                description = state.description,
+                releaseDate = state.releaseDate,
+                pages = state.pages,
+                cover = if (state.cover.isBlank()) DEFAULT_COVER else state.cover,
+                likes = state.likes,
                 isFavorite = false
             )
-
             viewModelScope.launch {
                 localRepository.insertBook(book)
             }
-
+          return true
         }
+        return false
     }
 
 }
+/// seven unit tests for this method.
+// 1. if the book contains the values you provided and also the if else for the cover to be tested (2 test)
+// 2. test that the localRepository is actually called with the book class
+// 3. if any of the if conditions is false, you do not call the LocalRepository.insertBook. (find out the way
+// to get the arguments)--> check the call argument for insertBook. (Mockito library how to verify arguments)
 
+// for the else case make one of the values empty or false .
+// improve the naming of test methods ( this is a template <methodUnderTest>_<precondition>_<expectedResult>() )

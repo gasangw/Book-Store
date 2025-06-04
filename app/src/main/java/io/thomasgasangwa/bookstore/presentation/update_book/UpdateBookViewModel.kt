@@ -16,9 +16,6 @@ class UpdateBookViewModel(
     private val _state = MutableStateFlow<UpdateBookState>(UpdateBookState.Success(book))
     val state: StateFlow<UpdateBookState> = _state.asStateFlow()
 
-    init {
-        updateBook()
-    }
 
     fun getCurrentBook(): Book {
         return (_state.value as UpdateBookState.Success).book

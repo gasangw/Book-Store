@@ -1,14 +1,18 @@
 package io.thomasgasangwa.bookstore.presentation.view_models
 
 import io.mockk.MockKAnnotations
+import io.mockk.called
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
+import io.mockk.slot
+import io.thomasgasangwa.bookstore.common.Constants.DEFAULT_COVER
 import io.thomasgasangwa.bookstore.common.Result
 import io.thomasgasangwa.bookstore.domain.model.Book
 import io.thomasgasangwa.bookstore.domain.repository.LocalRepository
 import io.thomasgasangwa.bookstore.presentation.add_book.AddBookViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.resetMain
@@ -17,7 +21,7 @@ import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import kotlin.test.Test
-import kotlin.test.assertContains
+import kotlin.test.assertEquals
 
 class AddBookViewModelTest {
     @MockK
@@ -26,6 +30,7 @@ class AddBookViewModelTest {
     private lateinit var viewModel: AddBookViewModel
     private lateinit var testDispatcher: TestDispatcher
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup() {
         MockKAnnotations.init(this)
@@ -33,6 +38,7 @@ class AddBookViewModelTest {
         Dispatchers.setMain(testDispatcher)
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     @After
     fun tearDown() {
         Dispatchers.resetMain()
@@ -60,9 +66,14 @@ class AddBookViewModelTest {
             isFavorite = false
         )
     )
+/// <methodUnderTest>_<precondition>_<expectedResult>()
+
+    // write unit tests *2 and verify that the book has correct properties.
+    // look through the Mockk documentation for the (arguments)
 
     @Test
-    fun `add a new book`() = runTest {
+    fun `addBook-formData is all valid-localRepository#insertBook is called only once`() = runTest {
+        val bookSlot = slot<Book>()
         val newBook = Book(
             id = 0,
             title = "i am new",
@@ -74,7 +85,7 @@ class AddBookViewModelTest {
             isFavorite = false
         )
 
-        coEvery { fakeLocalRepository.insertBook(newBook) } returns Result.Success(Unit)
+        coEvery { fakeLocalRepository.insertBook(capture(bookSlot)) } returns Result.Success(Unit)
 
         viewModel = AddBookViewModel(fakeLocalRepository)
 
@@ -86,12 +97,74 @@ class AddBookViewModelTest {
         viewModel.onPagesChanged(newBook.pages.toString())
 
         viewModel.addBook()
-        books.add(newBook)
+
         testDispatcher.scheduler.advanceUntilIdle()
 
-        coVerify { fakeLocalRepository.insertBook(newBook) }
+        val expectedBook = bookSlot.captured
+        assertEquals(newBook.title, expectedBook.title)
+        assertEquals(newBook.description, expectedBook.description)
+        assertEquals(newBook.pages, expectedBook.pages)
+        assertEquals(newBook.likes, expectedBook.likes)
+        assertEquals(newBook.cover, expectedBook.cover)
+        assertEquals(newBook.releaseDate, expectedBook.releaseDate)
 
-        assertContains(books, newBook)
+        coVerify(exactly = 1) { fakeLocalRepository.insertBook(any()) }
+
+    }
+
+    @Test
+    fun `addBook-allValid-coverBlank-usesDefaultCover`() = runTest {
+        val bookSlot = slot<Book>()
+        coEvery { fakeLocalRepository.insertBook(capture(bookSlot)) } returns Result.Success(Unit)
+
+        viewModel = AddBookViewModel(fakeLocalRepository)
+        viewModel.onTitleChanged("Title")
+        viewModel.onDescriptionChanged("Desc")
+        viewModel.onReleaseDateChanged("2025-06-04")
+        viewModel.onPagesChanged("100")
+        viewModel.onCoverChanged("")
+        viewModel.onLikesChanged("10")
+
+        viewModel.addBook()
+
+        coVerify(exactly = 1) { fakeLocalRepository.insertBook(any()) }
+        assertEquals(DEFAULT_COVER, bookSlot.captured.cover)
+    }
+
+    @Test
+    fun `addBook-formData is not all valid-localRepository#insertBook is not called`() = runTest {
+        val newBook = Book(
+            id = 0,
+            title = "",
+            releaseDate = "June 2, 2025",
+            description = "",
+            pages = 10,
+            cover = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQcjl4Rv6ypjyty5A4hMzfcwvg71Q9LKJDjYg&s",
+            likes = 0,
+            isFavorite = false
+        )
+
+        val bookSlot = slot<Book>()
+        coEvery { fakeLocalRepository.insertBook(capture(bookSlot)) } returns Result.Success(Unit)
+
+        viewModel = AddBookViewModel(fakeLocalRepository)
+
+        viewModel.onTitleChanged(newBook.title)
+        viewModel.onDescriptionChanged(newBook.description)
+        viewModel.onReleaseDateChanged(newBook.releaseDate)
+        viewModel.onLikesChanged(newBook.likes.toString())
+        viewModel.onCoverChanged(newBook.cover)
+        viewModel.onPagesChanged(newBook.pages.toString())
+
+        viewModel.addBook()
+
+        testDispatcher.scheduler.advanceUntilIdle()
+
+        val isBookAdded = viewModel.addBook()
+
+        assertEquals(isBookAdded, false)
+
+        coVerify { fakeLocalRepository wasNot called }
 
     }
 }

@@ -62,9 +62,10 @@ fun AddBookForm(
     onPagesChanged: (String) -> Unit,
     onCoverChanged: (String) -> Unit,
     onLikesChanged: (String) -> Unit,
-    addBook: () -> Unit,
+    addBook: () -> Boolean,
     modifier: Modifier = Modifier
 ) {
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -141,9 +142,15 @@ fun AddBookForm(
             }
             Button(
                 onClick = {
-                    addBook()
-                    onAddBook()
-                    Toast.makeText(context, "Book added successfully", Toast.LENGTH_SHORT).show()
+                    val allfieldsAreValid = addBook()
+                    if (allfieldsAreValid) {
+                        onAddBook()
+                        Toast.makeText(context, "Book added successfully", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        Toast.makeText(context, "Please fill all required fields correctly", Toast.LENGTH_SHORT).show()
+                    }
+
                 },
                 modifier = modifier.weight(1f)
             ) {
@@ -151,6 +158,8 @@ fun AddBookForm(
             }
         }
     }
+
+
 }
 
 
@@ -166,6 +175,9 @@ private fun AddBookFormPreview() {
         likes = 0,
         isFavorite = false
     )
+
+    val allFormFieldsAreValid = true
+
     val context = LocalContext.current
     BookStoreTheme {
         AddBookForm(
@@ -179,7 +191,7 @@ private fun AddBookFormPreview() {
             onPagesChanged = { _ -> },
             onCoverChanged = { _ -> },
             onLikesChanged = { _ -> },
-            addBook = {},
+            addBook = { allFormFieldsAreValid },
             modifier = Modifier
         )
     }
