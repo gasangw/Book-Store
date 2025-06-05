@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookstore.presentation.view_models
+package io.thomasgasangwa.bookstore.presentation.book_list
 
 import BookStoreTheme
 import androidx.compose.foundation.background
@@ -30,7 +30,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookstore.R
 import io.thomasgasangwa.bookstore.domain.model.Book
-import io.thomasgasangwa.bookstore.presentation.view_models.components.BookCard
+import io.thomasgasangwa.bookstore.presentation.book_list.components.BookCard
 import org.koin.androidx.compose.koinViewModel
 
 

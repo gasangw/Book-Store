@@ -1,9 +1,11 @@
-package io.thomasgasangwa.bookstore.presentation.view_models
+package io.thomasgasangwa.bookstore.presentation.book
 
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
+import io.mockk.slot
+import io.thomasgasangwa.bookstore.common.RepositoryException
 import io.thomasgasangwa.bookstore.common.Result
 import io.thomasgasangwa.bookstore.domain.model.Book
 import io.thomasgasangwa.bookstore.domain.repository.LocalRepository
@@ -22,6 +24,7 @@ import org.junit.After
 import org.junit.Before
 import kotlin.test.Test
 import kotlin.test.assertEquals
+import kotlin.test.assertTrue
 
 class BookDetailsViewModelTest {
     @MockK
@@ -45,9 +48,12 @@ class BookDetailsViewModelTest {
         Dispatchers.resetMain()
     }
 
+    /// <methodUnderTest>_<precondition>_<expectedResult>()
+
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `get details of the book`() = runTest {
+    fun `fetchBook-book id is valid-localRepository#getBookStream is called once`() = runTest {
+        val bookId = slot<Int>()
         val book = Book(
             id = 1,
             title = "business",
@@ -59,10 +65,13 @@ class BookDetailsViewModelTest {
             isFavorite = false
         )
 
-        coEvery { fakeLocalRepository.getBookStream(1) } returns flowOf(Result.Success(book))
+        coEvery { fakeLocalRepository.getBookStream(capture(bookId)) } returns flowOf(
+            Result.Success(
+                book
+            )
+        )
 
         viewModel = BookDetailsViewModel(1, fakeLocalRepository)
-        viewModel.fetchBook()
 
         backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
             viewModel.state.collect {}
@@ -70,12 +79,41 @@ class BookDetailsViewModelTest {
 
         testDispatcher.scheduler.advanceUntilIdle()
 
-        val actualBook = viewModel.state.value
+        val bookDetails = (viewModel.state.value as BookDetailsState.Success).book
 
-        coVerify { fakeLocalRepository.getBookStream(1) }
-        assert(actualBook is BookDetailsState.Success)
-        assertEquals(book, (actualBook as BookDetailsState.Success).book)
+        assertEquals(bookDetails.id, bookId.captured)
+
+        coVerify(exactly = 1) { fakeLocalRepository.getBookStream(any()) }
 
     }
+
+    @Test
+    fun `fetchBook-book id is not valid-localRepository#getBookStream throws NotFoundException`() =
+        runTest {
+            val bookId = slot<Int>()
+
+            coEvery { fakeLocalRepository.getBookStream(capture(bookId)) } returns flowOf(
+                Result.Failure(RepositoryException.NotFoundException("Book with id 90 is not found"))
+            )
+
+            viewModel = BookDetailsViewModel(90, fakeLocalRepository)
+
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.state.collect {}
+            }
+
+            testDispatcher.scheduler.advanceUntilIdle()
+
+            val state = viewModel.state.value
+            val errorState = state as BookDetailsState.Error
+
+
+            assertTrue(state is BookDetailsState.Error)
+
+            assertEquals("Book with id 90 is not found", errorState.exception.message)
+
+            coVerify(exactly = 1) { fakeLocalRepository.getBookStream(any()) }
+
+        }
 
 }

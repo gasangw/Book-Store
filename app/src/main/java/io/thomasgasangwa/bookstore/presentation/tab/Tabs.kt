@@ -14,8 +14,8 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import io.thomasgasangwa.bookstore.presentation.book_list.BookListScreen
 import io.thomasgasangwa.bookstore.presentation.favorites.Favorites
-import io.thomasgasangwa.bookstore.presentation.view_models.BookListScreen
 
 @Composable
 fun Tabs(

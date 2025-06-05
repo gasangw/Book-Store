@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookstore.presentation.view_models
+package io.thomasgasangwa.bookstore.presentation.book_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

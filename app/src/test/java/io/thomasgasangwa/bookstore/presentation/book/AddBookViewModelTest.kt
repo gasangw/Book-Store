@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookstore.presentation.view_models
+package io.thomasgasangwa.bookstore.presentation.book
 
 import io.mockk.MockKAnnotations
 import io.mockk.called
@@ -23,6 +23,7 @@ import org.junit.Before
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class AddBookViewModelTest {
     @MockK
     lateinit var fakeLocalRepository: LocalRepository
@@ -30,46 +31,19 @@ class AddBookViewModelTest {
     private lateinit var viewModel: AddBookViewModel
     private lateinit var testDispatcher: TestDispatcher
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup() {
         MockKAnnotations.init(this)
         testDispatcher = UnconfinedTestDispatcher()
         Dispatchers.setMain(testDispatcher)
     }
-
-    @OptIn(ExperimentalCoroutinesApi::class)
+    
     @After
     fun tearDown() {
         Dispatchers.resetMain()
     }
 
-    val books = mutableListOf(
-        Book(
-            id = 1,
-            title = "business",
-            releaseDate = "May 23, 1993",
-            description = "Learn how to start a business",
-            pages = 22,
-            cover = "",
-            likes = 30,
-            isFavorite = false
-        ),
-        Book(
-            id = 2,
-            title = "business2",
-            releaseDate = "May 2, 1973",
-            description = "Learn how to start a business with less capital",
-            pages = 900,
-            cover = "",
-            likes = 90,
-            isFavorite = false
-        )
-    )
 /// <methodUnderTest>_<precondition>_<expectedResult>()
-
-    // write unit tests *2 and verify that the book has correct properties.
-    // look through the Mockk documentation for the (arguments)
 
     @Test
     fun `addBook-formData is all valid-localRepository#insertBook is called only once`() = runTest {

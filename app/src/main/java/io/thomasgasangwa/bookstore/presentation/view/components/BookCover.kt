@@ -15,8 +15,8 @@ import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import io.thomasgasangwa.bookstore.R
-import io.thomasgasangwa.bookstore.presentation.view_models.components.BookStatusDisplay
-import io.thomasgasangwa.bookstore.presentation.view_models.components.BookingStatus
+import io.thomasgasangwa.bookstore.presentation.book_list.components.BookStatusDisplay
+import io.thomasgasangwa.bookstore.presentation.book_list.components.BookingStatus
 
 @Composable
 fun BookCover(modifier: Modifier = Modifier, bookCoverUrl: String) {

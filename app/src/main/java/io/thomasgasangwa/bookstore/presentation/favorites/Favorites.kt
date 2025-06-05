@@ -24,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookstore.R
 import io.thomasgasangwa.bookstore.domain.model.Book
-import io.thomasgasangwa.bookstore.presentation.view_models.BookListViewModel
-import io.thomasgasangwa.bookstore.presentation.view_models.components.BookCard
+import io.thomasgasangwa.bookstore.presentation.book_list.BookListViewModel
+import io.thomasgasangwa.bookstore.presentation.book_list.components.BookCard
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

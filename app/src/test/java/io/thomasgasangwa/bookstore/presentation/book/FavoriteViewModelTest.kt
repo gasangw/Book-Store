@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookstore.presentation.view_models
+package io.thomasgasangwa.bookstore.presentation.book
 
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
