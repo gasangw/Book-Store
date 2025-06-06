@@ -53,31 +53,7 @@ class BookListViewModelTest {
     fun tearDown() {
         Dispatchers.resetMain()
     }
-
-//    val books = listOf(
-//        Book(
-//            id = 1,
-//            title = "business",
-//            releaseDate = "May 23, 1993",
-//            description = "Learn how to start a business",
-//            pages = 22,
-//            cover = "",
-//            likes = 30,
-//            isFavorite = false
-//        ),
-//        Book(
-//            id = 2,
-//            title = "business2",
-//            releaseDate = "May 2, 1973",
-//            description = "Learn how to start a business with less capital",
-//            pages = 900,
-//            cover = "",
-//            likes = 90,
-//            isFavorite = false
-//        )
-//    )
-
-
+    
     val book = Book(
         id = 1,
         title = "business",
