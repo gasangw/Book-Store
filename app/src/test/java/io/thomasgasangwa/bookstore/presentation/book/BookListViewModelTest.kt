@@ -78,8 +78,6 @@ class BookListViewModelTest {
         )
     )
 
-    /// <methodUnderTest>_<precondition>_<expectedResult>()
-
     @Test
     fun `getAllBooks-repository is working perfectly-fakeLocalRepository#getAllBooksStream is called once`() =
         runTest {

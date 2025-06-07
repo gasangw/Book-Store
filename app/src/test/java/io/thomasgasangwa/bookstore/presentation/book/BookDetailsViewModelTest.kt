@@ -47,7 +47,6 @@ class BookDetailsViewModelTest {
         Dispatchers.resetMain()
     }
 
-    /// <methodUnderTest>_<precondition>_<expectedResult>()
     @Test
     fun `fetchBook-book id is valid-localRepository#getBookStream is called once`() = runTest {
         val bookId = slot<Int>()
