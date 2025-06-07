@@ -24,6 +24,7 @@ import org.junit.Before
 import kotlin.test.Test
 import kotlin.test.assertNotEquals
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class FavoriteViewModelTest {
     @MockK
     lateinit var fakeLocalRepository: LocalRepository
@@ -31,7 +32,6 @@ class FavoriteViewModelTest {
     private lateinit var viewModel: FavoriteViewModel
     private lateinit var testDispatcher: TestDispatcher
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup() {
         MockKAnnotations.init(this)
@@ -39,7 +39,6 @@ class FavoriteViewModelTest {
         Dispatchers.setMain(testDispatcher)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @After
     fun tearDown() {
         Dispatchers.resetMain()
@@ -68,7 +67,6 @@ class FavoriteViewModelTest {
         )
     )
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `get all favorite books`() = runTest {
         coEvery { fakeLocalRepository.getFavoriteBooksStream() } returns flowOf(Result.Success(books))
@@ -87,7 +85,6 @@ class FavoriteViewModelTest {
         assertEquals(books, (actualBooks as FavoriteBookState.Success).books)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `update the favorite status of a book`() = runTest {
         val book = Book(

@@ -2,6 +2,7 @@ package io.thomasgasangwa.bookstore.presentation.book
 
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.slot
 import io.mockk.verify
@@ -28,6 +29,7 @@ import org.junit.Test
 import kotlin.test.assertNotNull
 import kotlin.test.assertTrue
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class BookListViewModelTest {
     @MockK
     lateinit var fakeLocalRepository: LocalRepository
@@ -40,7 +42,6 @@ class BookListViewModelTest {
     private lateinit var testDispatcher: TestDispatcher
 
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup() {
         MockKAnnotations.init(this)
@@ -48,21 +49,33 @@ class BookListViewModelTest {
         Dispatchers.setMain(testDispatcher)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @After
     fun tearDown() {
         Dispatchers.resetMain()
     }
-    
-    val book = Book(
-        id = 1,
-        title = "business",
-        releaseDate = "May 23, 1993",
-        description = "Learn how to start a business",
-        pages = 22,
-        cover = "",
-        likes = 30,
-        isFavorite = false
+
+    val books = listOf<Book>(
+        Book(
+            id = 1,
+            title = "business",
+            releaseDate = "May 23, 1993",
+            description = "Learn how to start a business",
+            pages = 22,
+            cover = "",
+            likes = 30,
+            isFavorite = false
+
+        ),
+        Book(
+            id = 2,
+            title = "business2",
+            releaseDate = "May 23, 1991",
+            description = "Learn business and master it",
+            pages = 20,
+            cover = "",
+            likes = 10,
+            isFavorite = false
+        )
     )
 
     /// <methodUnderTest>_<precondition>_<expectedResult>()
@@ -112,26 +125,31 @@ class BookListViewModelTest {
             verify { fakeLocalRepository.getAllBooksStream() }
         }
 
-//    @Test
-//    fun `delete a book with a given Id`() = runTest {
-//
-//        coEvery { fakeLocalRepository.deleteBookById(1) } returns Result.Success(Unit)
-//        coEvery { getAllBooksUseCase(); fakeLocalRepository.getAllBooksStream() } returns flowOf(
-//            Result.Success(books.filter { it.id != 1 })
-//        )
-//
-//        viewModel = BookListViewModel(fakeLocalRepository, getAllBooksUseCase)
-//
-//        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-//            viewModel.state.collect {}
-//        }
-//        viewModel.deleteBook(1)
-//
-//        testDispatcher.scheduler.advanceUntilIdle()
-//
-//        val actualBooks = viewModel.state.value
-//        val bookList = (actualBooks as BookListState.Success).books
-//        assert(!bookList.any { it.id == 1 })
-//
-//    }
+    @Test
+    fun `deleteBook-valid id is provided-fakeLocalRepository#deleteBookById is called once`() =
+        runTest {
+            val bookId = slot<Int>()
+
+            coEvery { fakeLocalRepository.deleteBookById(capture(bookId)) } returns Result.Success(
+                Unit
+            )
+            coEvery { getAllBooksUseCase() } returns Unit
+            coEvery { fakeLocalRepository.getAllBooksStream() } returns flowOf(
+                Result.Success(books)
+            )
+
+            viewModel = BookListViewModel(fakeLocalRepository, getAllBooksUseCase)
+
+            viewModel.deleteBook(1)
+
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.state.collect {}
+            }
+            testDispatcher.scheduler.advanceUntilIdle()
+
+            val books = viewModel.state.value as BookListState.Success
+            assertEquals(books.books[0].id, bookId.captured)
+
+            coVerify(exactly = 1) { fakeLocalRepository.deleteBookById(any()) }
+        }
 }
