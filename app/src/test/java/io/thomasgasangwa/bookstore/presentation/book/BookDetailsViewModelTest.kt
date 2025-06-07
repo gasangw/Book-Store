@@ -24,8 +24,9 @@ import org.junit.After
 import org.junit.Before
 import kotlin.test.Test
 import kotlin.test.assertEquals
-import kotlin.test.assertTrue
 
+
+@OptIn(ExperimentalCoroutinesApi::class)
 class BookDetailsViewModelTest {
     @MockK
     lateinit var fakeLocalRepository: LocalRepository
@@ -34,7 +35,6 @@ class BookDetailsViewModelTest {
 
     private lateinit var testDispatcher: TestDispatcher
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setup() {
         MockKAnnotations.init(this)
@@ -42,15 +42,12 @@ class BookDetailsViewModelTest {
         Dispatchers.setMain(testDispatcher)
     }
 
-    @OptIn(ExperimentalCoroutinesApi::class)
     @After
     fun tearDown() {
         Dispatchers.resetMain()
     }
 
     /// <methodUnderTest>_<precondition>_<expectedResult>()
-
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `fetchBook-book id is valid-localRepository#getBookStream is called once`() = runTest {
         val bookId = slot<Int>()
@@ -106,9 +103,6 @@ class BookDetailsViewModelTest {
 
             val state = viewModel.state.value
             val errorState = state as BookDetailsState.Error
-
-
-            assertTrue(state is BookDetailsState.Error)
 
             assertEquals("Book with id 90 is not found", errorState.exception.message)
 
