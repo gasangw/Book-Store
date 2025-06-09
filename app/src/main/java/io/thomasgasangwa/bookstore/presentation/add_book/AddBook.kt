@@ -163,7 +163,7 @@ fun AddBookForm(
 }
 
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun AddBookFormPreview() {
     val initialBookState = AddBookFormState(

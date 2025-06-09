@@ -87,7 +87,8 @@ fun BookDetailsContent(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.padding(10.dp)
+        modifier = modifier
+            .padding(10.dp)
             .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -185,7 +186,7 @@ fun BookDetailsContent(
 
                 if (showDialog) {
                     BorrowDialog(
-                        onDismiss = {  onShowDialogChange(!showDialog) },
+                        onDismiss = { onShowDialogChange(!showDialog) },
                         onConfirm = {}
                     )
                 }
@@ -202,7 +203,7 @@ fun BookDetailsContent(
 }
 
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun BookDetailsPreview() {
     BookStoreTheme {
