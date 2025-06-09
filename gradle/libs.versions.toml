@@ -1,6 +1,8 @@
 [versions]
 agp = "8.10.1"
+credentials = "1.6.0-alpha02"
 firebaseBom = "33.15.0"
+googleid = "1.0.0"
 kotlin = "2.1.21"
 kotlin-test = "2.1.21"
 coreKtx = "1.16.0"
@@ -28,11 +30,15 @@ androidx-arch-core-testing = "2.2.0"
 kotlinx-coroutines-test = "1.10.2"
 androidx-core-splashscreen = "1.0.1"
 googleServices = "4.4.2"
+firebaseAuthCommon = "9.8.0"
 
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-credentials = { module = "androidx.credentials:credentials", version.ref = "credentials" }
+androidx-credentials-play-services-auth = { module = "androidx.credentials:credentials-play-services-auth", version.ref = "credentials" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }
+googleid = { module = "com.google.android.libraries.identity.googleid:googleid", version.ref = "googleid" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
@@ -71,6 +77,7 @@ kotlinx-coroutines-test = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-t
 androidx-arch-core-testing = { module = "androidx.arch.core:core-testing", version.ref = "androidx-arch-core-testing" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin-test" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidx-core-splashscreen" }
+firebase-auth-common = { group = "com.google.firebase", name = "firebase-auth-common", version.ref = "firebaseAuthCommon" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

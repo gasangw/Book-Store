@@ -79,6 +79,7 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.navigation.compose.android)
+    implementation(libs.firebase.auth.common)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.coil.mp)
@@ -88,7 +89,13 @@ dependencies {
     implementation(libs.coil.network.okhttp)
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.androidx.core.splashscreen)
+    // firebase
     implementation(platform(libs.firebase.bom))
+    //credential manager
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+
 
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
