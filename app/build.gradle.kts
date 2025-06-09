@@ -7,6 +7,7 @@ plugins {
     alias(libs.plugins.ktlint)
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.google.services)
 }
 
 ktlint {
@@ -87,6 +88,7 @@ dependencies {
     implementation(libs.coil.network.okhttp)
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.androidx.core.splashscreen)
+    implementation(platform(libs.firebase.bom))
 
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
