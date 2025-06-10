@@ -10,12 +10,14 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import io.thomasgasangwa.bookstore.R
 import io.thomasgasangwa.bookstore.presentation.add_book.AddBook
+import io.thomasgasangwa.bookstore.presentation.auth.SignInScreen
 import io.thomasgasangwa.bookstore.presentation.book_details.BookDetails
 import io.thomasgasangwa.bookstore.presentation.tab.Tabs
 import io.thomasgasangwa.bookstore.presentation.update_book.BookParcelableData
 import io.thomasgasangwa.bookstore.presentation.update_book.UpdateBook
 
 enum class AppNavigationScreens(@StringRes val title: Int) {
+    SignIn(title = R.string.sign_in),
     Tabs(title = R.string.app_name),
     AddBook(title = R.string.add_book),
     BookDetails(title = R.string.book_details),
@@ -30,9 +32,16 @@ fun AppNavigation(
 
     NavHost(
         navController = navController,
-        startDestination = AppNavigationScreens.Tabs.name,
+        startDestination = AppNavigationScreens.SignIn.name,
         modifier = modifier
     ) {
+        composable(route = AppNavigationScreens.SignIn.name) {
+            SignInScreen(
+                modifier = modifier,
+                onSignInSuccess = { navController.navigate(AppNavigationScreens.Tabs.name) }
+            )
+        }
+
         composable(route = AppNavigationScreens.Tabs.name) {
             Tabs(
                 onAddBookButtonClicked = { navController.navigate(AppNavigationScreens.AddBook.name) },

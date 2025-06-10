@@ -26,7 +26,7 @@ class FavoriteViewModel(
         getFavoriteBooks()
     }
 
-    fun getFavoriteBooks() {
+    private fun getFavoriteBooks() {
 
         _state.update { FavoriteBookState.Loading(value = true) }
         viewModelScope.launch {

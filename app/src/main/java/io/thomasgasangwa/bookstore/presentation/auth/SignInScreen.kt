@@ -1,6 +1,7 @@
 package io.thomasgasangwa.bookstore.presentation.auth
 
 import BookStoreTheme
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,13 +13,42 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookstore.R
 import io.thomasgasangwa.bookstore.presentation.auth.components.LoginButton
+import org.koin.androidx.compose.koinViewModel
+import androidx.compose.runtime.getValue
 
 @Composable
-fun SignInScreen(modifier: Modifier = Modifier) {
+fun SignInScreen(
+    modifier: Modifier = Modifier,
+    onSignInSuccess: () -> Unit
+) {
+    val context = LocalContext.current
+    val signInViewModel: SignInViewModel = koinViewModel()
+    val signInState by signInViewModel.state.collectAsStateWithLifecycle()
+
+    SigInComponents(
+        modifier = modifier,
+        context = context,
+        signIn = { signInViewModel.signIn(context) },
+        signInState = signInState,
+        onSignInSuccess = onSignInSuccess
+    )
+
+}
+
+@Composable
+fun SigInComponents(
+    modifier: Modifier = Modifier,
+    context: Context,
+    signIn: (context: Context) -> Unit,
+    signInState: SignInState,
+    onSignInSuccess: () -> Unit = {}
+) {
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -35,7 +65,12 @@ fun SignInScreen(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.fillMaxHeight(0.4f))
 
-        LoginButton(isLoading = false)
+        LoginButton(
+            context = context,
+            signIn = signIn,
+            signInState = signInState,
+            onSignInSuccess = onSignInSuccess
+        )
     }
 }
 
@@ -43,6 +78,12 @@ fun SignInScreen(modifier: Modifier = Modifier) {
 @Composable
 private fun LoginScreenPreview() {
     BookStoreTheme {
-        SignInScreen()
+        SigInComponents(
+            onSignInSuccess = {},
+            context = LocalContext.current,
+            signIn = {},
+            signInState = SignInState.Initial
+
+        )
     }
 }
