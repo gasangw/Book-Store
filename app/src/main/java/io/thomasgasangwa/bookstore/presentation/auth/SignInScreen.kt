@@ -18,7 +18,7 @@ import io.thomasgasangwa.bookstore.R
 import io.thomasgasangwa.bookstore.presentation.auth.components.LoginButton
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier) {
+fun SignInScreen(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -43,6 +43,6 @@ fun LoginScreen(modifier: Modifier = Modifier) {
 @Composable
 private fun LoginScreenPreview() {
     BookStoreTheme {
-        LoginScreen()
+        SignInScreen()
     }
 }

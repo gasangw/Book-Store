@@ -16,6 +16,14 @@ class AuthRepositoryImpl(
     private val credentialManager: CredentialManager
 ) : AuthRepository {
 
+    override suspend fun signIn(context: Context): Result<Boolean> {
+        return try {
+            getGoogleAuthCredentials(context)
+            Result.Success(value = true)
+        } catch (e: Exception) {
+            Result.Failure(e)
+        }
+    }
 
     private suspend fun getGoogleAuthCredentials(context: Context): Result<AuthCredential?> {
         return try {

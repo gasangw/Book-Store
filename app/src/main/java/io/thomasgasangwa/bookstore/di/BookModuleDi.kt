@@ -48,4 +48,5 @@ val localBookModule = module {
     viewModel { (bookId: Int) -> BookDetailsViewModel(bookId, get()) }
     viewModel { FavoriteViewModel(get()) }
     viewModel { (book: Book) -> UpdateBookViewModel(book, get()) }
+    //viewModel { SignInViewModel(get()) }
 }

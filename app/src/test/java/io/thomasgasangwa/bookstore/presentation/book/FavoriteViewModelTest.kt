@@ -4,6 +4,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
+import io.mockk.slot
 import io.thomasgasangwa.bookstore.common.Result
 import io.thomasgasangwa.bookstore.domain.model.Book
 import io.thomasgasangwa.bookstore.domain.repository.LocalRepository
@@ -89,58 +90,50 @@ class FavoriteViewModelTest {
             coVerify(exactly = 1) { fakeLocalRepository.getFavoriteBooksStream() }
         }
 
-//    @Test
-//    fun `update the favorite status of a book`() = runTest {
-//        val book = Book(
-//            id = 1,
-//            title = "business",
-//            releaseDate = "May 23, 1993",
-//            description = "Learn how to start a business",
-//            pages = 22,
-//            cover = "",
-//            likes = 30,
-//            isFavorite = true
-//        )
-//        coEvery {
-//            fakeLocalRepository.updateFavoriteStatus(
-//                book.id,
-//                !book.isFavorite
-//            )
-//        } returns Result.Success(Unit)
-//
-//        val updatedBooks: List<Book> = books.map { it ->
-//            if (it.id == book.id) {
-//                it.copy(isFavorite = !it.isFavorite)
-//            } else {
-//                it
-//            }
-//        }
-//
-//        coEvery { fakeLocalRepository.getFavoriteBooksStream() } returns flowOf(
-//            Result.Success(
-//                updatedBooks
-//            )
-//        )
-//        viewModel = FavoriteViewModel(fakeLocalRepository)
-//
-//        viewModel.updateFavoriteStatus(book.id, !book.isFavorite)
-//        viewModel.getFavoriteBooks()
-//
-//        backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
-//            viewModel.state.collect {}
-//        }
-//
-//        testDispatcher.scheduler.advanceUntilIdle()
-//
-//        coVerify { fakeLocalRepository.updateFavoriteStatus(id = book.id, isFavorite = false) }
-//        coVerify { fakeLocalRepository.getFavoriteBooksStream() }
-//
-//        val updatedBook = viewModel.state.value
-//
-//        assertNotEquals(
-//            book.isFavorite,
-//            (updatedBook as FavoriteBookState.Success).books[0].isFavorite
-//        )
-//
-//    }
+    @Test
+    fun `updateFavoriteStatus-given a book with isFavorite true-fakeRepository#updateFavoriteStatus is called once`() =
+        runTest {
+            val bookId = slot<Int>()
+            val isFavorite = slot<Boolean>()
+
+            val book = Book(
+                id = 1,
+                title = "business",
+                releaseDate = "May 23, 1993",
+                description = "Learn how to start a business",
+                pages = 22,
+                cover = "",
+                likes = 30,
+                isFavorite = false
+            )
+
+            coEvery {
+                fakeLocalRepository.updateFavoriteStatus(
+                    capture(bookId),
+                    capture(isFavorite)
+                )
+            } returns Result.Success(Unit)
+
+            coEvery { fakeLocalRepository.getFavoriteBooksStream() } returns flowOf(
+                Result.Success(
+                    emptyList()
+                )
+            )
+
+            viewModel = FavoriteViewModel(fakeLocalRepository)
+
+            viewModel.updateFavoriteStatus(book.id, !book.isFavorite)
+
+            backgroundScope.launch(UnconfinedTestDispatcher(testScheduler)) {
+                viewModel.state.collect {}
+            }
+
+            testDispatcher.scheduler.advanceUntilIdle()
+
+            assertEquals(bookId.captured, book.id)
+            assertEquals(isFavorite.captured, !book.isFavorite)
+
+            coVerify(exactly = 1) { fakeLocalRepository.updateFavoriteStatus(any(), any()) }
+
+        }
 }

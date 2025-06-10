@@ -1,3 +1,8 @@
 package io.thomasgasangwa.bookstore.domain.repository
 
-interface AuthRepository
+import android.content.Context
+import io.thomasgasangwa.bookstore.common.Result
+
+interface AuthRepository {
+    suspend fun signIn(context: Context): Result<Boolean>
+}
