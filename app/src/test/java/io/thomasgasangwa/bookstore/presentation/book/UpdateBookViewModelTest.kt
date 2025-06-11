@@ -1,14 +1,14 @@
-package io.thomasgasangwa.bookstore.presentation.view_models
+package io.thomasgasangwa.bookcollection.presentation.book
 
 import io.mockk.MockKAnnotations
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.slot
-import io.thomasgasangwa.bookstore.common.Result
-import io.thomasgasangwa.bookstore.domain.model.Book
-import io.thomasgasangwa.bookstore.domain.repository.LocalRepository
-import io.thomasgasangwa.bookstore.presentation.update_book.UpdateBookViewModel
+import io.thomasgasangwa.bookcollection.common.Result
+import io.thomasgasangwa.bookcollection.domain.model.Book
+import io.thomasgasangwa.bookcollection.domain.repository.LocalRepository
+import io.thomasgasangwa.bookcollection.presentation.update_book.UpdateBookViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestDispatcher

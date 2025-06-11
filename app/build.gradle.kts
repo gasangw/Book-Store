@@ -21,11 +21,11 @@ ktlint {
 }
 
 android {
-    namespace = "io.thomasgasangwa.bookstore"
+    namespace = "io.thomasgasangwa.bookcollection"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "io.thomasgasangwa.bookstore"
+        applicationId = "io.thomasgasangwa.bookcollection"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -95,6 +95,7 @@ dependencies {
     implementation(libs.androidx.credentials)
     implementation(libs.androidx.credentials.play.services.auth)
     implementation(libs.googleid)
+    implementation(libs.firebase.auth)
 
 
     testImplementation(libs.kotlinx.coroutines.test)

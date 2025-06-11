@@ -4,8 +4,8 @@ import androidx.compose.ui.test.hasAnyDescendant
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import io.thomasgasangwa.bookstore.presentation.navigation.AppBar
-import io.thomasgasangwa.bookstore.presentation.navigation.AppNavigationScreens
+import io.thomasgasangwa.bookcollection.presentation.navigation.AppBar
+import io.thomasgasangwa.bookcollection.presentation.navigation.AppNavigationScreens
 import org.junit.Rule
 import org.junit.Test
 

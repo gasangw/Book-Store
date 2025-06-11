@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookstore.presentation.book
+package io.thomasgasangwa.bookcollection.presentation.book
 
 import io.mockk.MockKAnnotations
 import io.mockk.called
@@ -6,11 +6,11 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.impl.annotations.MockK
 import io.mockk.slot
-import io.thomasgasangwa.bookstore.common.Constants.DEFAULT_COVER
-import io.thomasgasangwa.bookstore.common.Result
-import io.thomasgasangwa.bookstore.domain.model.Book
-import io.thomasgasangwa.bookstore.domain.repository.LocalRepository
-import io.thomasgasangwa.bookstore.presentation.add_book.AddBookViewModel
+import io.thomasgasangwa.bookcollection.common.Constants.DEFAULT_COVER
+import io.thomasgasangwa.bookcollection.common.Result
+import io.thomasgasangwa.bookcollection.domain.model.Book
+import io.thomasgasangwa.bookcollection.domain.repository.LocalRepository
+import io.thomasgasangwa.bookcollection.presentation.add_book.AddBookViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestDispatcher
@@ -37,7 +37,7 @@ class AddBookViewModelTest {
         testDispatcher = UnconfinedTestDispatcher()
         Dispatchers.setMain(testDispatcher)
     }
-    
+
     @After
     fun tearDown() {
         Dispatchers.resetMain()
