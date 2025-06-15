@@ -28,13 +28,13 @@ fun SignInScreen(
     onSignInSuccess: () -> Unit
 ) {
     val context = LocalContext.current
-    val signInViewModel: SignInViewModel = koinViewModel()
-    val signInState by signInViewModel.state.collectAsStateWithLifecycle()
+    val authViewModel: AuthViewModel = koinViewModel()
+    val signInState by authViewModel.state.collectAsStateWithLifecycle()
 
     SigInComponents(
         modifier = modifier,
         context = context,
-        signIn = { signInViewModel.signIn(context) },
+        signIn = { authViewModel.signIn(context) },
         signInState = signInState,
         onSignInSuccess = onSignInSuccess
     )

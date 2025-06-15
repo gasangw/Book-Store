@@ -79,7 +79,6 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.navigation.compose.android)
-    implementation(libs.firebase.auth.common)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     implementation(libs.coil.mp)

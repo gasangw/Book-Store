@@ -22,10 +22,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="io.thomasgasangwa.bookstore" />
-                  <option name="mobileSdkAppId" value="1:918963426414:android:149e6c6b3945b85eb0427f" />
-                  <option name="projectId" value="bookstore-7b332" />
-                  <option name="projectNumber" value="918963426414" />
+                  <option name="appId" value="io.thomasgasangwa.bookcollection" />
+                  <option name="mobileSdkAppId" value="1:655554299424:android:10204643e0a282c9931e45" />
+                  <option name="projectId" value="bookcollection-f45d0" />
+                  <option name="projectNumber" value="655554299424" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

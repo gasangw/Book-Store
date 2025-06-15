@@ -8,12 +8,17 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import io.thomasgasangwa.bookcollection.presentation.auth.AuthViewModel
 import io.thomasgasangwa.bookcollection.presentation.navigation.AppBar
 import io.thomasgasangwa.bookcollection.presentation.navigation.AppNavigation
 import io.thomasgasangwa.bookcollection.presentation.navigation.AppNavigationScreens
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun BookApp(modifier: Modifier = Modifier) {
+
+
+    val authViewModel: AuthViewModel = koinViewModel()
 
     val navController: NavHostController = rememberNavController()
 
@@ -27,7 +32,16 @@ fun BookApp(modifier: Modifier = Modifier) {
             AppBar(
                 currentScreen = currentScreen,
                 canNavigateBack = navController.previousBackStackEntry != null,
-                navigateUp = { navController.navigateUp() }
+                navigateUp = { navController.navigateUp() },
+                signOut = {
+                    authViewModel.signOut()
+                    navController.navigate(AppNavigationScreens.SignIn.name) {
+                        popUpTo(AppNavigationScreens.Tabs.name) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                }
             )
         }
     ) { innerPadding ->

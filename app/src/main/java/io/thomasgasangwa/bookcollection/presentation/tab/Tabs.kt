@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import io.thomasgasangwa.bookcollection.presentation.book_list.BookListScreen
 import io.thomasgasangwa.bookcollection.presentation.favorites.Favorites
@@ -27,19 +28,24 @@ fun Tabs(
     var state by rememberSaveable { mutableIntStateOf(0) }
     val titles = listOf("Books", "Favorites")
 
+    fun updateState(index: Int) {
+        state = if (index == 0) 0 else 1
+    }
+
     TabsDisplay(
         state = state,
         titles = titles,
-        onTabClicked = { index -> state = if (index == 0) 0 else 1 },
+        onTabClicked = { it -> updateState(it) },
         onAddBookButtonClicked = onAddBookButtonClicked,
         onBookClicked = { it -> onBookClicked(it) },
         modifier = modifier
     )
 }
 
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TabsDisplay(
+private fun TabsDisplay(
     state: Int,
     titles: List<String>,
     onTabClicked: (Int) -> Unit,
@@ -47,6 +53,8 @@ fun TabsDisplay(
     onBookClicked: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val isInPreview = LocalInspectionMode.current
+
     Column(modifier = modifier) {
         SecondaryTabRow(selectedTabIndex = state) {
             titles.forEachIndexed { index, title ->
@@ -57,19 +65,49 @@ fun TabsDisplay(
             }
         }
         when (state) {
-            0 -> BookListScreen(
-                onAddBookButtonClicked = onAddBookButtonClicked,
-                onBookClicked = { id -> onBookClicked(id) }
-            )
+            0 -> if(isInPreview){
+                FakeBookListScreen(
+                    onAddBookButtonClicked = {},
+                    onBookClicked = {}
+                )
+            } else{
+                BookListScreen(
+                    onAddBookButtonClicked = onAddBookButtonClicked,
+                    onBookClicked = { id -> onBookClicked(id) }
+                )
+            }
 
-            1 -> Favorites(
-                onBookClicked = { id -> onBookClicked(id) }
-            )
+            1 -> if(isInPreview) {
+                FakeFavorites(
+                onBookClicked = {}
+                )
+            } else {
+                Favorites(
+                    onBookClicked = { id -> onBookClicked(id) }
+                )
+            }
         }
     }
 }
 
-@Preview
+@Composable
+private fun FakeBookListScreen(
+    modifier: Modifier = Modifier,
+    onAddBookButtonClicked: () -> Unit,
+    onBookClicked: (Int) -> Unit,
+) {
+    Text(text = "This is a fake bookList screen")
+}
+
+@Composable
+private fun FakeFavorites(
+    modifier: Modifier = Modifier,
+    onBookClicked: (Int) -> Unit
+) {
+    Text(text = "This is a fake favorite screen")
+}
+
+@Preview(showBackground = true)
 @Composable
 private fun TabsPreview() {
     var state = 0
@@ -81,7 +119,6 @@ private fun TabsPreview() {
             onTabClicked = { index -> },
             onAddBookButtonClicked = {},
             onBookClicked = { _ -> },
-            modifier = Modifier
         )
     }
 }

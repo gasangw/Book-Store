@@ -38,7 +38,14 @@ fun AppNavigation(
         composable(route = AppNavigationScreens.SignIn.name) {
             SignInScreen(
                 modifier = modifier,
-                onSignInSuccess = { navController.navigate(AppNavigationScreens.Tabs.name) }
+                onSignInSuccess = {
+                    navController.navigate(AppNavigationScreens.Tabs.name) {
+                        popUpTo(AppNavigationScreens.SignIn.name) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                }
             )
         }
 

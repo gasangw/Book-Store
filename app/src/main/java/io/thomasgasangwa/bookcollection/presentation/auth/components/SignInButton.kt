@@ -72,6 +72,7 @@ fun LoginButton(
                 modifier = modifier
             )
         }
+        is SignInState.SignInUser -> {}
     }
 }
 

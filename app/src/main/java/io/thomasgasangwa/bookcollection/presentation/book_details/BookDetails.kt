@@ -224,7 +224,7 @@ private fun BookDetailsPreview() {
             updateFavoriteStatus = { bookId, isFavorite -> },
             onEditBook = {},
             isBooked = false,
-            showDialog = true,
+            showDialog = false,
             onShowDialogChange = {},
             modifier = Modifier
         )

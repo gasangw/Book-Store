@@ -10,6 +10,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import io.thomasgasangwa.bookcollection.R
@@ -21,7 +22,8 @@ fun AppBar(
     modifier: Modifier = Modifier,
     currentScreen: AppNavigationScreens,
     canNavigateBack: Boolean,
-    navigateUp: () -> Unit
+    navigateUp: () -> Unit,
+    signOut: () -> Unit
 ) {
     CenterAlignedTopAppBar(
         title = {
@@ -39,6 +41,14 @@ fun AppBar(
                 }
             }
         },
+        actions = {
+            IconButton(onClick = signOut) {
+                Icon(
+                    painter = painterResource(R.drawable.logout_icon),
+                    contentDescription = "logout"
+                )
+            }
+        }
     )
 }
 
@@ -49,7 +59,8 @@ private fun AppBarPreview() {
         AppBar(
             currentScreen = AppNavigationScreens.Tabs,
             canNavigateBack = false,
-            navigateUp = {}
+            navigateUp = {},
+            signOut = {}
         )
     }
 }
@@ -61,7 +72,8 @@ private fun AppBarPreviewAddBook() {
         AppBar(
             currentScreen = AppNavigationScreens.AddBook,
             canNavigateBack = true,
-            navigateUp = {}
+            navigateUp = {},
+            signOut = {}
         )
     }
 }
