@@ -16,7 +16,6 @@ class AuthViewModel(
     private val _state = MutableStateFlow<SignInState>(SignInState.Initial)
     val state: StateFlow<SignInState> = _state.asStateFlow()
 
-
     fun signIn(context: Context) {
         _state.value = SignInState.Loading
         viewModelScope.launch {
