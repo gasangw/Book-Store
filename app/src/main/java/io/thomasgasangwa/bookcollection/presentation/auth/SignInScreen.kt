@@ -2,12 +2,12 @@ package io.thomasgasangwa.bookcollection.presentation.auth
 
 import BookStoreTheme
 import android.content.Context
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -15,10 +15,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import io.thomasgasangwa.bookcollection.R
 import io.thomasgasangwa.bookcollection.presentation.auth.components.LoginButton
 import org.koin.androidx.compose.koinViewModel
 
@@ -50,20 +49,20 @@ fun SigInComponents(
     onSignInSuccess: () -> Unit = {}
 ) {
     Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.Center,
+        modifier = modifier.fillMaxSize().padding(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            painter = painterResource(R.drawable.logo), contentDescription = "app logo"
-        )
-
         Text(
-            text = "Read. Learn. Grow",
-            style = MaterialTheme.typography.titleLarge
+            text = "Glad to See You! \uD83D\uDE0A\uD83D\uDCDA",
+            style = MaterialTheme.typography.titleLarge,
+            modifier = modifier.padding(18.dp)
         )
 
-        Spacer(modifier = Modifier.fillMaxHeight(0.4f))
+        Spacer(modifier = modifier.fillMaxHeight(0.2f))
+
+        SignInForm()
+
+        Text(text = "Or", style = MaterialTheme.typography.bodyLarge)
 
         LoginButton(
             context = context,

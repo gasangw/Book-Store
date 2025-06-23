@@ -6,6 +6,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
@@ -35,9 +36,12 @@ fun LoginButton(
 
     when (signInState) {
         is SignInState.Initial -> {
-            Button(onClick = {
-                signIn(context)
-            }) {
+            Button(
+                onClick = {
+                    signIn(context)
+                },
+                modifier = modifier.fillMaxWidth()
+            ) {
                 Row(
                     modifier = modifier,
                     verticalAlignment = Alignment.CenterVertically,
@@ -72,6 +76,7 @@ fun LoginButton(
                 modifier = modifier
             )
         }
+
         is SignInState.SignInUser -> {}
     }
 }
