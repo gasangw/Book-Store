@@ -20,7 +20,8 @@ class AppBarTest {
             AppBar(
                 currentScreen = currentScreen,
                 canNavigateBack = false,
-                navigateUp = {}
+                navigateUp = {},
+                signOut = {}
             )
         }
         composeTestRule.onNodeWithText("Book Store")
@@ -34,7 +35,8 @@ class AppBarTest {
             AppBar(
                 currentScreen = currentScreen,
                 canNavigateBack = true,
-                navigateUp = {}
+                navigateUp = {},
+                signOut = {}
             )
         }
         composeTestRule.onNodeWithText("Add Book")
@@ -53,7 +55,8 @@ class AppBarTest {
             AppBar(
                 currentScreen = currentScreen,
                 canNavigateBack = true,
-                navigateUp = {}
+                navigateUp = {},
+                signOut = {}
             )
         }
         composeTestRule.onNodeWithText("Details")
@@ -72,7 +75,8 @@ class AppBarTest {
             AppBar(
                 currentScreen = currentScreen,
                 canNavigateBack = true,
-                navigateUp = {}
+                navigateUp = {},
+                signOut = {}
             )
         }
         composeTestRule.onNodeWithText("Edit")
