@@ -6,6 +6,8 @@ plugins {
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ktlint)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.google.services)
 }
 
 ktlint {
@@ -19,11 +21,11 @@ ktlint {
 }
 
 android {
-    namespace = "io.thomasgasangwa.bookstore"
+    namespace = "io.thomasgasangwa.bookcollection"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "io.thomasgasangwa.bookstore"
+        applicationId = "io.thomasgasangwa.bookcollection"
         minSdk = 24
         targetSdk = 35
         versionCode = 1
@@ -51,6 +53,9 @@ android {
     buildFeatures {
         compose = true
     }
+    tasks.withType<Test> {
+        jvmArgs("-XX:+EnableDynamicAgentLoading")
+    }
 }
 
 dependencies {
@@ -72,14 +77,32 @@ dependencies {
     implementation(libs.okhttp)
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
-    implementation(libs.room.runtime)
-    ksp(libs.room.compiler)
-    implementation(libs.room.ktx)
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.navigation.compose.android)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
     implementation(libs.coil.mp)
     implementation(libs.coil.compose)
     implementation(libs.coil.compose.core)
+    implementation(libs.timber)
+    implementation(libs.coil.network.okhttp)
+    implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.androidx.core.splashscreen)
+    // firebase
+    implementation(platform(libs.firebase.bom))
+    //credential manager
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+    implementation(libs.firebase.auth)
 
+
+    testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.junit)
+    testImplementation(libs.mockk)
+    testImplementation(libs.turbine)
+    testImplementation(libs.kotlin.test)
+    androidTestImplementation(libs.androidx.arch.core.testing)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
