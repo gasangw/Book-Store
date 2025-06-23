@@ -88,6 +88,7 @@ dependencies {
     implementation(libs.coil.network.okhttp)
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.androidx.material.icons.extended)
     // firebase
     implementation(platform(libs.firebase.bom))
     //credential manager

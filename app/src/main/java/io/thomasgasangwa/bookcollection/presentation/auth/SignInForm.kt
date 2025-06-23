@@ -3,7 +3,6 @@ package io.thomasgasangwa.bookcollection.presentation.auth
 import BookStoreTheme
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -18,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.thomasgasangwa.bookcollection.presentation.auth.components.PasswordTextField
 import io.thomasgasangwa.bookcollection.presentation.view.components.TextFieldElement
 
 @Composable
@@ -37,7 +37,10 @@ fun SignInForm(modifier: Modifier = Modifier) {
             textErrorMessage = "Email cannot be empty.."
         )
         Spacer(modifier = Modifier.height(6.dp))
-
+        PasswordTextField(
+            placeholderText = "Enter Password..."
+        )
+        Spacer(modifier = Modifier.height(25.dp))
         Button(
             onClick = {
                 hasAttemptedSubmit = true

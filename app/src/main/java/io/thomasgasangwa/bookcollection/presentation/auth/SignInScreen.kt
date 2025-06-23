@@ -2,7 +2,6 @@ package io.thomasgasangwa.bookcollection.presentation.auth
 
 import BookStoreTheme
 import android.content.Context
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -10,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -49,7 +49,9 @@ fun SigInComponents(
     onSignInSuccess: () -> Unit = {}
 ) {
     Column(
-        modifier = modifier.fillMaxSize().padding(12.dp),
+        modifier = modifier
+            .fillMaxSize()
+            .padding(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
@@ -70,6 +72,11 @@ fun SigInComponents(
             signInState = signInState,
             onSignInSuccess = onSignInSuccess
         )
+        Spacer(modifier = modifier.fillMaxHeight(0.8f))
+
+        TextButton(onClick = {}) {
+            Text(text = "Continue without Signing In", style = MaterialTheme.typography.bodyLarge)
+        }
     }
 }
 
