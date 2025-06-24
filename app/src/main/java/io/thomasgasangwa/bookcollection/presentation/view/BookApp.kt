@@ -22,6 +22,8 @@ fun BookApp(modifier: Modifier = Modifier) {
 
     val navController: NavHostController = rememberNavController()
 
+    val userIsAvailable: Boolean = authViewModel.userExists
+
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = AppNavigationScreens.valueOf(
         backStackEntry?.destination?.route?.split("/")[0] ?: AppNavigationScreens.Tabs.name
@@ -33,6 +35,7 @@ fun BookApp(modifier: Modifier = Modifier) {
                 currentScreen = currentScreen,
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp() },
+                userIsAvailable = userIsAvailable,
                 signOut = {
                     authViewModel.signOut()
                     navController.navigate(AppNavigationScreens.SignIn.name) {
@@ -47,6 +50,7 @@ fun BookApp(modifier: Modifier = Modifier) {
     ) { innerPadding ->
         AppNavigation(
             navController = navController,
+            userIsAvailable = userIsAvailable,
             modifier = modifier.padding(innerPadding)
         )
     }

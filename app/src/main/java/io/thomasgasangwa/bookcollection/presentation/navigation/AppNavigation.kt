@@ -27,12 +27,13 @@ enum class AppNavigationScreens(@StringRes val title: Int) {
 @Composable
 fun AppNavigation(
     modifier: Modifier = Modifier,
+    userIsAvailable: Boolean,
     navController: NavHostController
 ) {
 
     NavHost(
         navController = navController,
-        startDestination = AppNavigationScreens.SignIn.name,
+        startDestination = if (userIsAvailable) AppNavigationScreens.Tabs.name else AppNavigationScreens.SignIn.name,
         modifier = modifier
     ) {
         composable(route = AppNavigationScreens.SignIn.name) {

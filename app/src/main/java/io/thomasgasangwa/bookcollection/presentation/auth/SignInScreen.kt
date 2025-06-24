@@ -2,12 +2,15 @@ package io.thomasgasangwa.bookcollection.presentation.auth
 
 import BookStoreTheme
 import android.content.Context
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -18,7 +21,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import io.thomasgasangwa.bookcollection.presentation.auth.components.LoginButton
+import io.thomasgasangwa.bookcollection.presentation.auth.components.LoginWithGoogleButton
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -33,9 +36,10 @@ fun SignInScreen(
     SigInComponents(
         modifier = modifier,
         context = context,
-        signIn = { authViewModel.signIn(context) },
+        signIn = { authViewModel.signInWithGoogle(context) },
         signInState = signInState,
-        onSignInSuccess = onSignInSuccess
+        onSignInSuccess = onSignInSuccess,
+        signInAnonymously = { authViewModel.signInAnonymously() }
     )
 
 }
@@ -46,13 +50,15 @@ fun SigInComponents(
     context: Context,
     signIn: (context: Context) -> Unit,
     signInState: SignInState,
-    onSignInSuccess: () -> Unit = {}
+    onSignInSuccess: () -> Unit,
+    signInAnonymously: () -> Unit
 ) {
     Column(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxSize()
             .padding(12.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = "Glad to See You! \uD83D\uDE0A\uD83D\uDCDA",
@@ -60,21 +66,34 @@ fun SigInComponents(
             modifier = modifier.padding(18.dp)
         )
 
-        Spacer(modifier = modifier.fillMaxHeight(0.2f))
-
         SignInForm()
 
         Text(text = "Or", style = MaterialTheme.typography.bodyLarge)
 
-        LoginButton(
+        LoginWithGoogleButton(
             context = context,
             signIn = signIn,
             signInState = signInState,
             onSignInSuccess = onSignInSuccess
         )
-        Spacer(modifier = modifier.fillMaxHeight(0.8f))
 
-        TextButton(onClick = {}) {
+        Spacer(modifier = Modifier.height(10.dp))
+
+        TextButton(onClick = { signInAnonymously() }) {
+            when(signInState){
+                is SignInState.Error -> {}
+                SignInState.Initial -> {}
+                SignInState.Loading -> {
+                    CircularProgressIndicator(
+                        strokeWidth = 2.dp,
+                        color = ProgressIndicatorDefaults.circularColor
+                    )
+                }
+                is SignInState.SignInUser -> {}
+                SignInState.Success -> {
+                    onSignInSuccess()
+                }
+            }
             Text(text = "Continue without Signing In", style = MaterialTheme.typography.bodyLarge)
         }
     }
@@ -88,8 +107,8 @@ private fun LoginScreenPreview() {
             onSignInSuccess = {},
             context = LocalContext.current,
             signIn = {},
-            signInState = SignInState.Initial
-
+            signInState = SignInState.Initial,
+            signInAnonymously = {}
         )
     }
 }

@@ -21,6 +21,21 @@ class AuthRepositoryImpl(
     private val firebaseAuth: FirebaseAuth
 ) : AuthRepository {
 
+    override val hasUser: Boolean
+        get() = firebaseAuth.currentUser != null
+
+    override suspend fun signInAnonymously(): Result<Unit> {
+        return try {
+            firebaseAuth.signInAnonymously().await()
+            Result.Success(Unit)
+        } catch (e: Exception) {
+            Result.Failure(e)
+        }
+    }
+
+    override suspend fun getCurrentUser(): Result<User?> = getCurrentUser()
+
+
     override suspend fun signIn(context: Context): Result<User?> {
         val googleIdOption = GetGoogleIdOption.Builder()
             .setServerClientId(Constants.GOOGLE_CLIENT_ID)

@@ -5,6 +5,9 @@ import io.thomasgasangwa.bookcollection.common.Result
 import io.thomasgasangwa.bookcollection.domain.model.User
 
 interface AuthRepository {
+    val hasUser: Boolean
     suspend fun signIn(context: Context): Result<User?>
+    suspend fun signInAnonymously(): Result<Unit>
+    suspend fun getCurrentUser(): Result<User?>
     suspend fun signOut(): Result<Unit>
 }

@@ -27,6 +27,7 @@ fun AppBar(
     currentScreen: AppNavigationScreens,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
+    userIsAvailable: Boolean,
     signOut: () -> Unit
 ) {
     CenterAlignedTopAppBar(
@@ -46,19 +47,21 @@ fun AppBar(
             }
         },
         actions = {
-            TooltipBox(
-                modifier = modifier,
-                positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
-                tooltip = {
-                    PlainTooltip { Text(text = stringResource(R.string.logout)) }
-                },
-                state = rememberTooltipState()
-            ) {
-                IconButton(onClick = signOut) {
-                    Icon(
-                        painter = painterResource(R.drawable.logout_icon),
-                        contentDescription = "logout"
-                    )
+            if (userIsAvailable) {
+                TooltipBox(
+                    modifier = modifier,
+                    positionProvider = TooltipDefaults.rememberPlainTooltipPositionProvider(),
+                    tooltip = {
+                        PlainTooltip { Text(text = stringResource(R.string.logout)) }
+                    },
+                    state = rememberTooltipState()
+                ) {
+                    IconButton(onClick = signOut) {
+                        Icon(
+                            painter = painterResource(R.drawable.logout_icon),
+                            contentDescription = "logout"
+                        )
+                    }
                 }
             }
         }
@@ -73,7 +76,8 @@ private fun AppBarPreview() {
             currentScreen = AppNavigationScreens.Tabs,
             canNavigateBack = false,
             navigateUp = {},
-            signOut = {}
+            signOut = {},
+            userIsAvailable = false
         )
     }
 }
@@ -86,7 +90,8 @@ private fun AppBarPreviewAddBook() {
             currentScreen = AppNavigationScreens.AddBook,
             canNavigateBack = true,
             navigateUp = {},
-            signOut = {}
+            signOut = {},
+            userIsAvailable = false
         )
     }
 }
