@@ -4,8 +4,11 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Transaction
 import androidx.room.Update
 import io.thomasgasangwa.bookcollection.data.local.entity.BookEntity
+import io.thomasgasangwa.bookcollection.domain.model.BookWithBookings
+import io.thomasgasangwa.bookcollection.domain.model.Booking
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -13,6 +16,13 @@ interface BookDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(book: BookEntity)
+
+    @Insert
+    suspend fun insertBooking(booking: Booking)
+
+    @Transaction
+    @Query("SELECT * FROM books")
+    suspend fun getBooksWithBookings(): List<BookWithBookings>
 
     @Update
     suspend fun update(book: BookEntity)

@@ -23,6 +23,9 @@ fun BookApp(modifier: Modifier = Modifier) {
     val navController: NavHostController = rememberNavController()
 
     val userIsAvailable: Boolean = authViewModel.userExists
+//    val currentUser = authViewModel.currentUser()
+//
+//    Timber.d("currentUser: $currentUser")
 
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = AppNavigationScreens.valueOf(
