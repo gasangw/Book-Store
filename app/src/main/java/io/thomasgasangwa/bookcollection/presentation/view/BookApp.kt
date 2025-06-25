@@ -5,11 +5,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import io.thomasgasangwa.bookcollection.presentation.auth.AuthViewModel
-import io.thomasgasangwa.bookcollection.presentation.navigation.AppBar
+import io.thomasgasangwa.bookcollection.presentation.navigation.app_bar.AppBar
 import io.thomasgasangwa.bookcollection.presentation.navigation.AppNavigation
 import io.thomasgasangwa.bookcollection.presentation.navigation.AppNavigationScreens
 import org.koin.androidx.compose.koinViewModel
@@ -19,13 +20,9 @@ fun BookApp(modifier: Modifier = Modifier) {
 
 
     val authViewModel: AuthViewModel = koinViewModel()
+    val authState by authViewModel.state.collectAsStateWithLifecycle()
 
     val navController: NavHostController = rememberNavController()
-
-    val userIsAvailable: Boolean = authViewModel.userExists
-//    val currentUser = authViewModel.currentUser()
-//
-//    Timber.d("currentUser: $currentUser")
 
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = AppNavigationScreens.valueOf(
@@ -38,7 +35,7 @@ fun BookApp(modifier: Modifier = Modifier) {
                 currentScreen = currentScreen,
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp() },
-                userIsAvailable = userIsAvailable,
+//                authState = authState,
                 signOut = {
                     authViewModel.signOut()
                     navController.navigate(AppNavigationScreens.SignIn.name) {
@@ -53,7 +50,7 @@ fun BookApp(modifier: Modifier = Modifier) {
     ) { innerPadding ->
         AppNavigation(
             navController = navController,
-            userIsAvailable = userIsAvailable,
+            authState = authState,
             modifier = modifier.padding(innerPadding)
         )
     }

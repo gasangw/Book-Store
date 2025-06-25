@@ -33,7 +33,18 @@ class AuthRepositoryImpl(
         }
     }
 
-    override suspend fun getCurrentUser(): Result<User?> = getCurrentUser()
+    override suspend fun getCurrentUser(): Result<User?> {
+        val firebaseUser = firebaseAuth.currentUser
+        return firebaseUser?.let { user ->
+            val currentUser = User(
+                email = user.email ?: "",
+                photoUrl = user.photoUrl.toString(),
+                name = user.displayName ?: "Anonymous"
+            )
+            Result.Success(currentUser)
+        } ?: Result.Success(null)
+
+    }
 
 
     override suspend fun signIn(context: Context): Result<User?> {

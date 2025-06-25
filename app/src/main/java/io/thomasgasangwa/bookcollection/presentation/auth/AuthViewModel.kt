@@ -17,6 +17,10 @@ class AuthViewModel(
     private val _state = MutableStateFlow<SignInState>(SignInState.Initial)
     val state: StateFlow<SignInState> = _state.asStateFlow()
 
+    init {
+        currentUser()
+    }
+
     fun signInWithGoogle(context: Context) {
         _state.value = SignInState.Loading
         viewModelScope.launch {
@@ -45,7 +49,10 @@ class AuthViewModel(
     fun currentUser() {
         viewModelScope.launch {
             val user = authRepository.getCurrentUser()
-            _state.value = resultToSignInState(user)
+            _state.value = when (user) {
+                is Result.Failure -> SignInState.Error(Exception("Error occurred while getting a current user"))
+                is Result.Success<*> -> SignInState.SignInUser(user.value as User?)
+            }
         }
     }
 
@@ -54,17 +61,5 @@ class AuthViewModel(
         viewModelScope.launch {
             authRepository.signOut()
         }
-    }
-}
-
-private fun resultToSignInState(result: Result<User?>): SignInState {
-    return when (result) {
-        is Result.Success -> {
-            result.value?.let { user ->
-                SignInState.SignInUser(user)
-            } ?: SignInState.Error(Exception("User not found"))
-        }
-
-        is Result.Failure -> SignInState.Error(Exception(result.exception))
     }
 }

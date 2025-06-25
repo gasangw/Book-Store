@@ -11,6 +11,7 @@ import androidx.navigation.navArgument
 import io.thomasgasangwa.bookcollection.R
 import io.thomasgasangwa.bookcollection.presentation.add_book.AddBook
 import io.thomasgasangwa.bookcollection.presentation.auth.SignInScreen
+import io.thomasgasangwa.bookcollection.presentation.auth.SignInState
 import io.thomasgasangwa.bookcollection.presentation.book_details.BookDetails
 import io.thomasgasangwa.bookcollection.presentation.tab.Tabs
 import io.thomasgasangwa.bookcollection.presentation.update_book.BookParcelableData
@@ -27,13 +28,13 @@ enum class AppNavigationScreens(@StringRes val title: Int) {
 @Composable
 fun AppNavigation(
     modifier: Modifier = Modifier,
-    userIsAvailable: Boolean,
+    authState: SignInState,
     navController: NavHostController
 ) {
 
     NavHost(
         navController = navController,
-        startDestination = if (userIsAvailable) AppNavigationScreens.Tabs.name else AppNavigationScreens.SignIn.name,
+        startDestination =  AppNavigationScreens.Tabs.name,
         modifier = modifier
     ) {
         composable(route = AppNavigationScreens.SignIn.name) {
