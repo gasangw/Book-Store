@@ -1,6 +1,5 @@
 package io.thomasgasangwa.bookcollection.presentation.auth
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.thomasgasangwa.bookcollection.common.Result
@@ -20,29 +19,33 @@ class AuthViewModel(
     init {
         currentUser()
     }
-
-    fun signInWithGoogle(context: Context) {
-        _state.value = SignInState.Loading
-        viewModelScope.launch {
-            when (val result = authRepository.signIn(context)) {
-                is Result.Success -> {
-                    _state.value = SignInState.SignInUser(result.value)
-                    _state.value = SignInState.Success
-                }
-
-                is Result.Failure -> {
-                    _state.value = SignInState.Error(Exception(result.exception))
-                }
-            }
-
-        }
-    }
-
-    val userExists = authRepository.hasUser
+//
+//    fun signInWithGoogle(context: Context) {
+//        _state.value = SignInState.Loading
+//        viewModelScope.launch {
+//            when (val result = authRepository.signIn(context)) {
+//                is Result.Success -> {
+//                    _state.value = SignInState.SignInUser(result.value)
+//                    _state.value = SignInState.Success
+//                }
+//
+//                is Result.Failure -> {
+//                    _state.value = SignInState.Error(Exception(result.exception))
+//                }
+//            }
+//
+//        }
+//    }
 
     fun signInAnonymously() {
+        _state.value = SignInState.Loading
         viewModelScope.launch {
-            authRepository.signInAnonymously()
+            try {
+                authRepository.signInAnonymously()
+                _state.value = SignInState.Success
+            } catch (e: Exception) {
+                _state.value = SignInState.Error(e)
+            }
         }
     }
 
@@ -60,6 +63,7 @@ class AuthViewModel(
     fun signOut() {
         viewModelScope.launch {
             authRepository.signOut()
+            _state.value = SignInState.SignInUser(null)
         }
     }
 }

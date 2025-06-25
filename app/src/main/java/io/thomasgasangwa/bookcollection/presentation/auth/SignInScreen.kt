@@ -1,7 +1,6 @@
 package io.thomasgasangwa.bookcollection.presentation.auth
 
 import BookStoreTheme
-import android.content.Context
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -17,11 +16,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import io.thomasgasangwa.bookcollection.presentation.auth.components.LoginWithGoogleButton
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
@@ -29,14 +26,14 @@ fun SignInScreen(
     modifier: Modifier = Modifier,
     onSignInSuccess: () -> Unit
 ) {
-    val context = LocalContext.current
+//    val context = LocalContext.current
     val authViewModel: AuthViewModel = koinViewModel()
     val signInState by authViewModel.state.collectAsStateWithLifecycle()
 
     SigInComponents(
         modifier = modifier,
-        context = context,
-        signIn = { authViewModel.signInWithGoogle(context) },
+//        context = context,
+//        signIn = { authViewModel.signInWithGoogle(context) },
         signInState = signInState,
         onSignInSuccess = onSignInSuccess,
         signInAnonymously = { authViewModel.signInAnonymously() }
@@ -47,8 +44,8 @@ fun SignInScreen(
 @Composable
 fun SigInComponents(
     modifier: Modifier = Modifier,
-    context: Context,
-    signIn: (context: Context) -> Unit,
+//    context: Context,
+//    signIn: (context: Context) -> Unit,
     signInState: SignInState,
     onSignInSuccess: () -> Unit,
     signInAnonymously: () -> Unit
@@ -68,19 +65,20 @@ fun SigInComponents(
 
         SignInForm()
 
-        Text(text = "Or", style = MaterialTheme.typography.bodyLarge)
-
-        LoginWithGoogleButton(
-            context = context,
-            signIn = signIn,
-            signInState = signInState,
-            onSignInSuccess = onSignInSuccess
-        )
-
         Spacer(modifier = Modifier.height(10.dp))
 
+        Text(text = "Or", style = MaterialTheme.typography.bodyLarge)
+
+//        LoginWithGoogleButton(
+//            context = context,
+//            signIn = signIn,
+//            signInState = signInState,
+//            onSignInSuccess = onSignInSuccess
+//        )
+
+
         TextButton(onClick = { signInAnonymously() }) {
-            when(signInState){
+            when (signInState) {
                 is SignInState.Error -> {}
                 SignInState.Initial -> {}
                 SignInState.Loading -> {
@@ -89,6 +87,7 @@ fun SigInComponents(
                         color = ProgressIndicatorDefaults.circularColor
                     )
                 }
+
                 is SignInState.SignInUser -> {}
                 SignInState.Success -> {
                     onSignInSuccess()
@@ -105,8 +104,6 @@ private fun LoginScreenPreview() {
     BookStoreTheme {
         SigInComponents(
             onSignInSuccess = {},
-            context = LocalContext.current,
-            signIn = {},
             signInState = SignInState.Initial,
             signInAnonymously = {}
         )

@@ -33,10 +33,9 @@ fun AppNavigation(
     navController: NavHostController
 ) {
 
-    Timber.e("currentUser $currentUser")
     NavHost(
         navController = navController,
-        startDestination = AppNavigationScreens.Tabs.name,
+        startDestination = if(currentUser != null)  AppNavigationScreens.Tabs.name else  AppNavigationScreens.SignIn.name ,
         modifier = modifier
     ) {
         composable(route = AppNavigationScreens.SignIn.name) {

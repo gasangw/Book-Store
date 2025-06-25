@@ -24,12 +24,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.thomasgasangwa.bookcollection.R
+import io.thomasgasangwa.bookcollection.domain.model.User
 import io.thomasgasangwa.bookcollection.presentation.navigation.AppNavigationScreens
 
 @Composable
 fun AppBar(
     modifier: Modifier = Modifier,
     currentScreen: AppNavigationScreens,
+    currentUser: User?,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     signOut: () -> Unit
@@ -41,6 +43,7 @@ fun AppBar(
 
     CenteredAppBar(
         currentScreen = currentScreen,
+        currentUser = currentUser,
         canNavigateBack = canNavigateBack,
         navigateUp = navigateUp,
         signOut = signOut,
@@ -56,6 +59,7 @@ fun AppBar(
 fun CenteredAppBar(
     modifier: Modifier = Modifier,
     currentScreen: AppNavigationScreens,
+    currentUser: User?,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     signOut: () -> Unit,
@@ -80,12 +84,14 @@ fun CenteredAppBar(
             }
         },
         actions = {
-            DropDownMenu(
-                signOut = signOut,
-                onClickSettingsButton = onClickSettingsButton,
-                onClickDismissButton = onClickDismissButton,
-                uiState = uiState
-            )
+            if (currentUser != null) {
+                DropDownMenu(
+                    signOut = signOut,
+                    onClickSettingsButton = onClickSettingsButton,
+                    onClickDismissButton = onClickDismissButton,
+                    uiState = uiState
+                )
+            }
         }
     )
 }
@@ -139,6 +145,7 @@ private fun CenteredAppBarPreview() {
     BookStoreTheme {
         CenteredAppBar(
             currentScreen = AppNavigationScreens.Tabs,
+            currentUser = null,
             canNavigateBack = false,
             navigateUp = {},
             signOut = {},

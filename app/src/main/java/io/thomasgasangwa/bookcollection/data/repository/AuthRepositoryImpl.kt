@@ -15,6 +15,7 @@ import io.thomasgasangwa.bookcollection.common.Result
 import io.thomasgasangwa.bookcollection.domain.model.User
 import io.thomasgasangwa.bookcollection.domain.repository.AuthRepository
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 
 class AuthRepositoryImpl(
     private val credentialManager: CredentialManager,

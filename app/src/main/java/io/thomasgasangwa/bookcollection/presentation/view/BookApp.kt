@@ -39,9 +39,9 @@ fun BookApp(modifier: Modifier = Modifier) {
         topBar = {
             AppBar(
                 currentScreen = currentScreen,
+                currentUser = currentUser,
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp() },
-//                authState = authState,
                 signOut = {
                     authViewModel.signOut()
                     navController.navigate(AppNavigationScreens.SignIn.name) {
