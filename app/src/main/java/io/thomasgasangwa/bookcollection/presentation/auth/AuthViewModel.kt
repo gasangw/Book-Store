@@ -9,6 +9,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class AuthViewModel(
     private val authRepository: AuthRepository
@@ -41,7 +42,15 @@ class AuthViewModel(
         _state.value = SignInState.Loading
         viewModelScope.launch {
             try {
-                authRepository.signInAnonymously()
+                val user = authRepository.signInAnonymously()
+                _state.value = when (user) {
+                    is Result.Failure -> SignInState.Error(Exception("Error occurred while getting a current user"))
+                    is Result.Success<*> -> {
+                        Timber.e("user logged in ${user.value}")
+                        SignInState.SignInUser(user.value as User)
+                        SignInState.SignInUser(user.value as User?)
+                    }
+                }
                 _state.value = SignInState.Success
             } catch (e: Exception) {
                 _state.value = SignInState.Error(e)

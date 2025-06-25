@@ -26,6 +26,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import io.thomasgasangwa.bookcollection.R
 import io.thomasgasangwa.bookcollection.domain.model.User
 import io.thomasgasangwa.bookcollection.presentation.navigation.AppNavigationScreens
+import timber.log.Timber
 
 @Composable
 fun AppBar(
@@ -40,7 +41,7 @@ fun AppBar(
     val appBarViewModel: AppBarViewModel = viewModel()
     val uiState by appBarViewModel.state.collectAsStateWithLifecycle()
 
-
+    Timber.e("user in the appBar: $currentUser")
     CenteredAppBar(
         currentScreen = currentScreen,
         currentUser = currentUser,

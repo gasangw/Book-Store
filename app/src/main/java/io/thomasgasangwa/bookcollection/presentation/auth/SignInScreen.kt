@@ -35,7 +35,7 @@ fun SignInScreen(
 //        context = context,
 //        signIn = { authViewModel.signInWithGoogle(context) },
         signInState = signInState,
-        onSignInSuccess = onSignInSuccess,
+        onSignInSuccess = {onSignInSuccess()},
         signInAnonymously = { authViewModel.signInAnonymously() }
     )
 
@@ -79,19 +79,23 @@ fun SigInComponents(
 
         TextButton(onClick = { signInAnonymously() }) {
             when (signInState) {
-                is SignInState.Error -> {}
-                SignInState.Initial -> {}
+                is SignInState.Error -> {
+                    Text(
+                        text = "error occurred while logging in",
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
                 SignInState.Loading -> {
                     CircularProgressIndicator(
                         strokeWidth = 2.dp,
-                        color = ProgressIndicatorDefaults.circularColor
+                        color = ProgressIndicatorDefaults.circularColor,
+                        modifier = Modifier.padding(5.dp)
                     )
                 }
-
-                is SignInState.SignInUser -> {}
                 SignInState.Success -> {
                     onSignInSuccess()
                 }
+                else -> null
             }
             Text(text = "Continue without Signing In", style = MaterialTheme.typography.bodyLarge)
         }

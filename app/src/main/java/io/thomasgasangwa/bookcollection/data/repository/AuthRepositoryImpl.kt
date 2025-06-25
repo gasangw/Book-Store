@@ -15,7 +15,6 @@ import io.thomasgasangwa.bookcollection.common.Result
 import io.thomasgasangwa.bookcollection.domain.model.User
 import io.thomasgasangwa.bookcollection.domain.repository.AuthRepository
 import kotlinx.coroutines.tasks.await
-import timber.log.Timber
 
 class AuthRepositoryImpl(
     private val credentialManager: CredentialManager,
@@ -25,10 +24,19 @@ class AuthRepositoryImpl(
     override val hasUser: Boolean
         get() = firebaseAuth.currentUser != null
 
-    override suspend fun signInAnonymously(): Result<Unit> {
+    override suspend fun signInAnonymously(): Result<User> {
         return try {
-            firebaseAuth.signInAnonymously().await()
-            Result.Success(Unit)
+            val authResult = firebaseAuth.signInAnonymously().await()
+            val firebaseUser = authResult.user
+            return firebaseUser?.let { user ->
+                val user = User(
+                    email = user.email ?: "",
+                    photoUrl = user.photoUrl.toString() ?: "",
+                    name = user.displayName ?: "Anonymous"
+                )
+                Result.Success(user)
+            } ?: Result.Failure(Exception("Anonymous sign-in returned null user"))
+
         } catch (e: Exception) {
             Result.Failure(e)
         }
