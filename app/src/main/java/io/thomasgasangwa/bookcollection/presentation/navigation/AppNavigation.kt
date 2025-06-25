@@ -9,13 +9,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import io.thomasgasangwa.bookcollection.R
+import io.thomasgasangwa.bookcollection.domain.model.User
 import io.thomasgasangwa.bookcollection.presentation.add_book.AddBook
 import io.thomasgasangwa.bookcollection.presentation.auth.SignInScreen
-import io.thomasgasangwa.bookcollection.presentation.auth.SignInState
 import io.thomasgasangwa.bookcollection.presentation.book_details.BookDetails
 import io.thomasgasangwa.bookcollection.presentation.tab.Tabs
 import io.thomasgasangwa.bookcollection.presentation.update_book.BookParcelableData
 import io.thomasgasangwa.bookcollection.presentation.update_book.UpdateBook
+import timber.log.Timber
 
 enum class AppNavigationScreens(@StringRes val title: Int) {
     SignIn(title = R.string.sign_in),
@@ -28,13 +29,14 @@ enum class AppNavigationScreens(@StringRes val title: Int) {
 @Composable
 fun AppNavigation(
     modifier: Modifier = Modifier,
-    authState: SignInState,
+    currentUser: User?,
     navController: NavHostController
 ) {
 
+    Timber.e("currentUser $currentUser")
     NavHost(
         navController = navController,
-        startDestination =  AppNavigationScreens.Tabs.name,
+        startDestination = AppNavigationScreens.Tabs.name,
         modifier = modifier
     ) {
         composable(route = AppNavigationScreens.SignIn.name) {
