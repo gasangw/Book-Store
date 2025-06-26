@@ -9,3 +9,11 @@ sealed class SignInState {
     data class SignInUser(val currentUser: User?) : SignInState()
     data class Error(val exception: Exception) : SignInState()
 }
+
+data class LoginFormState(
+    val email: String = "",
+    val password: String = "",
+    val isPasswordVisible: Boolean = false,
+    val isEmailValid: Boolean = false,
+    val isPasswordValid: Boolean = false
+)

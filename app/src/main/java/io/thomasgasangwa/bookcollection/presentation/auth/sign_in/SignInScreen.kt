@@ -28,17 +28,24 @@ fun SignInScreen(
     onSignUpButtonClick: () -> Unit,
 ) {
 //    val context = LocalContext.current
-    val authViewModel: AuthViewModel = koinViewModel()
-    val signInState by authViewModel.state.collectAsStateWithLifecycle()
+    val signInViewModel: SignInViewModel = koinViewModel()
+    val signInState by signInViewModel.state.collectAsStateWithLifecycle()
+    val formState by signInViewModel.formState.collectAsStateWithLifecycle()
 
     SigInComponents(
         modifier = modifier,
 //        context = context,
 //        signIn = { authViewModel.signInWithGoogle(context) },
+        formState = formState,
+        onEmailChange = { it -> signInViewModel.onEmailChange(it) },
+        onPasswordChange = { it -> signInViewModel.onPasswordChange(it) },
+        togglePasswordVisible = { signInViewModel.togglePasswordVisible() },
+        onClickSignInButton = { signInViewModel.signInWithEmailAndPassword() },
+        clearSignInFormInputs = {signInViewModel.clearSignInFormInputs()},
         signInState = signInState,
-        onSignInSuccess = {onSignInSuccess()},
+        onSignInSuccess = { onSignInSuccess() },
         onSignUpButtonClick = onSignUpButtonClick,
-        signInAnonymously = { authViewModel.signInAnonymously() }
+        signInAnonymously = { signInViewModel.signInAnonymously() }
     )
 
 }
@@ -48,6 +55,12 @@ fun SigInComponents(
     modifier: Modifier = Modifier,
 //    context: Context,
 //    signIn: (context: Context) -> Unit,
+    formState: LoginFormState,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    togglePasswordVisible: () -> Unit,
+    onClickSignInButton: () -> Unit,
+    clearSignInFormInputs: () -> Unit,
     signInState: SignInState,
     onSignInSuccess: () -> Unit,
     onSignUpButtonClick: () -> Unit,
@@ -66,15 +79,22 @@ fun SigInComponents(
             modifier = modifier.padding(18.dp)
         )
 
-        SignInForm()
+        SignInForm(
+            formState = formState,
+            onEmailChange = onEmailChange,
+            onPasswordChange = onPasswordChange,
+            togglePasswordVisible = togglePasswordVisible,
+            onClickSignInButton = onClickSignInButton,
+            clearSignInFormInputs = clearSignInFormInputs
+        )
 
         Spacer(modifier = Modifier.height(16.dp))
 
-       Text(
-           text = "Doesn't have account?",
-           style = MaterialTheme.typography.titleSmall,
-           color = MaterialTheme.colorScheme.tertiary
-       )
+        Text(
+            text = "Doesn't have account?",
+            style = MaterialTheme.typography.titleSmall,
+            color = MaterialTheme.colorScheme.tertiary
+        )
         TextButton(onClick = { onSignUpButtonClick() }) {
             Text(
                 text = "SIGN UP",
@@ -99,6 +119,7 @@ fun SigInComponents(
                         color = MaterialTheme.colorScheme.error
                     )
                 }
+
                 SignInState.Loading -> {
                     CircularProgressIndicator(
                         strokeWidth = 2.dp,
@@ -106,9 +127,11 @@ fun SigInComponents(
                         modifier = Modifier.padding(5.dp)
                     )
                 }
+
                 SignInState.Success -> {
                     onSignInSuccess()
                 }
+
                 else -> null
             }
             Text(text = "Continue without Signing In", style = MaterialTheme.typography.bodyLarge)
@@ -124,7 +147,13 @@ private fun LoginScreenPreview() {
             onSignInSuccess = {},
             signInState = SignInState.Initial,
             onSignUpButtonClick = {},
-            signInAnonymously = {}
+            signInAnonymously = {},
+            formState = LoginFormState(),
+            onEmailChange = {},
+            onPasswordChange = {},
+            togglePasswordVisible = {},
+            onClickSignInButton = {},
+            clearSignInFormInputs = {}
         )
     }
 }

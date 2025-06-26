@@ -37,10 +37,18 @@ fun SignUpForm(modifier: Modifier = Modifier) {
             textErrorMessage = "Email cannot be empty.."
         )
         PasswordTextField(
-            placeholderText = "enter password..."
+            placeholderText = "enter password...",
+            formState = TODO(),
+            onPasswordChange = TODO(),
+            togglePasswordVisible = TODO(),
+            hasAttemptedSubmit = TODO(),
         )
         PasswordTextField(
-            placeholderText = "confirm password"
+            placeholderText = "confirm password",
+            formState = TODO(),
+            onPasswordChange = TODO(),
+            togglePasswordVisible = TODO(),
+            hasAttemptedSubmit = TODO()
         )
         Button(
             onClick = {

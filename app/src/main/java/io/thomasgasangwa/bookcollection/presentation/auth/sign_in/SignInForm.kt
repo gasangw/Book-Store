@@ -3,9 +3,7 @@ package io.thomasgasangwa.bookcollection.presentation.auth.sign_in
 import BookStoreTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -22,7 +20,15 @@ import io.thomasgasangwa.bookcollection.presentation.auth.components.PasswordTex
 import io.thomasgasangwa.bookcollection.presentation.view.components.TextFieldElement
 
 @Composable
-fun SignInForm(modifier: Modifier = Modifier) {
+fun SignInForm(
+    modifier: Modifier = Modifier,
+    formState: LoginFormState,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    togglePasswordVisible: () -> Unit,
+    onClickSignInButton: () -> Unit,
+    clearSignInFormInputs: () -> Unit
+) {
     var email by rememberSaveable { mutableStateOf("") }
     var hasAttemptedSubmit by rememberSaveable { mutableStateOf(false) }
     Column(
@@ -30,20 +36,26 @@ fun SignInForm(modifier: Modifier = Modifier) {
         verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         TextFieldElement(
-            textValue = email,
+            textValue = formState.email,
             label = "email",
-            onValueChange = { email = it },
-            textFieldHasError = hasAttemptedSubmit && email.isEmpty(),
+            onValueChange = { onEmailChange(it) },
+            textFieldHasError = hasAttemptedSubmit && email.isEmpty() && !formState.isEmailValid,
             singleLine = true,
             placeholder = "example@gmail.com",
-            textErrorMessage = "Email cannot be empty.."
+            textErrorMessage = "Kindly check the email field.."
         )
         PasswordTextField(
-            placeholderText = "enter password..."
+            onPasswordChange = onPasswordChange,
+            formState = formState,
+            placeholderText = "enter password...",
+            togglePasswordVisible = togglePasswordVisible,
+            hasAttemptedSubmit = hasAttemptedSubmit
         )
         Button(
             onClick = {
                 hasAttemptedSubmit = true
+                onClickSignInButton()
+                clearSignInFormInputs()
             },
             modifier = modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium
@@ -61,6 +73,13 @@ fun SignInForm(modifier: Modifier = Modifier) {
 @Composable
 private fun SignInFormPreview() {
     BookStoreTheme {
-        SignInForm()
+        SignInForm(
+            formState = LoginFormState(),
+            onEmailChange = {},
+            onPasswordChange = {},
+            togglePasswordVisible = {},
+            onClickSignInButton = {},
+            clearSignInFormInputs = {}
+        )
     }
 }

@@ -8,6 +8,7 @@ interface AuthRepository {
     val hasUser: Boolean
     suspend fun signIn(context: Context): Result<User?>
     suspend fun signInAnonymously(): Result<User>
+    suspend fun signInWithEmailAndPassword(email: String, password: String): Result<Unit>
     suspend fun getCurrentUser(): Result<User?>
     suspend fun signOut(): Result<Unit>
 }

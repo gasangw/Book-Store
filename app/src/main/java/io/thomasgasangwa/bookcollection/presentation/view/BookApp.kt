@@ -9,8 +9,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.AuthViewModel
 import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInState
+import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInViewModel
 import io.thomasgasangwa.bookcollection.presentation.navigation.AppNavigation
 import io.thomasgasangwa.bookcollection.presentation.navigation.AppNavigationScreens
 import io.thomasgasangwa.bookcollection.presentation.navigation.app_bar.AppBar
@@ -20,7 +20,7 @@ import org.koin.androidx.compose.koinViewModel
 fun BookApp(modifier: Modifier = Modifier) {
 
 
-    val authViewModel: AuthViewModel = koinViewModel()
+    val authViewModel: SignInViewModel = koinViewModel()
     val authState by authViewModel.state.collectAsStateWithLifecycle()
 
     val currentUser = when (authState) {
