@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookcollection.presentation.auth
+package io.thomasgasangwa.bookcollection.presentation.auth.sign_in
 
 import BookStoreTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -19,6 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInState
 import org.koin.androidx.compose.koinViewModel
 
 @Composable

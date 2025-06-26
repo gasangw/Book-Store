@@ -9,8 +9,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import io.thomasgasangwa.bookcollection.presentation.auth.AuthViewModel
-import io.thomasgasangwa.bookcollection.presentation.auth.SignInState
+import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.AuthViewModel
+import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInState
 import io.thomasgasangwa.bookcollection.presentation.navigation.AppNavigation
 import io.thomasgasangwa.bookcollection.presentation.navigation.AppNavigationScreens
 import io.thomasgasangwa.bookcollection.presentation.navigation.app_bar.AppBar
