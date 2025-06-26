@@ -15,7 +15,7 @@ import io.thomasgasangwa.bookcollection.domain.repository.LocalRepository
 import io.thomasgasangwa.bookcollection.domain.repository.RemoteRepository
 import io.thomasgasangwa.bookcollection.domain.usecase.GetAllBooksUseCase
 import io.thomasgasangwa.bookcollection.presentation.add_book.AddBookViewModel
-import io.thomasgasangwa.bookcollection.presentation.auth.AuthViewModel
+import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.AuthViewModel
 import io.thomasgasangwa.bookcollection.presentation.book_details.BookDetailsViewModel
 import io.thomasgasangwa.bookcollection.presentation.book_list.BookListViewModel
 import io.thomasgasangwa.bookcollection.presentation.favorites.FavoriteViewModel

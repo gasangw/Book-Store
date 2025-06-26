@@ -1,10 +1,11 @@
-package io.thomasgasangwa.bookcollection.presentation.auth
+package io.thomasgasangwa.bookcollection.presentation.auth.sign_in
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.thomasgasangwa.bookcollection.common.Result
 import io.thomasgasangwa.bookcollection.domain.model.User
 import io.thomasgasangwa.bookcollection.domain.repository.AuthRepository
+import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -46,7 +47,7 @@ class AuthViewModel(
                 _state.value = when (user) {
                     is Result.Failure -> SignInState.Error(Exception("Error occurred while getting a current user"))
                     is Result.Success<*> -> {
-                        Timber.e("user logged in ${user.value}")
+                        Timber.Forest.e("user logged in ${user.value}")
                         SignInState.SignInUser(user.value as User)
                         SignInState.SignInUser(user.value as User?)
                     }

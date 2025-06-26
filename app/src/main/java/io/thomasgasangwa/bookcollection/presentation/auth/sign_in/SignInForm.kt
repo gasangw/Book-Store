@@ -1,6 +1,7 @@
-package io.thomasgasangwa.bookcollection.presentation.auth
+package io.thomasgasangwa.bookcollection.presentation.auth.sign_in
 
 import BookStoreTheme
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,7 +26,8 @@ fun SignInForm(modifier: Modifier = Modifier) {
     var email by rememberSaveable { mutableStateOf("") }
     var hasAttemptedSubmit by rememberSaveable { mutableStateOf(false) }
     Column(
-        modifier = modifier
+        modifier = modifier,
+        verticalArrangement = Arrangement.spacedBy(10.dp)
     ) {
         TextFieldElement(
             textValue = email,
@@ -36,11 +38,9 @@ fun SignInForm(modifier: Modifier = Modifier) {
             placeholder = "example@gmail.com",
             textErrorMessage = "Email cannot be empty.."
         )
-        Spacer(modifier = Modifier.height(6.dp))
         PasswordTextField(
             placeholderText = "enter password..."
         )
-        Spacer(modifier = Modifier.height(25.dp))
         Button(
             onClick = {
                 hasAttemptedSubmit = true

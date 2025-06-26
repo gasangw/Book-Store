@@ -11,15 +11,16 @@ import androidx.navigation.navArgument
 import io.thomasgasangwa.bookcollection.R
 import io.thomasgasangwa.bookcollection.domain.model.User
 import io.thomasgasangwa.bookcollection.presentation.add_book.AddBook
-import io.thomasgasangwa.bookcollection.presentation.auth.SignInScreen
+import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInScreen
+import io.thomasgasangwa.bookcollection.presentation.auth.sign_up.SignUpScreen
 import io.thomasgasangwa.bookcollection.presentation.book_details.BookDetails
 import io.thomasgasangwa.bookcollection.presentation.tab.Tabs
 import io.thomasgasangwa.bookcollection.presentation.update_book.BookParcelableData
 import io.thomasgasangwa.bookcollection.presentation.update_book.UpdateBook
-import timber.log.Timber
 
 enum class AppNavigationScreens(@StringRes val title: Int) {
     SignIn(title = R.string.sign_in),
+    SignUp(title = R.string.sign_up),
     Tabs(title = R.string.app_name),
     AddBook(title = R.string.add_book),
     BookDetails(title = R.string.book_details),
@@ -48,8 +49,13 @@ fun AppNavigation(
                         }
                         launchSingleTop = true
                     }
-                }
+                },
+                onSignUpButtonClick = { navController.navigate(AppNavigationScreens.SignUp.name)}
             )
+        }
+
+        composable(route = AppNavigationScreens.SignUp.name) {
+            SignUpScreen()
         }
 
         composable(route = AppNavigationScreens.Tabs.name) {

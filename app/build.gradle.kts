@@ -1,5 +1,7 @@
 import org.jlleitschuh.gradle.ktlint.reporter.ReporterType
 
+val googleId = project.findProperty("GOOGLE_CLIENT_ID") ?: ""
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -30,8 +32,8 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        buildConfigField("String", "GOOGLE_CLIENT_ID", "\"$googleId\"")
     }
 
     buildTypes {
@@ -52,6 +54,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     tasks.withType<Test> {
         jvmArgs("-XX:+EnableDynamicAgentLoading")

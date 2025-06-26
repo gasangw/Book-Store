@@ -22,7 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.thomasgasangwa.bookcollection.R
-import io.thomasgasangwa.bookcollection.presentation.auth.SignInState
+import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInState
 
 @Composable
 fun LoginWithGoogleButton(

@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.RemoveModerator
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DropdownMenu
@@ -13,6 +14,7 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -127,7 +129,7 @@ fun DropDownMenu(
                 onClick = { /* Do something... */ }
             )
             DropdownMenuItem(
-                text = { Text("Log out") },
+                text = { Text("LOG OUT") },
                 leadingIcon = {
                     Icon(
                         painter = painterResource(R.drawable.logout_icon),
@@ -135,6 +137,22 @@ fun DropDownMenu(
                     )
                 },
                 onClick = signOut
+            )
+            DropdownMenuItem(
+                text = {
+                    Text(
+                        text = "DELETE ACCOUNT",
+                        color = MaterialTheme.colorScheme.error
+                    )
+                },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Filled.RemoveModerator,
+                        contentDescription = "delete account",
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                },
+                onClick = {/* Do something... */ }
             )
         }
     }

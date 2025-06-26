@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookcollection.presentation.auth
+package io.thomasgasangwa.bookcollection.presentation.auth.sign_in
 
 import io.thomasgasangwa.bookcollection.domain.model.User
 

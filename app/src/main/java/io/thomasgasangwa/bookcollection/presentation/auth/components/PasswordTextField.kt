@@ -43,24 +43,24 @@ fun PasswordTextField(
             } else {
                 TextObfuscationMode.RevealLastTyped
             },
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
-            .border(1.dp, Color.Gray, MaterialTheme.shapes.small)
-            .padding(6.dp),
+            .border(1.dp, Color.Gray, MaterialTheme.shapes.small),
         decorator = { innerTextField ->
             Box(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth()
+                    .padding(6.dp),
                 contentAlignment = Alignment.CenterStart
             ) {
                 Box(
-                    modifier = Modifier
-                        .align(Alignment.CenterStart)
+                    modifier = modifier.padding(start = 8.dp),
+                    contentAlignment = Alignment.Center
                 ) {
                     if (state.text.isEmpty()) {
                         Text(
                             text = placeholderText,
                             color = Color.DarkGray,
-                            modifier = Modifier.padding(start = 10.dp)
+                            modifier = modifier.padding(start = 16.dp)
                         )
                     }
                     innerTextField()
