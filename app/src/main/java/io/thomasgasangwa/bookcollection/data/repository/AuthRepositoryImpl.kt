@@ -42,7 +42,10 @@ class AuthRepositoryImpl(
         }
     }
 
-    override suspend fun signInWithEmailAndPassword(email: String, password: String): Result<Unit> {
+    override suspend fun signInWithEmailAndPassword(
+        email: String,
+        password: String
+    ): Result<Unit> {
         return try {
             firebaseAuth.signInWithEmailAndPassword(email, password).await()
             Result.Success(Unit)
@@ -50,6 +53,19 @@ class AuthRepositoryImpl(
             Result.Failure(e)
         }
     }
+
+    override suspend fun createNewUserWithEmailAndPassword(
+        email: String,
+        password: String
+    ): Result<Unit> {
+        return try {
+            firebaseAuth.createUserWithEmailAndPassword(email, password).await()
+            Result.Success(Unit)
+        } catch (e: Exception) {
+            Result.Failure(e)
+        }
+    }
+
 
     override suspend fun getCurrentUser(): Result<User?> {
         val firebaseUser = firebaseAuth.currentUser
