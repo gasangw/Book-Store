@@ -38,7 +38,7 @@ fun SignInForm(modifier: Modifier = Modifier) {
         )
         Spacer(modifier = Modifier.height(6.dp))
         PasswordTextField(
-            placeholderText = "Enter Password..."
+            placeholderText = "enter password..."
         )
         Spacer(modifier = Modifier.height(25.dp))
         Button(

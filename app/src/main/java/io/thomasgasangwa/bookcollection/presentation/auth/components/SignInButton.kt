@@ -25,15 +25,13 @@ import io.thomasgasangwa.bookcollection.R
 import io.thomasgasangwa.bookcollection.presentation.auth.SignInState
 
 @Composable
-fun LoginButton(
+fun LoginWithGoogleButton(
     modifier: Modifier = Modifier,
     context: Context,
     signIn: (context: Context) -> Unit,
     signInState: SignInState,
     onSignInSuccess: () -> Unit,
 ) {
-
-
     when (signInState) {
         is SignInState.Initial -> {
             Button(
@@ -86,7 +84,7 @@ fun LoginButton(
 private fun LoginButtonPreview() {
     val context = LocalContext.current
     BookStoreTheme {
-        LoginButton(
+        LoginWithGoogleButton(
             context = context,
             signIn = {},
             signInState = SignInState.Initial,

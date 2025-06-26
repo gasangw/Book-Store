@@ -60,7 +60,7 @@ fun PasswordTextField(
                         Text(
                             text = placeholderText,
                             color = Color.DarkGray,
-                            modifier = Modifier.padding(start = 26.dp)
+                            modifier = Modifier.padding(start = 10.dp)
                         )
                     }
                     innerTextField()
