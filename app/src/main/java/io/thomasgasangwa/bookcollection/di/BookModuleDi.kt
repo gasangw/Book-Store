@@ -16,6 +16,7 @@ import io.thomasgasangwa.bookcollection.domain.repository.RemoteRepository
 import io.thomasgasangwa.bookcollection.domain.usecase.GetAllBooksUseCase
 import io.thomasgasangwa.bookcollection.presentation.add_book.AddBookViewModel
 import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInViewModel
+import io.thomasgasangwa.bookcollection.presentation.auth.sign_up.SignUpViewModel
 import io.thomasgasangwa.bookcollection.presentation.book_details.BookDetailsViewModel
 import io.thomasgasangwa.bookcollection.presentation.book_list.BookListViewModel
 import io.thomasgasangwa.bookcollection.presentation.favorites.FavoriteViewModel
@@ -52,4 +53,5 @@ val localBookModule = module {
     viewModel { FavoriteViewModel(get()) }
     viewModel { (book: Book) -> UpdateBookViewModel(book, get()) }
     viewModel { SignInViewModel(get()) }
+    viewModel { SignUpViewModel(get()) }
 }

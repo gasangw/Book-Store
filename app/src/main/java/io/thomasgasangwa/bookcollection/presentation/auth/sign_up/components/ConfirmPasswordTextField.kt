@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookcollection.presentation.auth.components
+package io.thomasgasangwa.bookcollection.presentation.auth.sign_up.components
 
 import BookStoreTheme
 import androidx.compose.foundation.clickable
@@ -14,39 +14,34 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.LoginFormState
 
 @Composable
-fun PasswordTextField(
+fun ConfirmPasswordTextField(
     modifier: Modifier = Modifier,
-    formState: LoginFormState,
-    onPasswordChange: (String) -> Unit,
-    togglePasswordVisible: () -> Unit,
-    placeholderText: String,
-    hasAttemptedSubmit: Boolean
+    placeholderText: String
 ) {
     OutlinedTextField(
-        value = formState.password,
-        onValueChange = { onPasswordChange(it) },
+        value = "",
+        onValueChange = { },
         placeholder = { Text(placeholderText) },
-        visualTransformation = if (formState.isPasswordVisible)
+        visualTransformation = if (true)
             VisualTransformation.None
         else
             PasswordVisualTransformation(),
         trailingIcon = {
             Icon(
-                imageVector = if (formState.isPasswordVisible)
+                imageVector = if (true)
                     Icons.Filled.Visibility
                 else
                     Icons.Filled.VisibilityOff,
-                contentDescription = "Toggle password visibility",
-                modifier = Modifier.clickable { togglePasswordVisible() }
+                contentDescription = "Toggle confirm password visibility",
+                modifier = Modifier.clickable {  }
             )
         },
-        isError = hasAttemptedSubmit && formState.password.isEmpty(),
+        isError = false,
         supportingText = {
-            if (hasAttemptedSubmit && formState.password.isEmpty()) {
-                Text(text = "Password can't be empty")
+            if (true) {
+                Text(text = "Confirm Password should be the same as password")
             }
         },
         modifier = modifier.fillMaxWidth()
@@ -55,14 +50,10 @@ fun PasswordTextField(
 
 @Preview
 @Composable
-private fun PasswordTextFieldPreview() {
+private fun ConfirmPasswordTextFieldPreview() {
     BookStoreTheme {
-        PasswordTextField(
-            placeholderText = "Enter Password...",
-            formState = LoginFormState(),
-            onPasswordChange = {},
-            togglePasswordVisible = {},
-            hasAttemptedSubmit = false
+        ConfirmPasswordTextField(
+            placeholderText = "Confirm Password"
         )
     }
 }

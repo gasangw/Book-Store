@@ -72,19 +72,19 @@ class SignInViewModel(
     }
 
     fun onPasswordChange(password: String) {
-        if(password.isNotEmpty()){
+        if (password.isNotEmpty()) {
             _formState.value = _formState.value.copy(
-                password = password,
-                isPasswordValid = true
+                password = password
             )
         }
     }
 
-    fun togglePasswordVisible(){
-        _formState.value = _formState.value.copy(isPasswordVisible = !_formState.value.isPasswordVisible)
+    fun togglePasswordVisible() {
+        _formState.value =
+            _formState.value.copy(isPasswordVisible = !_formState.value.isPasswordVisible)
     }
 
-    fun clearSignInFormInputs(){
+    fun clearSignInFormInputs() {
         _formState.value = _formState.value.copy(
             email = "",
             password = ""
@@ -93,7 +93,22 @@ class SignInViewModel(
 
 
     fun signInWithEmailAndPassword() {
-        Timber.e("form State ${_formState.value.email}, ${_formState.value.password}")
+        _state.value = SignInState.Loading
+        viewModelScope.launch {
+            try {
+                if (_formState.value.email.isNotEmpty() && _formState.value.password.isNotEmpty()) {
+                    authRepository.signInWithEmailAndPassword(
+                        _formState.value.email,
+                        _formState.value.password
+                    )
+                    _state.value = SignInState.Success
+                } else {
+                    throw Exception("Invalid inputs.")
+                }
+            } catch (e: Exception) {
+                _state.value = SignInState.Error(e)
+            }
+        }
     }
 
     fun currentUser() {

@@ -16,7 +16,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.thomasgasangwa.bookcollection.presentation.auth.components.PasswordTextField
+
+import io.thomasgasangwa.bookcollection.presentation.auth.sign_up.components.ConfirmPasswordTextField
+import io.thomasgasangwa.bookcollection.presentation.auth.sign_up.components.SignUpPasswordTextField
 import io.thomasgasangwa.bookcollection.presentation.view.components.TextFieldElement
 
 @Composable
@@ -36,20 +38,14 @@ fun SignUpForm(modifier: Modifier = Modifier) {
             placeholder = "example@gmail.com",
             textErrorMessage = "Email cannot be empty.."
         )
-        PasswordTextField(
-            placeholderText = "enter password...",
-            formState = TODO(),
-            onPasswordChange = TODO(),
-            togglePasswordVisible = TODO(),
-            hasAttemptedSubmit = TODO(),
+        SignUpPasswordTextField(
+            placeholderText = "Password",
+            hasAttemptedSubmit = hasAttemptedSubmit
         )
-        PasswordTextField(
-            placeholderText = "confirm password",
-            formState = TODO(),
-            onPasswordChange = TODO(),
-            togglePasswordVisible = TODO(),
-            hasAttemptedSubmit = TODO()
+        ConfirmPasswordTextField(
+            placeholderText = "Confirm Password"
         )
+
         Button(
             onClick = {
                 hasAttemptedSubmit = true

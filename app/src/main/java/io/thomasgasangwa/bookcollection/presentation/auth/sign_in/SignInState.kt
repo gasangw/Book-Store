@@ -15,5 +15,4 @@ data class LoginFormState(
     val password: String = "",
     val isPasswordVisible: Boolean = false,
     val isEmailValid: Boolean = false,
-    val isPasswordValid: Boolean = false
 )
