@@ -55,7 +55,9 @@ fun AppNavigation(
         }
 
         composable(route = AppNavigationScreens.SignUp.name) {
-            SignUpScreen()
+            SignUpScreen(
+                onSignUpNavigateToLogin = {navController.navigate(AppNavigationScreens.SignIn.name)}
+            )
         }
 
         composable(route = AppNavigationScreens.Tabs.name) {

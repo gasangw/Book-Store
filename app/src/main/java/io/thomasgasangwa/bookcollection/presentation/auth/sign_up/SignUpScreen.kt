@@ -10,15 +10,50 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookcollection.R
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun SignUpScreen(modifier: Modifier = Modifier) {
+fun SignUpScreen(
+    modifier: Modifier = Modifier,
+    onSignUpNavigateToLogin: () -> Unit
+) {
+    val signUpViewModel: SignUpViewModel = koinViewModel()
+    val state by signUpViewModel.createUserState.collectAsStateWithLifecycle()
+    SignUp(
+        state = state,
+        onEmailChange = { it -> signUpViewModel.onEmailChange(it) },
+        onPasswordChange = { it -> signUpViewModel.onPasswordChange(it) },
+        onConfirmPasswordChange = { it -> signUpViewModel.onConfirmPasswordChange(it) },
+        passwordVisible = { signUpViewModel.togglePasswordVisibility() },
+        confirmPasswordVisible = { signUpViewModel.toggleConfirmPasswordVisibility() },
+        clearSignUpInputFields = { signUpViewModel.clearSignUpFormInputs() },
+        createNewUserWithEmailAndPassword = { signUpViewModel.createNewUserWithEmailAndPassword() },
+        onSignUpNavigateToLogin = onSignUpNavigateToLogin,
+        modifier = modifier
+    )
+}
+
+@Composable
+fun SignUp(
+    modifier: Modifier = Modifier,
+    state: SignUpUiState,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onConfirmPasswordChange: (String) -> Unit,
+    passwordVisible: () -> Unit,
+    confirmPasswordVisible: () -> Unit,
+    clearSignUpInputFields: () -> Unit,
+    createNewUserWithEmailAndPassword: () -> Unit,
+    onSignUpNavigateToLogin: () -> Unit
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -33,7 +68,17 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
             modifier = Modifier.size(200.dp)
         )
         Spacer(modifier = modifier.fillMaxHeight(0.03f))
-        SignUpForm()
+        SignUpForm(
+            state = state,
+            onEmailChange = onEmailChange,
+            onPasswordChange = onPasswordChange,
+            onConfirmPasswordChange = onConfirmPasswordChange,
+            passwordVisible = passwordVisible,
+            confirmPasswordVisible = confirmPasswordVisible,
+            clearSignUpInputFields = clearSignUpInputFields,
+            createNewUserWithEmailAndPassword = createNewUserWithEmailAndPassword,
+            onSignUpNavigateToLogin = onSignUpNavigateToLogin,
+        )
     }
 }
 
@@ -41,6 +86,8 @@ fun SignUpScreen(modifier: Modifier = Modifier) {
 @Composable
 private fun SignUpScreenPreview() {
     BookStoreTheme {
-        SignUpScreen()
+        SignUpScreen(
+            onSignUpNavigateToLogin = {}
+        )
     }
 }

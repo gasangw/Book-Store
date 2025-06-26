@@ -14,34 +14,38 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import io.thomasgasangwa.bookcollection.presentation.auth.sign_up.SignUpUiState
 
 @Composable
 fun SignUpPasswordTextField(
     modifier: Modifier = Modifier,
+    state: SignUpUiState,
     placeholderText: String,
-    hasAttemptedSubmit: Boolean
+    onPasswordChange: (String) -> Unit,
+    hasAttemptedSubmit: Boolean,
+    passwordVisible: () -> Unit,
 ) {
     OutlinedTextField(
-        value = "",
-        onValueChange = {  },
+        value = state.password,
+        onValueChange = { onPasswordChange(it) },
         placeholder = { Text(placeholderText) },
-        visualTransformation = if (true)
+        visualTransformation = if (state.isPasswordVisible)
             VisualTransformation.None
         else
             PasswordVisualTransformation(),
         trailingIcon = {
             Icon(
-                imageVector = if (true)
+                imageVector = if (state.isPasswordVisible)
                     Icons.Filled.Visibility
                 else
                     Icons.Filled.VisibilityOff,
                 contentDescription = "Toggle password visibility",
-                modifier = Modifier.clickable { }
+                modifier = Modifier.clickable { passwordVisible() }
             )
         },
-        isError = true,
+        isError = hasAttemptedSubmit && state.password.isEmpty(),
         supportingText = {
-            if (false) {
+            if (hasAttemptedSubmit && state.password.isEmpty()) {
                 Text(text = "Password can't be empty")
             }
         },
@@ -55,7 +59,10 @@ private fun SignUpPasswordTextFieldPreview() {
     BookStoreTheme {
         SignUpPasswordTextField(
             placeholderText = "Enter Password...",
-            hasAttemptedSubmit = true
+            hasAttemptedSubmit = false,
+            state = SignUpUiState(),
+            onPasswordChange = {},
+            passwordVisible = {},
         )
     }
 }

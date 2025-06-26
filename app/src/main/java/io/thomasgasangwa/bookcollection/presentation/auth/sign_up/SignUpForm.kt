@@ -22,33 +22,53 @@ import io.thomasgasangwa.bookcollection.presentation.auth.sign_up.components.Sig
 import io.thomasgasangwa.bookcollection.presentation.view.components.TextFieldElement
 
 @Composable
-fun SignUpForm(modifier: Modifier = Modifier) {
-    var email by rememberSaveable { mutableStateOf("") }
+fun SignUpForm(
+    modifier: Modifier = Modifier,
+    state: SignUpUiState,
+    onEmailChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onConfirmPasswordChange: (String) -> Unit,
+    passwordVisible: () -> Unit,
+    confirmPasswordVisible: () -> Unit,
+    clearSignUpInputFields: () -> Unit,
+    createNewUserWithEmailAndPassword: () -> Unit,
+    onSignUpNavigateToLogin: () -> Unit
+) {
     var hasAttemptedSubmit by rememberSaveable { mutableStateOf(false) }
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
         TextFieldElement(
-            textValue = email,
+            textValue = state.email,
             label = "email",
-            onValueChange = { email = it },
-            textFieldHasError = hasAttemptedSubmit && email.isEmpty(),
+            onValueChange = { onEmailChange(it) },
+            textFieldHasError = hasAttemptedSubmit && state.email.isEmpty(),
             singleLine = true,
             placeholder = "example@gmail.com",
             textErrorMessage = "Email cannot be empty.."
         )
         SignUpPasswordTextField(
+            state = state,
             placeholderText = "Password",
-            hasAttemptedSubmit = hasAttemptedSubmit
+            onPasswordChange = onPasswordChange,
+            hasAttemptedSubmit = hasAttemptedSubmit,
+            passwordVisible = passwordVisible
         )
         ConfirmPasswordTextField(
-            placeholderText = "Confirm Password"
+            state = state,
+            placeholderText = "Confirm Password",
+            onConfirmPasswordChange = onConfirmPasswordChange,
+            hasAttemptedSubmit = hasAttemptedSubmit,
+            confirmPasswordVisible = confirmPasswordVisible
         )
 
         Button(
             onClick = {
                 hasAttemptedSubmit = true
+                createNewUserWithEmailAndPassword()
+                clearSignUpInputFields()
+                onSignUpNavigateToLogin()
             },
             modifier = modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium
@@ -66,6 +86,17 @@ fun SignUpForm(modifier: Modifier = Modifier) {
 @Composable
 private fun SignUpFormPreview() {
     BookStoreTheme {
-        SignUpForm()
+        SignUpForm(
+            state = SignUpUiState(),
+            onEmailChange = {},
+            onPasswordChange = {},
+            onConfirmPasswordChange = {},
+            passwordVisible = {},
+            confirmPasswordVisible = {},
+            clearSignUpInputFields = {},
+            createNewUserWithEmailAndPassword = {},
+            onSignUpNavigateToLogin ={}
+
+        )
     }
 }

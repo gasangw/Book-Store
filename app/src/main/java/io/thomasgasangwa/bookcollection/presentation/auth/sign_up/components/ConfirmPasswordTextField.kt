@@ -14,33 +14,42 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import io.thomasgasangwa.bookcollection.presentation.auth.sign_up.SignUpUiState
 
 @Composable
 fun ConfirmPasswordTextField(
     modifier: Modifier = Modifier,
-    placeholderText: String
+    state: SignUpUiState,
+    placeholderText: String,
+    onConfirmPasswordChange: (String) -> Unit,
+    hasAttemptedSubmit: Boolean,
+    confirmPasswordVisible: () -> Unit
+
 ) {
     OutlinedTextField(
-        value = "",
-        onValueChange = { },
+        value = state.confirmPassword,
+        onValueChange = { it -> onConfirmPasswordChange(it) },
         placeholder = { Text(placeholderText) },
-        visualTransformation = if (true)
+        visualTransformation = if (state.isConfirmPasswordVisible)
             VisualTransformation.None
         else
             PasswordVisualTransformation(),
         trailingIcon = {
             Icon(
-                imageVector = if (true)
+                imageVector = if (state.isConfirmPasswordVisible)
                     Icons.Filled.Visibility
                 else
                     Icons.Filled.VisibilityOff,
                 contentDescription = "Toggle confirm password visibility",
-                modifier = Modifier.clickable {  }
+                modifier = Modifier.clickable { confirmPasswordVisible() }
             )
         },
-        isError = false,
+        isError = hasAttemptedSubmit &&
+                !state.confirmPasswordIsEqualToPassword,
         supportingText = {
-            if (true) {
+            if (hasAttemptedSubmit &&
+                !state.confirmPasswordIsEqualToPassword
+            ) {
                 Text(text = "Confirm Password should be the same as password")
             }
         },
@@ -53,7 +62,11 @@ fun ConfirmPasswordTextField(
 private fun ConfirmPasswordTextFieldPreview() {
     BookStoreTheme {
         ConfirmPasswordTextField(
-            placeholderText = "Confirm Password"
+            placeholderText = "Confirm Password",
+            state = SignUpUiState(),
+            onConfirmPasswordChange = {},
+            hasAttemptedSubmit = false,
+            confirmPasswordVisible = {},
         )
     }
 }

@@ -6,5 +6,6 @@ data class SignUpUiState(
     val confirmPassword: String = "",
     val confirmPasswordIsEqualToPassword: Boolean = false,
     val isEmailValid: Boolean = false,
-    val isPasswordVisible: Boolean = false
+    val isPasswordVisible: Boolean = false,
+    val isConfirmPasswordVisible: Boolean = false
 )
