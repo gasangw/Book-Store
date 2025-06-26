@@ -9,7 +9,7 @@ import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
-import io.thomasgasangwa.bookcollection.common.Constants
+import io.thomasgasangwa.bookcollection.BuildConfig
 import io.thomasgasangwa.bookcollection.common.LoginFailedException
 import io.thomasgasangwa.bookcollection.common.Result
 import io.thomasgasangwa.bookcollection.domain.model.User
@@ -58,7 +58,7 @@ class AuthRepositoryImpl(
 
     override suspend fun signIn(context: Context): Result<User?> {
         val googleIdOption = GetGoogleIdOption.Builder()
-            .setServerClientId(Constants.GOOGLE_CLIENT_ID)
+            .setServerClientId(BuildConfig.GOOGLE_CLIENT_ID)
             .setFilterByAuthorizedAccounts(true)
             .build()
 
