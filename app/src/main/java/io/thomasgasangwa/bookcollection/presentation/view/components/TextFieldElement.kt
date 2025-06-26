@@ -33,6 +33,6 @@ fun TextFieldElement(
         },
         shape = MaterialTheme.shapes.small,
 
-        modifier = modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth()
     )
 }

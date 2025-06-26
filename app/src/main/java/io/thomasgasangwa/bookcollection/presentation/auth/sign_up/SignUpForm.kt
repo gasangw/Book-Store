@@ -1,11 +1,9 @@
-package io.thomasgasangwa.bookcollection.presentation.auth.sign_in
+package io.thomasgasangwa.bookcollection.presentation.auth.sign_up
 
 import BookStoreTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -22,12 +20,12 @@ import io.thomasgasangwa.bookcollection.presentation.auth.components.PasswordTex
 import io.thomasgasangwa.bookcollection.presentation.view.components.TextFieldElement
 
 @Composable
-fun SignInForm(modifier: Modifier = Modifier) {
+fun SignUpForm(modifier: Modifier = Modifier) {
     var email by rememberSaveable { mutableStateOf("") }
     var hasAttemptedSubmit by rememberSaveable { mutableStateOf(false) }
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.spacedBy(10.dp)
+        verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
         TextFieldElement(
             textValue = email,
@@ -41,6 +39,9 @@ fun SignInForm(modifier: Modifier = Modifier) {
         PasswordTextField(
             placeholderText = "enter password..."
         )
+        PasswordTextField(
+            placeholderText = "confirm password"
+        )
         Button(
             onClick = {
                 hasAttemptedSubmit = true
@@ -49,7 +50,7 @@ fun SignInForm(modifier: Modifier = Modifier) {
             shape = MaterialTheme.shapes.medium
         ) {
             Text(
-                text = "Sign In",
+                text = "Sign Up",
                 modifier = modifier
                     .padding(10.dp)
             )
@@ -59,8 +60,8 @@ fun SignInForm(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-private fun SignInFormPreview() {
+private fun SignUpFormPreview() {
     BookStoreTheme {
-        SignInForm()
+        SignUpForm()
     }
 }

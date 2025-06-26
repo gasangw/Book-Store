@@ -19,13 +19,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInState
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun SignInScreen(
     modifier: Modifier = Modifier,
-    onSignInSuccess: () -> Unit
+    onSignInSuccess: () -> Unit,
+    onSignUpButtonClick: () -> Unit,
 ) {
 //    val context = LocalContext.current
     val authViewModel: AuthViewModel = koinViewModel()
@@ -37,6 +37,7 @@ fun SignInScreen(
 //        signIn = { authViewModel.signInWithGoogle(context) },
         signInState = signInState,
         onSignInSuccess = {onSignInSuccess()},
+        onSignUpButtonClick = onSignUpButtonClick,
         signInAnonymously = { authViewModel.signInAnonymously() }
     )
 
@@ -49,6 +50,7 @@ fun SigInComponents(
 //    signIn: (context: Context) -> Unit,
     signInState: SignInState,
     onSignInSuccess: () -> Unit,
+    onSignUpButtonClick: () -> Unit,
     signInAnonymously: () -> Unit
 ) {
     Column(
@@ -66,10 +68,21 @@ fun SigInComponents(
 
         SignInForm()
 
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-        Text(text = "Or", style = MaterialTheme.typography.bodyLarge)
-
+       Text(
+           text = "Doesn't have account?",
+           style = MaterialTheme.typography.titleSmall,
+           color = MaterialTheme.colorScheme.tertiary
+       )
+        TextButton(onClick = { onSignUpButtonClick() }) {
+            Text(
+                text = "SIGN UP",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.surfaceTint
+            )
+        }
+        Spacer(modifier = Modifier.height(18.dp))
 //        LoginWithGoogleButton(
 //            context = context,
 //            signIn = signIn,
@@ -110,6 +123,7 @@ private fun LoginScreenPreview() {
         SigInComponents(
             onSignInSuccess = {},
             signInState = SignInState.Initial,
+            onSignUpButtonClick = {},
             signInAnonymously = {}
         )
     }
