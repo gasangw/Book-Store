@@ -9,7 +9,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class SignInViewModel(
     private val authRepository: AuthRepository
@@ -50,7 +49,6 @@ class SignInViewModel(
                 _state.value = when (user) {
                     is Result.Failure -> SignInState.Error(Exception("Error occurred while getting a current user"))
                     is Result.Success<*> -> {
-                        Timber.Forest.e("user logged in ${user.value}")
                         SignInState.SignInUser(user.value as User)
                     }
                 }
@@ -97,13 +95,20 @@ class SignInViewModel(
         viewModelScope.launch {
             try {
                 if (_formState.value.email.isNotEmpty() && _formState.value.password.isNotEmpty()) {
-                    authRepository.signInWithEmailAndPassword(
+                    val user = authRepository.signInWithEmailAndPassword(
                         _formState.value.email,
                         _formState.value.password
                     )
+                    when (user) {
+                        is Result.Failure -> _state.value =
+                            SignInState.Error(Exception("Error occurred while logging in"))
+
+                        is Result.Success<*> -> _state.value =
+                            SignInState.SignInUser(user.value as User)
+                    }
                     _state.value = SignInState.Success
                 } else {
-                    throw Exception("Invalid inputs.")
+                    _state.value = SignInState.Error(Exception("Email or password cannot be empty"))
                 }
             } catch (e: Exception) {
                 _state.value = SignInState.Error(e)

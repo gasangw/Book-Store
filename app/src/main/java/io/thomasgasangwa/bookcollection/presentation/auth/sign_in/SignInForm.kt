@@ -55,7 +55,7 @@ fun SignInForm(
             onClick = {
                 hasAttemptedSubmit = true
                 onClickSignInButton()
-                clearSignInFormInputs()
+                // clearSignInFormInputs()
             },
             modifier = modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium

@@ -26,10 +26,10 @@ fun Tabs(
 ) {
 
     var state by rememberSaveable { mutableIntStateOf(0) }
-    val titles = listOf("Books", "Favorites")
+    val titles = listOf("Bookings","Books", "Favorites")
 
     fun updateState(index: Int) {
-        state = if (index == 0) 0 else 1
+        state = if (index == 0) 0 else if(index == 1) 1 else 2
     }
 
     TabsDisplay(
@@ -111,7 +111,7 @@ private fun FakeFavorites(
 @Composable
 private fun TabsPreview() {
     var state = 0
-    var titles = listOf("Books", "Favorites")
+    var titles = listOf("Bookings","Books", "Favorites")
     BookStoreTheme {
         TabsDisplay(
             state = state,

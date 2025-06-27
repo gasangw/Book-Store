@@ -8,6 +8,7 @@ import androidx.credentials.GetCredentialRequest
 import com.google.android.libraries.identity.googleid.GetGoogleIdOption
 import com.google.android.libraries.identity.googleid.GoogleIdTokenCredential
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
 import com.google.firebase.auth.GoogleAuthProvider
 import io.thomasgasangwa.bookcollection.BuildConfig
 import io.thomasgasangwa.bookcollection.common.LoginFailedException
@@ -45,12 +46,28 @@ class AuthRepositoryImpl(
     override suspend fun signInWithEmailAndPassword(
         email: String,
         password: String
-    ): Result<Unit> {
+    ): Result<User> {
         return try {
-            firebaseAuth.signInWithEmailAndPassword(email, password).await()
-            Result.Success(Unit)
+            val authResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
+            if (authResult.user == null) {
+                throw FirebaseAuthInvalidUserException(
+                    "User doesn't exist",
+                    "Kindly check login credentials again"
+                )
+            }
+            val firebaseUser = authResult.user
+            return firebaseUser?.let { user ->
+                val user = User(
+                    email = user.email ?: "",
+                    photoUrl = user.photoUrl.toString() ?: "",
+                    name = user.displayName ?: ""
+                )
+                Result.Success(user)
+            } ?: Result.Failure(Exception("Signing in your with email and password failed"))
         } catch (e: Exception) {
             Result.Failure(e)
+        } catch (e: Exception) {
+            Result.Failure(FirebaseAuthInvalidUserException("User doesn't exist", "$e"))
         }
     }
 
