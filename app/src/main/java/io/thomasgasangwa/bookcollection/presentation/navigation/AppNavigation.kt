@@ -42,7 +42,7 @@ fun AppNavigation(
         composable(route = AppNavigationScreens.SignIn.name) {
             SignInScreen(
                 modifier = modifier,
-                onSignInSuccess = {
+                onSignInNavigateToHomeScreen = {
                     navController.navigate(AppNavigationScreens.Tabs.name) {
                         popUpTo(AppNavigationScreens.SignIn.name) {
                             inclusive = true

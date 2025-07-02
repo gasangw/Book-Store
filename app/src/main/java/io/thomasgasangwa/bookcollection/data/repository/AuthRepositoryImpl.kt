@@ -50,10 +50,11 @@ class AuthRepositoryImpl(
         return try {
             val authResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
             if (authResult.user == null) {
-                throw FirebaseAuthInvalidUserException(
+                Result.Failure(FirebaseAuthInvalidUserException(
                     "User doesn't exist",
                     "Kindly check login credentials again"
-                )
+                ))
+                // return the failing result instead of throwing an exception
             }
             val firebaseUser = authResult.user
             return firebaseUser?.let { user ->

@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import io.thomasgasangwa.bookcollection.presentation.book_list.BookListScreen
+import io.thomasgasangwa.bookcollection.presentation.bookings.list_bookings.AllBookings
 import io.thomasgasangwa.bookcollection.presentation.favorites.Favorites
 
 @Composable
@@ -26,10 +27,10 @@ fun Tabs(
 ) {
 
     var state by rememberSaveable { mutableIntStateOf(0) }
-    val titles = listOf("Bookings","Books", "Favorites")
+    val titles = listOf("Books", "Favorites", "Bookings")
 
     fun updateState(index: Int) {
-        state = if (index == 0) 0 else if(index == 1) 1 else 2
+        state = if (index == 0) 0 else if (index == 1) 1 else 2
     }
 
     TabsDisplay(
@@ -65,26 +66,30 @@ private fun TabsDisplay(
             }
         }
         when (state) {
-            0 -> if(isInPreview){
+            0 -> if (isInPreview) {
                 FakeBookListScreen(
                     onAddBookButtonClicked = {},
                     onBookClicked = {}
                 )
-            } else{
+            } else {
                 BookListScreen(
                     onAddBookButtonClicked = onAddBookButtonClicked,
                     onBookClicked = { id -> onBookClicked(id) }
                 )
             }
 
-            1 -> if(isInPreview) {
+            1 -> if (isInPreview) {
                 FakeFavorites(
-                onBookClicked = {}
+                    onBookClicked = {}
                 )
             } else {
                 Favorites(
                     onBookClicked = { id -> onBookClicked(id) }
                 )
+            }
+
+            2 -> {
+                AllBookings()
             }
         }
     }
@@ -111,7 +116,7 @@ private fun FakeFavorites(
 @Composable
 private fun TabsPreview() {
     var state = 0
-    var titles = listOf("Bookings","Books", "Favorites")
+    var titles = listOf("Books", "Favorites", "Bookings")
     BookStoreTheme {
         TabsDisplay(
             state = state,

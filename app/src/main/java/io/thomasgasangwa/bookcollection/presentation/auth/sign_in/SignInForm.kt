@@ -6,7 +6,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -22,12 +24,14 @@ import io.thomasgasangwa.bookcollection.presentation.view.components.TextFieldEl
 @Composable
 fun SignInForm(
     modifier: Modifier = Modifier,
+    signInState: SignInState,
     formState: LoginFormState,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     togglePasswordVisible: () -> Unit,
     onClickSignInButton: () -> Unit,
-    clearSignInFormInputs: () -> Unit
+    clearSignInFormInputs: () -> Unit,
+    onSignInNavigateToHomeScreen: () -> Unit
 ) {
     var email by rememberSaveable { mutableStateOf("") }
     var hasAttemptedSubmit by rememberSaveable { mutableStateOf(false) }
@@ -55,16 +59,35 @@ fun SignInForm(
             onClick = {
                 hasAttemptedSubmit = true
                 onClickSignInButton()
-                // clearSignInFormInputs()
             },
             modifier = modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium
         ) {
-            Text(
-                text = "Sign In",
-                modifier = modifier
-                    .padding(10.dp)
-            )
+            when(signInState){
+                SignInState.Initial -> {
+                    Text(
+                        text = "Sign In",
+                        modifier = modifier
+                            .padding(10.dp)
+                    )
+                }
+                is SignInState.SignInEmailAndPasswordError -> {
+                    Text(text = "Error occurred ${signInState.exception.message}")
+                }
+                SignInState.SignInEmailAndPasswordLoading -> {
+                    CircularProgressIndicator(
+                        strokeWidth = 2.dp,
+                        color = ProgressIndicatorDefaults.circularColor,
+                        modifier = Modifier.padding(5.dp)
+                    )
+                }
+                SignInState.SignInEmailAndPasswordSuccess -> {
+                    clearSignInFormInputs()
+                    onSignInNavigateToHomeScreen()
+                }
+
+                else -> null
+            }
         }
     }
 }
@@ -79,7 +102,9 @@ private fun SignInFormPreview() {
             onPasswordChange = {},
             togglePasswordVisible = {},
             onClickSignInButton = {},
-            clearSignInFormInputs = {}
+            clearSignInFormInputs = {},
+            signInState = SignInState.Initial,
+            onSignInNavigateToHomeScreen = {}
         )
     }
 }

@@ -42,19 +42,19 @@ class SignInViewModel(
 
 
     fun signInAnonymously() {
-        _state.value = SignInState.Loading
+        _state.value = SignInState.AnonymousSignInLoading
         viewModelScope.launch {
             try {
                 val user = authRepository.signInAnonymously()
                 _state.value = when (user) {
-                    is Result.Failure -> SignInState.Error(Exception("Error occurred while getting a current user"))
+                    is Result.Failure -> SignInState.AnonymousSignInError(Exception("Error occurred while getting a current user"))
                     is Result.Success<*> -> {
                         SignInState.SignInUser(user.value as User)
                     }
                 }
-                _state.value = SignInState.Success
+                _state.value = SignInState.AnonymousSuccess
             } catch (e: Exception) {
-                _state.value = SignInState.Error(e)
+                _state.value = SignInState.AnonymousSignInError(e)
             }
         }
     }
@@ -91,7 +91,7 @@ class SignInViewModel(
 
 
     fun signInWithEmailAndPassword() {
-        _state.value = SignInState.Loading
+        _state.value = SignInState.SignInEmailAndPasswordLoading
         viewModelScope.launch {
             try {
                 if (_formState.value.email.isNotEmpty() && _formState.value.password.isNotEmpty()) {
@@ -101,26 +101,28 @@ class SignInViewModel(
                     )
                     when (user) {
                         is Result.Failure -> _state.value =
-                            SignInState.Error(Exception("Error occurred while logging in"))
+                            SignInState.SignInEmailAndPasswordError(Exception("Error occurred while logging in"))
 
                         is Result.Success<*> -> _state.value =
                             SignInState.SignInUser(user.value as User)
                     }
-                    _state.value = SignInState.Success
+                    _state.value = SignInState.SignInEmailAndPasswordSuccess // check it
                 } else {
-                    _state.value = SignInState.Error(Exception("Email or password cannot be empty"))
+                    _state.value =
+                        SignInState.SignInEmailAndPasswordError(Exception("Email or password cannot be empty"))
                 }
             } catch (e: Exception) {
-                _state.value = SignInState.Error(e)
+                _state.value = SignInState.SignInEmailAndPasswordError(e)
             }
         }
     }
+
 
     fun currentUser() {
         viewModelScope.launch {
             val user = authRepository.getCurrentUser()
             _state.value = when (user) {
-                is Result.Failure -> SignInState.Error(Exception("Error occurred while getting a current user"))
+                is Result.Failure -> SignInState.CurrentUserError(Exception("Error occurred while getting a current user"))
                 is Result.Success<*> -> SignInState.SignInUser(user.value as User?)
             }
         }
