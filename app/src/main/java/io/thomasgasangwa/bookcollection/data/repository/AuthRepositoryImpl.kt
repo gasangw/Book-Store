@@ -25,19 +25,10 @@ class AuthRepositoryImpl(
     override val hasUser: Boolean
         get() = firebaseAuth.currentUser != null
 
-    override suspend fun signInAnonymously(): Result<User> {
+    override suspend fun signInAnonymously(): Result<Unit> {
         return try {
-            val authResult = firebaseAuth.signInAnonymously().await()
-            val firebaseUser = authResult.user
-            return firebaseUser?.let { user ->
-                val user = User(
-                    email = user.email ?: "",
-                    photoUrl = user.photoUrl.toString() ?: "",
-                    name = user.displayName ?: "Anonymous"
-                )
-                Result.Success(user)
-            } ?: Result.Failure(Exception("Anonymous sign-in returned null user"))
-
+            firebaseAuth.signInAnonymously().await()
+            Result.Success(Unit)
         } catch (e: Exception) {
             Result.Failure(e)
         }
@@ -50,11 +41,12 @@ class AuthRepositoryImpl(
         return try {
             val authResult = firebaseAuth.signInWithEmailAndPassword(email, password).await()
             if (authResult.user == null) {
-                Result.Failure(FirebaseAuthInvalidUserException(
-                    "User doesn't exist",
-                    "Kindly check login credentials again"
-                ))
-                // return the failing result instead of throwing an exception
+                Result.Failure(
+                    FirebaseAuthInvalidUserException(
+                        "User doesn't exist",
+                        "Kindly check login credentials again"
+                    )
+                )
             }
             val firebaseUser = authResult.user
             return firebaseUser?.let { user ->
