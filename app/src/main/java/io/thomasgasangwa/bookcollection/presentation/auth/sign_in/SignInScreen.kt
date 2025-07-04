@@ -7,9 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -30,7 +28,7 @@ fun SignInScreen(
 
 //    val context = LocalContext.current
     val signInViewModel: SignInViewModel = koinViewModel()
-    val signInState by signInViewModel.state.collectAsStateWithLifecycle()
+    val signUiInState by signInViewModel.state.collectAsStateWithLifecycle()
     val formState by signInViewModel.formState.collectAsStateWithLifecycle()
 
     SigInComponents(
@@ -43,9 +41,8 @@ fun SignInScreen(
         togglePasswordVisible = { signInViewModel.togglePasswordVisible() },
         onClickSignInButton = { signInViewModel.signInWithEmailAndPassword() },
         clearSignInFormInputs = { signInViewModel.clearSignInFormInputs() },
-        signInState = signInState,
+        signInUiState = signUiInState,
         onSignUpButtonClick = onSignUpButtonClick,
-        signInAnonymously = { signInViewModel.signInAnonymously() },
         onSignInNavigateToHomeScreen = onSignInNavigateToHomeScreen
     )
 }
@@ -55,15 +52,14 @@ fun SigInComponents(
     modifier: Modifier = Modifier,
 //    context: Context,
 //    signIn: (context: Context) -> Unit,
-    formState: LoginFormState,
+    formState: LoginFormUiState,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     togglePasswordVisible: () -> Unit,
     onClickSignInButton: () -> Unit,
     clearSignInFormInputs: () -> Unit,
-    signInState: SignInState,
+    signInUiState: SignInUiState,
     onSignUpButtonClick: () -> Unit,
-    signInAnonymously: () -> Unit,
     onSignInNavigateToHomeScreen: () -> Unit
 ) {
     Column(
@@ -80,13 +76,12 @@ fun SigInComponents(
         )
 
         SignInForm(
-            signInState = signInState,
+            signInUiState = signInUiState,
             formState = formState,
             onEmailChange = onEmailChange,
             onPasswordChange = onPasswordChange,
             togglePasswordVisible = togglePasswordVisible,
             onClickSignInButton = onClickSignInButton,
-            clearSignInFormInputs = clearSignInFormInputs,
             onSignInNavigateToHomeScreen = onSignInNavigateToHomeScreen
         )
 
@@ -105,32 +100,32 @@ fun SigInComponents(
             )
         }
         Spacer(modifier = Modifier.height(18.dp))
-
-        TextButton(onClick = { signInAnonymously() }) {
-            when (signInState) {
-                is SignInState.AnonymousSignInError -> {
-                    Text(
-                        text = "Error occurred ${signInState.exception.message}"
-                    )
-                }
-
-                SignInState.AnonymousSignInLoading -> {
-                    CircularProgressIndicator(
-                        strokeWidth = 2.dp,
-                        color = ProgressIndicatorDefaults.circularColor,
-                        modifier = Modifier.padding(5.dp)
-                    )
-                }
-
-                SignInState.AnonymousSuccess -> {
-                    SignInState.AnonymousSuccess
-                    onSignInNavigateToHomeScreen()
-                }
-
-                else -> null
-            }
-            Text(text = "Continue without Signing In", style = MaterialTheme.typography.bodyLarge)
-        }
+//
+//        TextButton(onClick = { signInAnonymously() }) {
+//            when (signInState) {
+//                is SignInState.AnonymousSignInError -> {
+//                    Text(
+//                        text = "Error occurred ${signInState.exception.message}"
+//                    )
+//                }
+//
+//                SignInState.AnonymousSignInLoading -> {
+//                    CircularProgressIndicator(
+//                        strokeWidth = 2.dp,
+//                        color = ProgressIndicatorDefaults.circularColor,
+//                        modifier = Modifier.padding(5.dp)
+//                    )
+//                }
+//
+//                SignInState.AnonymousSuccess -> {
+//                    SignInState.AnonymousSuccess
+//                    onSignInNavigateToHomeScreen()
+//                }
+//
+//                else -> null
+//            }
+//            Text(text = "Continue without Signing In", style = MaterialTheme.typography.bodyLarge)
+//        }
     }
 }
 
@@ -139,10 +134,9 @@ fun SigInComponents(
 private fun LoginScreenPreview() {
     BookStoreTheme {
         SigInComponents(
-            signInState = SignInState.Initial,
+            signInUiState = SignInUiState(),
             onSignUpButtonClick = {},
-            signInAnonymously = {},
-            formState = LoginFormState(),
+            formState = LoginFormUiState(),
             onEmailChange = {},
             onPasswordChange = {},
             togglePasswordVisible = {},

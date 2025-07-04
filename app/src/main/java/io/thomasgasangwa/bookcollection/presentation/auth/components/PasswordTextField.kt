@@ -14,12 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.LoginFormState
+import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.LoginFormUiState
 
 @Composable
 fun PasswordTextField(
     modifier: Modifier = Modifier,
-    formState: LoginFormState,
+    formState: LoginFormUiState,
     onPasswordChange: (String) -> Unit,
     togglePasswordVisible: () -> Unit,
     placeholderText: String,
@@ -59,7 +59,7 @@ private fun PasswordTextFieldPreview() {
     BookStoreTheme {
         PasswordTextField(
             placeholderText = "Enter Password...",
-            formState = LoginFormState(),
+            formState = LoginFormUiState(),
             onPasswordChange = {},
             togglePasswordVisible = {},
             hasAttemptedSubmit = false

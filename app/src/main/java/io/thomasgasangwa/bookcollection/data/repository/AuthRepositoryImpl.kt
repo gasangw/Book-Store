@@ -16,6 +16,7 @@ import io.thomasgasangwa.bookcollection.common.Result
 import io.thomasgasangwa.bookcollection.domain.model.User
 import io.thomasgasangwa.bookcollection.domain.repository.AuthRepository
 import kotlinx.coroutines.tasks.await
+import timber.log.Timber
 
 class AuthRepositoryImpl(
     private val credentialManager: CredentialManager,
@@ -50,9 +51,10 @@ class AuthRepositoryImpl(
             }
             val firebaseUser = authResult.user
             return firebaseUser?.let { user ->
+                Timber.e("user: $user")
                 val user = User(
                     email = user.email ?: "",
-                    photoUrl = user.photoUrl.toString() ?: "",
+                    photoUrl = user.photoUrl.toString(),
                     name = user.displayName ?: ""
                 )
                 Result.Success(user)
@@ -120,7 +122,7 @@ class AuthRepositoryImpl(
             return firebaseUser?.let {
                 val user = User(
                     email = it.email ?: "",
-                    photoUrl = it.photoUrl.toString() ?: "",
+                    photoUrl = it.photoUrl.toString(),
                     name = it.displayName ?: ""
                 )
                 Result.Success(user)

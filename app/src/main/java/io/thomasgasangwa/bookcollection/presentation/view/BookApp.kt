@@ -5,11 +5,9 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInState
 import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInViewModel
 import io.thomasgasangwa.bookcollection.presentation.navigation.AppNavigation
 import io.thomasgasangwa.bookcollection.presentation.navigation.AppNavigationScreens
@@ -21,12 +19,11 @@ fun BookApp(modifier: Modifier = Modifier) {
 
 
     val authViewModel: SignInViewModel = koinViewModel()
-    val authState by authViewModel.state.collectAsStateWithLifecycle()
 
-    val currentUser = when (authState) {
-        is SignInState.SignInUser -> (authState as SignInState.SignInUser).currentUser
-        else -> null
-    }
+//    val currentUser = when (authState) {
+//        is SignInState.SignInUser -> (authState as SignInState.SignInUser).currentUser
+//        else -> null
+//    }
 
     val navController: NavHostController = rememberNavController()
 
@@ -39,7 +36,7 @@ fun BookApp(modifier: Modifier = Modifier) {
         topBar = {
             AppBar(
                 currentScreen = currentScreen,
-                currentUser = currentUser,
+                currentUser = null,
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp() },
                 signOut = {
@@ -56,7 +53,7 @@ fun BookApp(modifier: Modifier = Modifier) {
     ) { innerPadding ->
         AppNavigation(
             navController = navController,
-            currentUser = currentUser,
+            currentUser = null,
             modifier = modifier.padding(innerPadding)
         )
     }

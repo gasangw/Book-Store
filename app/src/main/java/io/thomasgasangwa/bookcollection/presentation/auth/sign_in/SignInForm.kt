@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -24,17 +25,22 @@ import io.thomasgasangwa.bookcollection.presentation.view.components.TextFieldEl
 @Composable
 fun SignInForm(
     modifier: Modifier = Modifier,
-    signInState: SignInState,
-    formState: LoginFormState,
+    signInUiState: SignInUiState,
+    formState: LoginFormUiState,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     togglePasswordVisible: () -> Unit,
     onClickSignInButton: () -> Unit,
-    clearSignInFormInputs: () -> Unit,
     onSignInNavigateToHomeScreen: () -> Unit
 ) {
-    var email by rememberSaveable { mutableStateOf("") }
     var hasAttemptedSubmit by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(signInUiState.signInIsSuccessful) {
+        if (signInUiState.signInIsSuccessful) {
+            onSignInNavigateToHomeScreen()
+        }
+    }
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(10.dp)
@@ -43,7 +49,7 @@ fun SignInForm(
             textValue = formState.email,
             label = "email",
             onValueChange = { onEmailChange(it) },
-            textFieldHasError = hasAttemptedSubmit && email.isEmpty() && !formState.isEmailValid,
+            textFieldHasError = hasAttemptedSubmit && formState.email.isEmpty() && !formState.isEmailValid,
             singleLine = true,
             placeholder = "example@gmail.com",
             textErrorMessage = "Kindly check the email field.."
@@ -63,30 +69,19 @@ fun SignInForm(
             modifier = modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium
         ) {
-            when(signInState){
-                SignInState.Initial -> {
-                    Text(
-                        text = "Sign In",
-                        modifier = modifier
-                            .padding(10.dp)
-                    )
-                }
-                is SignInState.SignInEmailAndPasswordError -> {
-                    Text(text = "Error occurred ${signInState.exception.message}")
-                }
-                SignInState.SignInEmailAndPasswordLoading -> {
-                    CircularProgressIndicator(
-                        strokeWidth = 2.dp,
-                        color = ProgressIndicatorDefaults.circularColor,
-                        modifier = Modifier.padding(5.dp)
-                    )
-                }
-                SignInState.SignInEmailAndPasswordSuccess -> {
-                    clearSignInFormInputs()
-                    onSignInNavigateToHomeScreen()
-                }
 
-                else -> null
+            if (signInUiState.isLoading) {
+                CircularProgressIndicator(
+                    strokeWidth = 2.dp,
+                    color = ProgressIndicatorDefaults.circularColor,
+                    modifier = Modifier.padding(5.dp)
+                )
+            } else {
+                Text(
+                    text = "Sign In",
+                    modifier = modifier
+                        .padding(10.dp)
+                )
             }
         }
     }
@@ -97,13 +92,12 @@ fun SignInForm(
 private fun SignInFormPreview() {
     BookStoreTheme {
         SignInForm(
-            formState = LoginFormState(),
+            formState = LoginFormUiState(),
             onEmailChange = {},
             onPasswordChange = {},
             togglePasswordVisible = {},
             onClickSignInButton = {},
-            clearSignInFormInputs = {},
-            signInState = SignInState.Initial,
+            signInUiState = SignInUiState(),
             onSignInNavigateToHomeScreen = {}
         )
     }

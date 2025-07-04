@@ -3,25 +3,26 @@ package io.thomasgasangwa.bookcollection.presentation.auth.sign_in
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.thomasgasangwa.bookcollection.common.Result
-import io.thomasgasangwa.bookcollection.domain.model.User
 import io.thomasgasangwa.bookcollection.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class SignInViewModel(
     private val authRepository: AuthRepository
 ) : ViewModel() {
-    private val _state = MutableStateFlow<SignInState>(SignInState.Initial)
-    val state: StateFlow<SignInState> = _state.asStateFlow()
+    private val _state = MutableStateFlow(SignInUiState())
+    val state: StateFlow<SignInUiState> = _state.asStateFlow()
 
-    private val _formState = MutableStateFlow(LoginFormState())
-    val formState: StateFlow<LoginFormState> = _formState.asStateFlow()
+    private val _formState = MutableStateFlow(LoginFormUiState())
+    val formState: StateFlow<LoginFormUiState> = _formState.asStateFlow()
 
-    init {
-        currentUser()
-    }
+//    init {
+//        currentUser()
+//    }
 //
 //    fun signInWithGoogle(context: Context) {
 //        _state.value = SignInState.Loading
@@ -40,24 +41,6 @@ class SignInViewModel(
 //        }
 //    }
 
-
-    fun signInAnonymously() {
-        _state.value = SignInState.AnonymousSignInLoading
-        viewModelScope.launch {
-            try {
-                val user = authRepository.signInAnonymously()
-                _state.value = when (user) {
-                    is Result.Failure -> SignInState.AnonymousSignInError(Exception("Error occurred while getting a current user"))
-                    is Result.Success<*> -> {
-                        SignInState.SignInUser(user.value as User)
-                    }
-                }
-                _state.value = SignInState.AnonymousSuccess
-            } catch (e: Exception) {
-                _state.value = SignInState.AnonymousSignInError(e)
-            }
-        }
-    }
 
     fun onEmailChange(email: String) {
         val isValid = android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
@@ -89,9 +72,28 @@ class SignInViewModel(
         )
     }
 
+//    fun signInAnonymously() {
+//        _state.value = SignInUiState(isLoading = true)
+//        viewModelScope.launch {
+//            try {
+//                authRepository.signInAnonymously()
+//                SignInUiState(signInIsSuccessful = true)
+//            } catch (e: Exception) {
+//                _state.value = SignInUiState(errorMessage = e.message.toString())
+//            }
+//        }
+//        _state.value = SignInUiState(isLoading = false)
+//    }
+
 
     fun signInWithEmailAndPassword() {
-        _state.value = SignInState.SignInEmailAndPasswordLoading
+        _state.update { state ->
+            state.copy(
+                isLoading = true,
+                errorMessage = null
+            )
+        }
+        Timber.e("inside the sign in with email and password")
         viewModelScope.launch {
             try {
                 if (_formState.value.email.isNotEmpty() && _formState.value.password.isNotEmpty()) {
@@ -99,40 +101,49 @@ class SignInViewModel(
                         _formState.value.email,
                         _formState.value.password
                     )
-                    when (user) {
-                        is Result.Failure -> _state.value =
-                            SignInState.SignInEmailAndPasswordError(Exception("Error occurred while logging in"))
+                    _state.update {
+                        when (user) {
+                            is Result.Failure -> it.copy(
+                                isLoading = false,
+                                errorMessage = Exception("Error occurred while signing in")
+                            )
 
-                        is Result.Success<*> -> _state.value =
-                            SignInState.SignInUser(user.value as User)
+                            is Result.Success<*> -> it.copy(
+                                isLoading = false,
+                                signInIsSuccessful = true
+                            )
+                        }
                     }
-                    _state.value = SignInState.SignInEmailAndPasswordSuccess // check it
+                    Timber.e("inside the if statement")
                 } else {
-                    _state.value =
-                        SignInState.SignInEmailAndPasswordError(Exception("Email or password cannot be empty"))
+                    _state.update {
+                        it.copy(
+                            errorMessage = Exception("Email or password cannot be empty"),
+                            isLoading = false
+                        )
+                    }
                 }
             } catch (e: Exception) {
-                _state.value = SignInState.SignInEmailAndPasswordError(e)
+                _state.update { it.copy(errorMessage = e, isLoading = false) }
             }
         }
     }
 
 
-    fun currentUser() {
-        viewModelScope.launch {
-            val user = authRepository.getCurrentUser()
-            _state.value = when (user) {
-                is Result.Failure -> SignInState.CurrentUserError(Exception("Error occurred while getting a current user"))
-                is Result.Success<*> -> SignInState.SignInUser(user.value as User?)
-            }
-        }
-    }
+//    fun currentUser() {
+//        viewModelScope.launch {
+//            val user = authRepository.getCurrentUser()
+//            _state.value = when (user) {
+//                is Result.Failure -> SignInState.CurrentUserError(Exception("Error occurred while getting a current user"))
+//                is Result.Success<*> -> SignInState.SignInUser(user.value as User?)
+//            }
+//        }
+//    }
 
 
     fun signOut() {
         viewModelScope.launch {
             authRepository.signOut()
-            _state.value = SignInState.SignInUser(null)
         }
     }
 }
