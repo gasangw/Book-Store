@@ -26,9 +26,12 @@ fun SignUpScreen(
     onSignUpNavigateToLogin: () -> Unit
 ) {
     val signUpViewModel: SignUpViewModel = koinViewModel()
-    val state by signUpViewModel.createUserState.collectAsStateWithLifecycle()
+    val uiState by signUpViewModel.createUserState.collectAsStateWithLifecycle()
+    val signUpFormState by signUpViewModel.signUpFormUiState.collectAsStateWithLifecycle()
+
     SignUp(
-        state = state,
+        uiState = uiState,
+        signUpFormState = signUpFormState,
         onEmailChange = { it -> signUpViewModel.onEmailChange(it) },
         onPasswordChange = { it -> signUpViewModel.onPasswordChange(it) },
         onConfirmPasswordChange = { it -> signUpViewModel.onConfirmPasswordChange(it) },
@@ -44,7 +47,8 @@ fun SignUpScreen(
 @Composable
 fun SignUp(
     modifier: Modifier = Modifier,
-    state: SignUpUiState,
+    uiState: SignUpUiState,
+    signUpFormState: SignUpFormUiState,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onConfirmPasswordChange: (String) -> Unit,
@@ -69,7 +73,8 @@ fun SignUp(
         )
         Spacer(modifier = modifier.fillMaxHeight(0.03f))
         SignUpForm(
-            state = state,
+            uiState = uiState,
+            signUpFormState = signUpFormState,
             onEmailChange = onEmailChange,
             onPasswordChange = onPasswordChange,
             onConfirmPasswordChange = onConfirmPasswordChange,

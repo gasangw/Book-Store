@@ -5,11 +5,12 @@ import androidx.lifecycle.viewModelScope
 import io.thomasgasangwa.bookcollection.common.Result
 import io.thomasgasangwa.bookcollection.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 class SignInViewModel(
     private val authRepository: AuthRepository
@@ -20,10 +21,14 @@ class SignInViewModel(
     private val _formState = MutableStateFlow(LoginFormUiState())
     val formState: StateFlow<LoginFormUiState> = _formState.asStateFlow()
 
-//    init {
-//        currentUser()
-//    }
-//
+
+    val currentUserIsLoggedIn: StateFlow<Boolean?> = authRepository.currentUserIsLoggedIn.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = null
+    )
+
+
 //    fun signInWithGoogle(context: Context) {
 //        _state.value = SignInState.Loading
 //        viewModelScope.launch {
@@ -72,18 +77,18 @@ class SignInViewModel(
         )
     }
 
-//    fun signInAnonymously() {
-//        _state.value = SignInUiState(isLoading = true)
-//        viewModelScope.launch {
-//            try {
-//                authRepository.signInAnonymously()
-//                SignInUiState(signInIsSuccessful = true)
-//            } catch (e: Exception) {
-//                _state.value = SignInUiState(errorMessage = e.message.toString())
-//            }
-//        }
-//        _state.value = SignInUiState(isLoading = false)
-//    }
+    fun signInAnonymously() {
+        _state.value = SignInUiState(isLoading = true)
+        viewModelScope.launch {
+            try {
+                authRepository.signInAnonymously()
+                SignInUiState(signInIsSuccessful = true)
+            } catch (e: Exception) {
+                _state.value = SignInUiState(errorMessage = e)
+            }
+        }
+        _state.value = SignInUiState(isLoading = false)
+    }
 
 
     fun signInWithEmailAndPassword() {
@@ -93,7 +98,6 @@ class SignInViewModel(
                 errorMessage = null
             )
         }
-        Timber.e("inside the sign in with email and password")
         viewModelScope.launch {
             try {
                 if (_formState.value.email.isNotEmpty() && _formState.value.password.isNotEmpty()) {
@@ -114,7 +118,6 @@ class SignInViewModel(
                             )
                         }
                     }
-                    Timber.e("inside the if statement")
                 } else {
                     _state.update {
                         it.copy(

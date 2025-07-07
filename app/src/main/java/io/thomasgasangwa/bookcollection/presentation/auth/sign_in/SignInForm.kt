@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ProgressIndicatorDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -71,11 +70,7 @@ fun SignInForm(
         ) {
 
             if (signInUiState.isLoading) {
-                CircularProgressIndicator(
-                    strokeWidth = 2.dp,
-                    color = ProgressIndicatorDefaults.circularColor,
-                    modifier = Modifier.padding(5.dp)
-                )
+                CircularProgressIndicator()
             } else {
                 Text(
                     text = "Sign In",

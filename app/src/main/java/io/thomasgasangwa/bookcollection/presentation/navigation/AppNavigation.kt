@@ -9,7 +9,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import io.thomasgasangwa.bookcollection.R
-import io.thomasgasangwa.bookcollection.domain.model.User
 import io.thomasgasangwa.bookcollection.presentation.add_book.AddBook
 import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInScreen
 import io.thomasgasangwa.bookcollection.presentation.auth.sign_up.SignUpScreen
@@ -30,13 +29,13 @@ enum class AppNavigationScreens(@StringRes val title: Int) {
 @Composable
 fun AppNavigation(
     modifier: Modifier = Modifier,
-    currentUser: User?,
+    currentUserIsLoggedIn: Boolean?,
     navController: NavHostController
 ) {
 
     NavHost(
         navController = navController,
-        startDestination = if(currentUser != null)  AppNavigationScreens.Tabs.name else  AppNavigationScreens.SignIn.name ,
+        startDestination = if (currentUserIsLoggedIn != null && currentUserIsLoggedIn) AppNavigationScreens.Tabs.name else AppNavigationScreens.SignIn.name,
         modifier = modifier
     ) {
         composable(route = AppNavigationScreens.SignIn.name) {
@@ -50,13 +49,13 @@ fun AppNavigation(
                         launchSingleTop = true
                     }
                 },
-                onSignUpButtonClick = { navController.navigate(AppNavigationScreens.SignUp.name)}
+                onSignUpButtonClick = { navController.navigate(AppNavigationScreens.SignUp.name) }
             )
         }
 
         composable(route = AppNavigationScreens.SignUp.name) {
             SignUpScreen(
-                onSignUpNavigateToLogin = {navController.navigate(AppNavigationScreens.SignIn.name)}
+                onSignUpNavigateToLogin = { navController.navigate(AppNavigationScreens.SignIn.name) }
             )
         }
 

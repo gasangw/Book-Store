@@ -2,6 +2,7 @@ package io.thomasgasangwa.bookcollection.presentation.auth.sign_up
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.thomasgasangwa.bookcollection.common.Result
 import io.thomasgasangwa.bookcollection.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -70,25 +71,48 @@ class SignUpViewModel(
         _createUserState.update { it.copy(isLoading = true) }
         viewModelScope.launch {
             try {
-                if (_signUpFormUiState.value.email.isNotEmpty() &&
-                    _signUpFormUiState.value.password.isNotEmpty()
-                ) {
-                    authRepository.createNewUserWithEmailAndPassword(
-                        _signUpFormUiState.value.email,
-                        _signUpFormUiState.value.password
-                    )
+                if (_signUpFormUiState.value.email.isEmpty() || _signUpFormUiState.value.password.isEmpty()) {
                     _createUserState.update {
                         it.copy(
                             isLoading = false,
-                            signUpIsSuccessful = true
+                            errorMessage = Exception("Email and password cannot be empty")
                         )
                     }
-                } else {
+                    return@launch
+                }
+                if (!_signUpFormUiState.value.confirmPasswordIsEqualToPassword) {
                     _createUserState.update {
                         it.copy(
                             isLoading = false,
-                            errorMessage = Exception("Error occurred while signing up user")
+                            errorMessage = Exception("Confirm password should be the same as password")
                         )
+                    }
+                    return@launch
+                }
+
+                val result = authRepository.createNewUserWithEmailAndPassword(
+                    _signUpFormUiState.value.email,
+                    _signUpFormUiState.value.password
+                )
+
+
+                when (result) {
+                    is Result.Failure -> {
+                        _createUserState.update {
+                            it.copy(
+                                isLoading = false,
+                                errorMessage = Exception(result.exception)
+                            )
+                        }
+                    }
+
+                    is Result.Success<*> -> {
+                        _createUserState.update {
+                            it.copy(
+                                isLoading = false,
+                                signUpIsSuccessful = true
+                            )
+                        }
                     }
                 }
             } catch (e: Exception) {

@@ -14,28 +14,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
-import io.thomasgasangwa.bookcollection.presentation.auth.sign_up.SignUpUiState
+import io.thomasgasangwa.bookcollection.presentation.auth.sign_up.SignUpFormUiState
 
 @Composable
 fun SignUpPasswordTextField(
     modifier: Modifier = Modifier,
-    state: SignUpUiState,
+    signUpFormState: SignUpFormUiState,
     placeholderText: String,
     onPasswordChange: (String) -> Unit,
     hasAttemptedSubmit: Boolean,
     passwordVisible: () -> Unit,
 ) {
     OutlinedTextField(
-        value = state.password,
+        value = signUpFormState.password,
         onValueChange = { onPasswordChange(it) },
         placeholder = { Text(placeholderText) },
-        visualTransformation = if (state.isPasswordVisible)
+        visualTransformation = if (signUpFormState.isPasswordVisible)
             VisualTransformation.None
         else
             PasswordVisualTransformation(),
         trailingIcon = {
             Icon(
-                imageVector = if (state.isPasswordVisible)
+                imageVector = if (signUpFormState.isPasswordVisible)
                     Icons.Filled.Visibility
                 else
                     Icons.Filled.VisibilityOff,
@@ -43,9 +43,9 @@ fun SignUpPasswordTextField(
                 modifier = Modifier.clickable { passwordVisible() }
             )
         },
-        isError = hasAttemptedSubmit && state.password.isEmpty(),
+        isError = hasAttemptedSubmit && signUpFormState.password.isEmpty(),
         supportingText = {
-            if (hasAttemptedSubmit && state.password.isEmpty()) {
+            if (hasAttemptedSubmit && signUpFormState.password.isEmpty()) {
                 Text(text = "Password can't be empty")
             }
         },
@@ -60,7 +60,7 @@ private fun SignUpPasswordTextFieldPreview() {
         SignUpPasswordTextField(
             placeholderText = "Enter Password...",
             hasAttemptedSubmit = false,
-            state = SignUpUiState(),
+            signUpFormState = SignUpFormUiState(),
             onPasswordChange = {},
             passwordVisible = {},
         )

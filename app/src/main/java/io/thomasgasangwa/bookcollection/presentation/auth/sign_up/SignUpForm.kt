@@ -9,6 +9,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -16,6 +17,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import io.thomasgasangwa.bookcollection.presentation.auth.components.CircularProgressIndicator
 
 import io.thomasgasangwa.bookcollection.presentation.auth.sign_up.components.ConfirmPasswordTextField
 import io.thomasgasangwa.bookcollection.presentation.auth.sign_up.components.SignUpPasswordTextField
@@ -24,7 +26,8 @@ import io.thomasgasangwa.bookcollection.presentation.view.components.TextFieldEl
 @Composable
 fun SignUpForm(
     modifier: Modifier = Modifier,
-    state: SignUpUiState,
+    uiState: SignUpUiState,
+    signUpFormState: SignUpFormUiState,
     onEmailChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onConfirmPasswordChange: (String) -> Unit,
@@ -35,28 +38,36 @@ fun SignUpForm(
     onSignUpNavigateToLogin: () -> Unit
 ) {
     var hasAttemptedSubmit by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(uiState.signUpIsSuccessful) {
+        if (uiState.signUpIsSuccessful) {
+            clearSignUpInputFields()
+            onSignUpNavigateToLogin()
+        }
+    }
+
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(15.dp)
     ) {
         TextFieldElement(
-            textValue = state.email,
+            textValue = signUpFormState.email,
             label = "email",
             onValueChange = { onEmailChange(it) },
-            textFieldHasError = hasAttemptedSubmit && state.email.isEmpty(),
+            textFieldHasError = hasAttemptedSubmit && signUpFormState.email.isEmpty(),
             singleLine = true,
             placeholder = "example@gmail.com",
             textErrorMessage = "Email cannot be empty.."
         )
         SignUpPasswordTextField(
-            state = state,
+            signUpFormState = signUpFormState,
             placeholderText = "Password",
             onPasswordChange = onPasswordChange,
             hasAttemptedSubmit = hasAttemptedSubmit,
             passwordVisible = passwordVisible
         )
         ConfirmPasswordTextField(
-            state = state,
+            signUpFormState = signUpFormState,
             placeholderText = "Confirm Password",
             onConfirmPasswordChange = onConfirmPasswordChange,
             hasAttemptedSubmit = hasAttemptedSubmit,
@@ -67,17 +78,19 @@ fun SignUpForm(
             onClick = {
                 hasAttemptedSubmit = true
                 createNewUserWithEmailAndPassword()
-                clearSignUpInputFields()
-                onSignUpNavigateToLogin()
             },
             modifier = modifier.fillMaxWidth(),
             shape = MaterialTheme.shapes.medium
         ) {
-            Text(
-                text = "Sign Up",
-                modifier = modifier
-                    .padding(10.dp)
-            )
+            if (uiState.isLoading) {
+                CircularProgressIndicator()
+            } else {
+                Text(
+                    text = "Sign Up",
+                    modifier = modifier
+                        .padding(10.dp)
+                )
+            }
         }
     }
 }
@@ -87,7 +100,8 @@ fun SignUpForm(
 private fun SignUpFormPreview() {
     BookStoreTheme {
         SignUpForm(
-            state = SignUpUiState(),
+            uiState = SignUpUiState(),
+            signUpFormState = SignUpFormUiState(),
             onEmailChange = {},
             onPasswordChange = {},
             onConfirmPasswordChange = {},
@@ -95,8 +109,7 @@ private fun SignUpFormPreview() {
             confirmPasswordVisible = {},
             clearSignUpInputFields = {},
             createNewUserWithEmailAndPassword = {},
-            onSignUpNavigateToLogin ={}
-
+            onSignUpNavigateToLogin = {}
         )
     }
 }

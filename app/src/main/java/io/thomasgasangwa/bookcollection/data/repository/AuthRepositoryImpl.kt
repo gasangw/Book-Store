@@ -15,6 +15,11 @@ import io.thomasgasangwa.bookcollection.common.LoginFailedException
 import io.thomasgasangwa.bookcollection.common.Result
 import io.thomasgasangwa.bookcollection.domain.model.User
 import io.thomasgasangwa.bookcollection.domain.repository.AuthRepository
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.conflate
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.tasks.await
 import timber.log.Timber
 
@@ -23,8 +28,14 @@ class AuthRepositoryImpl(
     private val firebaseAuth: FirebaseAuth
 ) : AuthRepository {
 
-    override val hasUser: Boolean
-        get() = firebaseAuth.currentUser != null
+    override val currentUserIsLoggedIn: Flow<Boolean?> = callbackFlow {
+        trySend(firebaseAuth.currentUser != null)
+        val listener = FirebaseAuth.AuthStateListener { auth ->
+            trySend(auth.currentUser != null)
+        }
+        firebaseAuth.addAuthStateListener(listener)
+        awaitClose { firebaseAuth.removeAuthStateListener(listener) }
+    }.conflate().distinctUntilChanged()
 
     override suspend fun signInAnonymously(): Result<Unit> {
         return try {
@@ -70,12 +81,14 @@ class AuthRepositoryImpl(
         email: String,
         password: String
     ): Result<Unit> {
-        return try {
+        try {
             firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             Result.Success(Unit)
+            Timber.e("i have registered the user")
         } catch (e: Exception) {
             Result.Failure(e)
         }
+        return Result.Success(Unit)
     }
 
 

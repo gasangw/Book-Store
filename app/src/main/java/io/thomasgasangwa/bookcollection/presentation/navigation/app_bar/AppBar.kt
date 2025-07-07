@@ -26,15 +26,13 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.thomasgasangwa.bookcollection.R
-import io.thomasgasangwa.bookcollection.domain.model.User
 import io.thomasgasangwa.bookcollection.presentation.navigation.AppNavigationScreens
-import timber.log.Timber
 
 @Composable
 fun AppBar(
     modifier: Modifier = Modifier,
     currentScreen: AppNavigationScreens,
-    currentUser: User?,
+    currentUserIsLoggedIn: Boolean?,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     signOut: () -> Unit
@@ -43,10 +41,9 @@ fun AppBar(
     val appBarViewModel: AppBarViewModel = viewModel()
     val uiState by appBarViewModel.state.collectAsStateWithLifecycle()
 
-    Timber.e("user in the appBar: $currentUser")
     CenteredAppBar(
         currentScreen = currentScreen,
-        currentUser = currentUser,
+        currentUserIsLoggedIn = currentUserIsLoggedIn,
         canNavigateBack = canNavigateBack,
         navigateUp = navigateUp,
         signOut = signOut,
@@ -62,7 +59,7 @@ fun AppBar(
 fun CenteredAppBar(
     modifier: Modifier = Modifier,
     currentScreen: AppNavigationScreens,
-    currentUser: User?,
+    currentUserIsLoggedIn: Boolean?,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     signOut: () -> Unit,
@@ -87,7 +84,7 @@ fun CenteredAppBar(
             }
         },
         actions = {
-            if (currentUser != null) {
+            if (currentUserIsLoggedIn != null && currentUserIsLoggedIn) {
                 DropDownMenu(
                     signOut = signOut,
                     onClickSettingsButton = onClickSettingsButton,
@@ -164,7 +161,7 @@ private fun CenteredAppBarPreview() {
     BookStoreTheme {
         CenteredAppBar(
             currentScreen = AppNavigationScreens.Tabs,
-            currentUser = null,
+            currentUserIsLoggedIn = true,
             canNavigateBack = false,
             navigateUp = {},
             signOut = {},
