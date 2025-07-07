@@ -6,6 +6,7 @@ data class SignInUiState(
     val isLoading: Boolean = false,
     val errorMessage: Exception? = null,
     val signInIsSuccessful: Boolean = false,
+    val deleteUserSuccessfully: Boolean = false,
     val user: User? = null
 )
 

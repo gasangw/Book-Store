@@ -174,4 +174,22 @@ class SignInViewModel(
             authRepository.signOut()
         }
     }
+
+    fun deleteAccount() {
+        _state.update { state ->
+            state.copy(
+                isLoading = true
+            )
+        }
+        viewModelScope.launch {
+            authRepository.deleteAccount()
+            _state.update { state ->
+                state.copy(
+                    isLoading = false,
+                    deleteUserSuccessfully = true
+                )
+            }
+        }
+    }
+
 }

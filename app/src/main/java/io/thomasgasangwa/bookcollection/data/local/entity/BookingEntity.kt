@@ -19,6 +19,7 @@ import io.thomasgasangwa.bookcollection.common.Constants.BOOKINGS
 data class BookingEntity(
     @PrimaryKey(autoGenerate = true) val bookingId: Int = 0,
     val bookId: Int,
+    val userId: String,
     val startDate: Long,
     val endDate: Long
 )

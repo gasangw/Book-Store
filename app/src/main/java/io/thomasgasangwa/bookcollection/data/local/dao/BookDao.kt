@@ -14,13 +14,6 @@ interface BookDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insert(book: BookEntity)
 
-//    @Insert
-//    suspend fun insertBooking(booking: Booking)
-//
-//    @Transaction
-//    @Query("SELECT * FROM books")
-//    suspend fun getBooksWithBookings(): List<BookWithBookings>
-
     @Update
     suspend fun update(book: BookEntity)
 

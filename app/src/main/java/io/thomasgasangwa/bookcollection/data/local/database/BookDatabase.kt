@@ -5,12 +5,15 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import io.thomasgasangwa.bookcollection.data.local.dao.BookDao
+import io.thomasgasangwa.bookcollection.data.local.dao.BookingDao
 import io.thomasgasangwa.bookcollection.data.local.entity.BookEntity
+import io.thomasgasangwa.bookcollection.data.local.entity.BookingEntity
 
 
-@Database(entities = [BookEntity::class], version = 1, exportSchema = false)
+@Database(entities = [BookEntity::class, BookingEntity::class], version = 1, exportSchema = false)
 abstract class BookDatabase : RoomDatabase() {
     abstract fun bookDao(): BookDao
+    abstract fun bookingDao(): BookingDao
 
     companion object {
 

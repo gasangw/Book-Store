@@ -1,12 +1,12 @@
 package io.thomasgasangwa.bookcollection.data.repository
 
 import io.thomasgasangwa.bookcollection.common.RepositoryException
-import io.thomasgasangwa.bookcollection.data.local.dao.BookDao
-import io.thomasgasangwa.bookcollection.data.local.mapper.toBookList
-import io.thomasgasangwa.bookcollection.domain.model.Book
 import io.thomasgasangwa.bookcollection.common.Result
+import io.thomasgasangwa.bookcollection.data.local.dao.BookDao
 import io.thomasgasangwa.bookcollection.data.local.mapper.toBook
 import io.thomasgasangwa.bookcollection.data.local.mapper.toBookEntity
+import io.thomasgasangwa.bookcollection.data.local.mapper.toBookList
+import io.thomasgasangwa.bookcollection.domain.model.Book
 import io.thomasgasangwa.bookcollection.domain.repository.LocalRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -76,6 +76,10 @@ class LocalRepositoryImpl(
     } catch (e: Exception) {
         Result.Failure(RepositoryException.DatabaseException("Failed to update likes of a book", e))
     }
+
+    /*
+    Here you'll find all the available methods for handling bookings.
+     */
 }
 
 

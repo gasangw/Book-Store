@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.tasks.await
-import timber.log.Timber
 
 class AuthRepositoryImpl(
     private val credentialManager: CredentialManager,
@@ -63,6 +62,7 @@ class AuthRepositoryImpl(
             val firebaseUser = authResult.user
             return firebaseUser?.let { user ->
                 val user = User(
+                    id = user.uid,
                     email = user.email ?: "",
                     photoUrl = user.photoUrl.toString(),
                     name = user.displayName ?: ""
@@ -83,7 +83,6 @@ class AuthRepositoryImpl(
         try {
             firebaseAuth.createUserWithEmailAndPassword(email, password).await()
             Result.Success(Unit)
-            Timber.e("i have registered the user")
         } catch (e: Exception) {
             Result.Failure(e)
         }
@@ -94,13 +93,12 @@ class AuthRepositoryImpl(
     override suspend fun getCurrentUser(): Result<User?> {
         val firebaseUser = firebaseAuth.currentUser
         return firebaseUser?.let { user ->
-            Timber.e("in the auth implementation ${user.email}, ${user.photoUrl}, ${user.displayName}")
             val currentUser = User(
+                id = user.uid,
                 email = user.email ?: "",
                 photoUrl = user.photoUrl.toString(),
                 name = user.displayName ?: "Anonymous"
             )
-            Timber.e("current user $currentUser")
             Result.Success(currentUser)
         } ?: Result.Success(null)
     }
@@ -134,6 +132,7 @@ class AuthRepositoryImpl(
 
             return firebaseUser?.let {
                 val user = User(
+                    id = it.uid,
                     email = it.email ?: "",
                     photoUrl = it.photoUrl.toString(),
                     name = it.displayName ?: ""
@@ -154,6 +153,16 @@ class AuthRepositoryImpl(
         return try {
             val clearRequest = ClearCredentialStateRequest()
             credentialManager.clearCredentialState(clearRequest)
+            Result.Success(Unit)
+        } catch (e: Exception) {
+            Result.Failure(e)
+        }
+    }
+
+    override suspend fun deleteAccount(): Result<Unit> {
+        val user = firebaseAuth.currentUser
+        return try {
+            user?.delete()?.await()
             Result.Success(Unit)
         } catch (e: Exception) {
             Result.Failure(e)
