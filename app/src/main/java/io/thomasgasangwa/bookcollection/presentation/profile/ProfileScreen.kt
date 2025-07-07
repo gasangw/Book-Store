@@ -24,12 +24,14 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookcollection.R
 import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInViewModel
 import org.koin.androidx.compose.koinViewModel
+import timber.log.Timber
 
 @Composable
 fun ProfileScreen(modifier: Modifier = Modifier) {
     val authViewModel: SignInViewModel = koinViewModel()
     val state by authViewModel.state.collectAsStateWithLifecycle()
     val user = state.user
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -53,14 +55,29 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
             )
         }
 
-        Text(
-            text = user?.email?.split("@")[0] ?: "Anonymous User",
-            style = MaterialTheme.typography.titleLarge,
+        if(user?.name == "Anonymous") {
+            Text(
+                text = "Anonymous User",
+                style = MaterialTheme.typography.titleLarge,
             )
-        Text(
-            text = user?.email ?: "example@gmail.com",
-            style = MaterialTheme.typography.bodyMedium,
-        )
+        } else {
+            Text(
+                text = user?.name ?: "Anonymous User",
+                style = MaterialTheme.typography.titleLarge,
+            )
+        }
+
+        if (user?.email?.isNullOrEmpty() == true) {
+            Text(
+                text = "example@gmail.com",
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        } else {
+            Text(
+                text = user?.email ?: "example@gmail.com",
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
     }
 }
 

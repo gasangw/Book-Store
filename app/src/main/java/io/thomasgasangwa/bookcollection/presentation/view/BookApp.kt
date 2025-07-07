@@ -18,8 +18,9 @@ import org.koin.androidx.compose.koinViewModel
 @Composable
 fun BookApp(modifier: Modifier = Modifier) {
 
-
     val authViewModel: SignInViewModel = koinViewModel()
+
+    val state by authViewModel.state.collectAsStateWithLifecycle()
 
     val currentUserIsLoggedIn by authViewModel.currentUserIsLoggedIn.collectAsStateWithLifecycle()
 
@@ -54,6 +55,7 @@ fun BookApp(modifier: Modifier = Modifier) {
     ) { innerPadding ->
         AppNavigation(
             navController = navController,
+            state = state,
             currentUserIsLoggedIn = currentUserIsLoggedIn,
             modifier = modifier.padding(innerPadding)
         )

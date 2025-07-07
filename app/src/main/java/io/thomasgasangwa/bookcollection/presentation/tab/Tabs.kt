@@ -15,6 +15,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
+import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInUiState
 import io.thomasgasangwa.bookcollection.presentation.book_list.BookListScreen
 import io.thomasgasangwa.bookcollection.presentation.bookings.list_bookings.AllBookings
 import io.thomasgasangwa.bookcollection.presentation.favorites.Favorites
@@ -22,19 +23,21 @@ import io.thomasgasangwa.bookcollection.presentation.favorites.Favorites
 @Composable
 fun Tabs(
     modifier: Modifier = Modifier,
+    state: SignInUiState,
     onAddBookButtonClicked: () -> Unit,
     onBookClicked: (Int) -> Unit
 ) {
 
-    var state by rememberSaveable { mutableIntStateOf(0) }
+    var tabsState by rememberSaveable { mutableIntStateOf(0) }
     val titles = listOf("Books", "Favorites", "Bookings")
 
     fun updateState(index: Int) {
-        state = if (index == 0) 0 else if (index == 1) 1 else 2
+        tabsState = if (index == 0) 0 else if (index == 1) 1 else 2
     }
 
     TabsDisplay(
         state = state,
+        tabsState = tabsState,
         titles = titles,
         onTabClicked = { it -> updateState(it) },
         onAddBookButtonClicked = onAddBookButtonClicked,
@@ -47,7 +50,8 @@ fun Tabs(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TabsDisplay(
-    state: Int,
+    state: SignInUiState,
+    tabsState: Int,
     titles: List<String>,
     onTabClicked: (Int) -> Unit,
     onAddBookButtonClicked: () -> Unit,
@@ -57,15 +61,15 @@ private fun TabsDisplay(
     val isInPreview = LocalInspectionMode.current
 
     Column(modifier = modifier) {
-        SecondaryTabRow(selectedTabIndex = state) {
+        SecondaryTabRow(selectedTabIndex = tabsState) {
             titles.forEachIndexed { index, title ->
                 Tab(
-                    selected = (state == index), onClick = { onTabClicked(index) },
+                    selected = (tabsState == index), onClick = { onTabClicked(index) },
                     text = { Text(text = title, color = MaterialTheme.colorScheme.onSurface) }
                 )
             }
         }
-        when (state) {
+        when (tabsState) {
             0 -> if (isInPreview) {
                 FakeBookListScreen(
                     onAddBookButtonClicked = {},
@@ -89,7 +93,9 @@ private fun TabsDisplay(
             }
 
             2 -> {
-                AllBookings()
+                AllBookings(
+                    state = state
+                )
             }
         }
     }
@@ -115,11 +121,12 @@ private fun FakeFavorites(
 @Preview(showBackground = true)
 @Composable
 private fun TabsPreview() {
-    var state = 0
+    var tabsState = 0
     var titles = listOf("Books", "Favorites", "Bookings")
     BookStoreTheme {
         TabsDisplay(
-            state = state,
+            state = SignInUiState(),
+            tabsState = tabsState,
             titles = titles,
             onTabClicked = { index -> },
             onAddBookButtonClicked = {},
