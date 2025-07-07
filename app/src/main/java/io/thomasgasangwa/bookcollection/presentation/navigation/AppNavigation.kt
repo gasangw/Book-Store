@@ -13,6 +13,7 @@ import io.thomasgasangwa.bookcollection.presentation.add_book.AddBook
 import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInScreen
 import io.thomasgasangwa.bookcollection.presentation.auth.sign_up.SignUpScreen
 import io.thomasgasangwa.bookcollection.presentation.book_details.BookDetails
+import io.thomasgasangwa.bookcollection.presentation.profile.ProfileScreen
 import io.thomasgasangwa.bookcollection.presentation.tab.Tabs
 import io.thomasgasangwa.bookcollection.presentation.update_book.BookParcelableData
 import io.thomasgasangwa.bookcollection.presentation.update_book.UpdateBook
@@ -20,6 +21,7 @@ import io.thomasgasangwa.bookcollection.presentation.update_book.UpdateBook
 enum class AppNavigationScreens(@StringRes val title: Int) {
     SignIn(title = R.string.sign_in),
     SignUp(title = R.string.sign_up),
+    Profile(title = R.string.profile),
     Tabs(title = R.string.app_name),
     AddBook(title = R.string.add_book),
     BookDetails(title = R.string.book_details),
@@ -57,6 +59,10 @@ fun AppNavigation(
             SignUpScreen(
                 onSignUpNavigateToLogin = { navController.navigate(AppNavigationScreens.SignIn.name) }
             )
+        }
+
+        composable(route = AppNavigationScreens.Profile.name) {
+            ProfileScreen()
         }
 
         composable(route = AppNavigationScreens.Tabs.name) {

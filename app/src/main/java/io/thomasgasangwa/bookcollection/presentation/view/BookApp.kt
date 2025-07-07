@@ -37,6 +37,9 @@ fun BookApp(modifier: Modifier = Modifier) {
                 currentUserIsLoggedIn = currentUserIsLoggedIn,
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp() },
+                navigateToProfile = {
+                    navController.navigate(AppNavigationScreens.Profile.name)
+                },
                 signOut = {
                     authViewModel.signOut()
                     navController.navigate(AppNavigationScreens.SignIn.name) {

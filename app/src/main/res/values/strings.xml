@@ -18,4 +18,5 @@
     <string name="sign_in">Sign In</string>
     <string name="logout">LogOut</string>
     <string name="sign_up">Create new Account</string>
+    <string name="profile">Profile</string>
 </resources>

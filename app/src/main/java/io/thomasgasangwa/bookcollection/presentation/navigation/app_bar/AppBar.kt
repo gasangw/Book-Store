@@ -35,6 +35,7 @@ fun AppBar(
     currentUserIsLoggedIn: Boolean?,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
+    navigateToProfile: () -> Unit,
     signOut: () -> Unit
 ) {
 
@@ -46,6 +47,7 @@ fun AppBar(
         currentUserIsLoggedIn = currentUserIsLoggedIn,
         canNavigateBack = canNavigateBack,
         navigateUp = navigateUp,
+        navigateToProfile = navigateToProfile,
         signOut = signOut,
         onClickSettingsButton = { appBarViewModel.expandDropdown() },
         onClickDismissButton = { appBarViewModel.dismissDropdown() },
@@ -62,6 +64,7 @@ fun CenteredAppBar(
     currentUserIsLoggedIn: Boolean?,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
+    navigateToProfile: () -> Unit,
     signOut: () -> Unit,
     onClickSettingsButton: () -> Unit,
     onClickDismissButton: () -> Unit,
@@ -86,6 +89,7 @@ fun CenteredAppBar(
         actions = {
             if (currentUserIsLoggedIn != null && currentUserIsLoggedIn) {
                 DropDownMenu(
+                    navigateToProfile = navigateToProfile,
                     signOut = signOut,
                     onClickSettingsButton = onClickSettingsButton,
                     onClickDismissButton = onClickDismissButton,
@@ -99,6 +103,7 @@ fun CenteredAppBar(
 @Composable
 fun DropDownMenu(
     modifier: Modifier = Modifier,
+    navigateToProfile: () -> Unit,
     signOut: () -> Unit,
     onClickSettingsButton: () -> Unit,
     onClickDismissButton: () -> Unit,
@@ -123,7 +128,7 @@ fun DropDownMenu(
                         contentDescription = "profile"
                     )
                 },
-                onClick = { /* Do something... */ }
+                onClick = { navigateToProfile() }
             )
             DropdownMenuItem(
                 text = { Text("LOG OUT") },
@@ -167,7 +172,8 @@ private fun CenteredAppBarPreview() {
             signOut = {},
             onClickSettingsButton = {},
             onClickDismissButton = {},
-            uiState = DropDownUiState()
+            uiState = DropDownUiState(),
+            navigateToProfile = {}
         )
     }
 }
@@ -180,7 +186,8 @@ private fun DropDownMenuPreview() {
             signOut = {},
             onClickSettingsButton = {},
             onClickDismissButton = {},
-            uiState = DropDownUiState()
+            uiState = DropDownUiState(),
+            navigateToProfile = {}
         )
     }
 }
