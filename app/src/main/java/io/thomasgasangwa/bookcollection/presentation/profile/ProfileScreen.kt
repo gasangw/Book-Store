@@ -55,14 +55,14 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
             )
         }
 
-        if(user?.name == "Anonymous") {
+        if(user?.email?.isNullOrEmpty() == true) {
             Text(
                 text = "Anonymous User",
                 style = MaterialTheme.typography.titleLarge,
             )
         } else {
             Text(
-                text = user?.name ?: "Anonymous User",
+                text = user?.email?.split("@")[0] ?: "Anonymous User",
                 style = MaterialTheme.typography.titleLarge,
             )
         }

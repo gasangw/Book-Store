@@ -62,7 +62,6 @@ class AuthRepositoryImpl(
             }
             val firebaseUser = authResult.user
             return firebaseUser?.let { user ->
-                Timber.e("user: $user")
                 val user = User(
                     email = user.email ?: "",
                     photoUrl = user.photoUrl.toString(),

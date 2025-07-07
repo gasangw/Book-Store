@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInUiState
 import io.thomasgasangwa.bookcollection.presentation.bookings.bookings
 import io.thomasgasangwa.bookcollection.presentation.bookings.userBookings
-import timber.log.Timber
 
 @Composable
 fun AllBookings(
@@ -21,26 +20,7 @@ fun AllBookings(
     state: SignInUiState,
 ) {
 
-    Timber.e("inside bookings ${state.user}")
-    Timber.e("is email available ${state.user?.email}")
-
-
     if (state.user?.email.isNullOrBlank()) {
-        LazyVerticalGrid(
-            columns = GridCells.Adaptive(minSize = 300.dp),
-            contentPadding = PaddingValues(15.dp),
-            verticalArrangement = Arrangement.spacedBy(15.dp),
-            horizontalArrangement = Arrangement.spacedBy(15.dp)
-        ) {
-            items(bookings) { booking ->
-                AdminsBookingScreen(
-                    title = booking.title,
-                    userName = booking.userName,
-                    days = booking.days
-                )
-            }
-        }
-    } else {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 300.dp),
             contentPadding = PaddingValues(15.dp),
@@ -52,6 +32,21 @@ fun AllBookings(
                     title = booking.title,
                     status = booking.status,
                     onCancelBooking = {},
+                )
+            }
+        }
+    } else {
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(minSize = 300.dp),
+            contentPadding = PaddingValues(15.dp),
+            verticalArrangement = Arrangement.spacedBy(15.dp),
+            horizontalArrangement = Arrangement.spacedBy(15.dp)
+        ) {
+            items(bookings) { booking ->
+                AdminsBookingScreen(
+                    title = booking.title,
+                    userName = booking.userName,
+                    days = booking.days
                 )
             }
         }

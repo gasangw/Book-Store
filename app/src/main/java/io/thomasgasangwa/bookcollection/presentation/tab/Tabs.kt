@@ -29,7 +29,9 @@ fun Tabs(
 ) {
 
     var tabsState by rememberSaveable { mutableIntStateOf(0) }
-    val titles = listOf("Books", "Favorites", "Bookings")
+    val userTitles = listOf("Books", "Favorites", "Bookings")
+    val adminTitles = listOf("Books", "Bookings")
+
 
     fun updateState(index: Int) {
         tabsState = if (index == 0) 0 else if (index == 1) 1 else 2
@@ -38,7 +40,8 @@ fun Tabs(
     TabsDisplay(
         state = state,
         tabsState = tabsState,
-        titles = titles,
+        userTitles = userTitles,
+        adminTitles = adminTitles,
         onTabClicked = { it -> updateState(it) },
         onAddBookButtonClicked = onAddBookButtonClicked,
         onBookClicked = { it -> onBookClicked(it) },
@@ -52,7 +55,8 @@ fun Tabs(
 private fun TabsDisplay(
     state: SignInUiState,
     tabsState: Int,
-    titles: List<String>,
+    userTitles: List<String>,
+    adminTitles: List<String>,
     onTabClicked: (Int) -> Unit,
     onAddBookButtonClicked: () -> Unit,
     onBookClicked: (Int) -> Unit,
@@ -61,41 +65,73 @@ private fun TabsDisplay(
     val isInPreview = LocalInspectionMode.current
 
     Column(modifier = modifier) {
-        SecondaryTabRow(selectedTabIndex = tabsState) {
-            titles.forEachIndexed { index, title ->
-                Tab(
-                    selected = (tabsState == index), onClick = { onTabClicked(index) },
-                    text = { Text(text = title, color = MaterialTheme.colorScheme.onSurface) }
-                )
-            }
-        }
-        when (tabsState) {
-            0 -> if (isInPreview) {
-                FakeBookListScreen(
-                    onAddBookButtonClicked = {},
-                    onBookClicked = {}
-                )
-            } else {
-                BookListScreen(
-                    onAddBookButtonClicked = onAddBookButtonClicked,
-                    onBookClicked = { id -> onBookClicked(id) }
-                )
+
+        if (state.user?.email.isNullOrEmpty()) {
+            SecondaryTabRow(selectedTabIndex = tabsState) {
+                userTitles.forEachIndexed { index, title ->
+                    Tab(
+                        selected = (tabsState == index), onClick = { onTabClicked(index) },
+                        text = { Text(text = title, color = MaterialTheme.colorScheme.onSurface) }
+                    )
+                }
             }
 
-            1 -> if (isInPreview) {
-                FakeFavorites(
-                    onBookClicked = {}
-                )
-            } else {
-                Favorites(
-                    onBookClicked = { id -> onBookClicked(id) }
-                )
-            }
+            when (tabsState) {
+                0 -> if (isInPreview) {
+                    FakeBookListScreen(
+                        onAddBookButtonClicked = {},
+                        onBookClicked = {}
+                    )
+                } else {
+                    BookListScreen(
+                        onAddBookButtonClicked = onAddBookButtonClicked,
+                        onBookClicked = { id -> onBookClicked(id) }
+                    )
+                }
 
-            2 -> {
-                AllBookings(
-                    state = state
-                )
+                1 -> if (isInPreview) {
+                    FakeFavorites(
+                        onBookClicked = {}
+                    )
+                } else {
+                    Favorites(
+                        onBookClicked = { id -> onBookClicked(id) }
+                    )
+                }
+
+                2 -> {
+                    AllBookings(
+                        state = state
+                    )
+                }
+            }
+        } else {
+            SecondaryTabRow(selectedTabIndex = tabsState) {
+                adminTitles.forEachIndexed { index, title ->
+                    Tab(
+                        selected = (tabsState == index), onClick = { onTabClicked(index) },
+                        text = { Text(text = title, color = MaterialTheme.colorScheme.onSurface) }
+                    )
+                }
+            }
+            when (tabsState) {
+                0 -> if (isInPreview) {
+                    FakeBookListScreen(
+                        onAddBookButtonClicked = {},
+                        onBookClicked = {}
+                    )
+                } else {
+                    BookListScreen(
+                        onAddBookButtonClicked = onAddBookButtonClicked,
+                        onBookClicked = { id -> onBookClicked(id) }
+                    )
+                }
+
+                1 -> {
+                    AllBookings(
+                        state = state
+                    )
+                }
             }
         }
     }
@@ -122,12 +158,13 @@ private fun FakeFavorites(
 @Composable
 private fun TabsPreview() {
     var tabsState = 0
-    var titles = listOf("Books", "Favorites", "Bookings")
+    var userTitles = listOf("Books", "Favorites", "Bookings")
     BookStoreTheme {
         TabsDisplay(
             state = SignInUiState(),
             tabsState = tabsState,
-            titles = titles,
+            adminTitles = userTitles,
+            userTitles = userTitles,
             onTabClicked = { index -> },
             onAddBookButtonClicked = {},
             onBookClicked = { _ -> },
