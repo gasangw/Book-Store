@@ -3,6 +3,7 @@ package io.thomasgasangwa.bookcollection.presentation.auth.sign_in
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.thomasgasangwa.bookcollection.common.Result
+import io.thomasgasangwa.bookcollection.domain.model.User
 import io.thomasgasangwa.bookcollection.domain.repository.AuthRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -21,13 +22,15 @@ class SignInViewModel(
     private val _formState = MutableStateFlow(LoginFormUiState())
     val formState: StateFlow<LoginFormUiState> = _formState.asStateFlow()
 
-
     val currentUserIsLoggedIn: StateFlow<Boolean?> = authRepository.currentUserIsLoggedIn.stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
         initialValue = null
     )
 
+    init {
+        currentUser()
+    }
 
 //    fun signInWithGoogle(context: Context) {
 //        _state.value = SignInState.Loading
@@ -70,12 +73,12 @@ class SignInViewModel(
             _formState.value.copy(isPasswordVisible = !_formState.value.isPasswordVisible)
     }
 
-    fun clearSignInFormInputs() {
-        _formState.value = _formState.value.copy(
-            email = "",
-            password = ""
-        )
-    }
+//    fun clearSignInFormInputs() {
+//        _formState.value = _formState.value.copy(
+//            email = "",
+//            password = ""
+//        )
+//    }
 
     fun signInAnonymously() {
         _state.value = SignInUiState(isLoading = true)
@@ -133,15 +136,37 @@ class SignInViewModel(
     }
 
 
-//    fun currentUser() {
-//        viewModelScope.launch {
-//            val user = authRepository.getCurrentUser()
-//            _state.value = when (user) {
-//                is Result.Failure -> SignInState.CurrentUserError(Exception("Error occurred while getting a current user"))
-//                is Result.Success<*> -> SignInState.SignInUser(user.value as User?)
-//            }
-//        }
-//    }
+    fun currentUser() {
+        viewModelScope.launch {
+            _state.value = SignInUiState(isLoading = true)
+            try {
+                viewModelScope.launch {
+                    val currentUser = authRepository.getCurrentUser()
+                    when (currentUser) {
+                        is Result.Failure -> {
+                            _state.update {
+                                it.copy(
+                                    isLoading = false,
+                                    errorMessage = Exception("User information can't be retrieved")
+                                )
+                            }
+                        }
+
+                        is Result.Success<*> -> {
+                            _state.update { state ->
+                                state.copy(
+                                    isLoading = false,
+                                    user = currentUser.value as User?
+                                )
+                            }
+                        }
+                    }
+                }
+            } catch (e: Exception) {
+                _state.update { it.copy(errorMessage = e, isLoading = false) }
+            }
+        }
+    }
 
 
     fun signOut() {

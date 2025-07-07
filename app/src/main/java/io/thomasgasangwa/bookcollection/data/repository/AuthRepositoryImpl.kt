@@ -95,14 +95,15 @@ class AuthRepositoryImpl(
     override suspend fun getCurrentUser(): Result<User?> {
         val firebaseUser = firebaseAuth.currentUser
         return firebaseUser?.let { user ->
+            Timber.e("in the auth implementation ${user.email}, ${user.photoUrl}, ${user.displayName}")
             val currentUser = User(
                 email = user.email ?: "",
                 photoUrl = user.photoUrl.toString(),
                 name = user.displayName ?: "Anonymous"
             )
+            Timber.e("current user $currentUser")
             Result.Success(currentUser)
         } ?: Result.Success(null)
-
     }
 
 

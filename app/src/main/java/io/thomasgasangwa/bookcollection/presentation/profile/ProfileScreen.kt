@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,11 +20,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookcollection.R
+import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @Composable
 fun ProfileScreen(modifier: Modifier = Modifier) {
-    val user = ""
+    val authViewModel: SignInViewModel = koinViewModel()
+    val state by authViewModel.state.collectAsStateWithLifecycle()
+    val user = state.user
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -48,11 +54,11 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
         }
 
         Text(
-            text = if (user.isEmpty()) "Anonymous User" else "Thomas Gasangwa",
+            text = user?.email?.split("@")[0] ?: "Anonymous User",
             style = MaterialTheme.typography.titleLarge,
-        )
+            )
         Text(
-            text = if (user.isEmpty()) "example@gmail.com" else "thomasgasangwa@gmail.com",
+            text = user?.email ?: "example@gmail.com",
             style = MaterialTheme.typography.bodyMedium,
         )
     }
