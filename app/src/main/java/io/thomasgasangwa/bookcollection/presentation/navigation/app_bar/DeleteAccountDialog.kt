@@ -3,13 +3,16 @@ package io.thomasgasangwa.bookcollection.presentation.navigation.app_bar
 import BookStoreTheme
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.RemoveModerator
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
@@ -23,13 +26,23 @@ fun DeleteAccountDialog(
 ) {
     AlertDialog(
         icon = {
-            Icon(icon, contentDescription = "Example Icon")
+            Icon(
+                icon,
+                contentDescription = "remove moderator Icon",
+                tint = MaterialTheme.colorScheme.error
+            )
         },
         title = {
-            Text(text = dialogTitle)
+            Text(
+                text = dialogTitle,
+                color = MaterialTheme.colorScheme.error
+            )
         },
         text = {
-            Text(text = dialogText)
+            Text(
+                text = dialogText,
+                textAlign = TextAlign.Center,
+            )
         },
         onDismissRequest = {
             onDismissRequest()
@@ -40,7 +53,10 @@ fun DeleteAccountDialog(
                     onConfirmation()
                 }
             ) {
-                Text("Confirm")
+                Text(
+                    "Delete",
+                    color = MaterialTheme.colorScheme.error
+                )
             }
         },
         dismissButton = {
@@ -65,7 +81,7 @@ private fun DeleteAccountDialogPreview() {
             onConfirmation = {},
             dialogTitle = "Delete Account",
             dialogText = "Are you sure you want to delete your account?",
-            icon = Icons.Default.Delete,
+            icon = Icons.Default.RemoveModerator,
         )
     }
 }

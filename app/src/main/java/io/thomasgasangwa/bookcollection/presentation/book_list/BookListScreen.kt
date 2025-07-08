@@ -31,8 +31,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookcollection.R
+import io.thomasgasangwa.bookcollection.common.state.UserState
 import io.thomasgasangwa.bookcollection.domain.model.Book
 import io.thomasgasangwa.bookcollection.presentation.book_list.components.BookCard
+import io.thomasgasangwa.bookcollection.presentation.view.LocalUserData
 import org.koin.androidx.compose.koinViewModel
 
 
@@ -44,8 +46,10 @@ fun BookListScreen(
 ) {
     val bookViewModel: BookListViewModel = koinViewModel()
     val booksState by bookViewModel.state.collectAsStateWithLifecycle()
+    val currentUserInfo = LocalUserData.current
 
     BookListDisplay(
+        currentUserInfo = currentUserInfo,
         onAddBookButtonClicked = onAddBookButtonClicked,
         onBookClicked = { it -> onBookClicked(it) },
         booksState = booksState,
@@ -58,6 +62,7 @@ fun BookListScreen(
 
 @Composable
 fun BookListDisplay(
+    currentUserInfo: UserState,
     onAddBookButtonClicked: () -> Unit,
     onBookClicked: (Int) -> Unit,
     booksState: BookListState,
@@ -68,16 +73,19 @@ fun BookListDisplay(
 ) {
     Scaffold(
         floatingActionButton = {
-            LargeFloatingActionButton(onClick = onAddBookButtonClicked) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = stringResource(R.string.add_book_icon),
-                    modifier = Modifier.size(40.dp)
-                )
+            if (currentUserInfo.user?.email?.isNotEmpty() == true) {
+                LargeFloatingActionButton(onClick = onAddBookButtonClicked) {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = stringResource(R.string.add_book_icon),
+                        modifier = Modifier.size(40.dp)
+                    )
+                }
             }
         },
         floatingActionButtonPosition = FabPosition.End,
         modifier = Modifier
+
     ) { innerPadding ->
         Column(modifier = Modifier.padding(innerPadding)) {
             when (booksState) {
@@ -163,6 +171,7 @@ private fun BookListScreenPreview() {
 
     BookStoreTheme {
         BookListDisplay(
+            currentUserInfo = UserState(),
             onAddBookButtonClicked = {},
             onBookClicked = { _ -> },
             booksState = BookListState.Success(bookList),
