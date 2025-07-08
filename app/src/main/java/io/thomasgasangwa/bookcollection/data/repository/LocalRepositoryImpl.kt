@@ -7,6 +7,8 @@ import io.thomasgasangwa.bookcollection.data.local.dao.BookingDao
 import io.thomasgasangwa.bookcollection.data.local.mapper.toBook
 import io.thomasgasangwa.bookcollection.data.local.mapper.toBookEntity
 import io.thomasgasangwa.bookcollection.data.local.mapper.toBookList
+import io.thomasgasangwa.bookcollection.data.local.mapper.toBookingEntity
+import io.thomasgasangwa.bookcollection.data.local.mapper.toBookingList
 import io.thomasgasangwa.bookcollection.domain.model.Book
 import io.thomasgasangwa.bookcollection.domain.model.Booking
 import io.thomasgasangwa.bookcollection.domain.repository.LocalRepository
@@ -85,21 +87,23 @@ class LocalRepositoryImpl(
     Here you'll find all the available methods for handling bookings.
      */
 
-    override fun getAllBookingsStream(): Flow<Result<List<Booking>>> {
-        itemDao.getAllBooks().map { it ->
-            Result.Success(it.toBookList())
+    override fun getAllBookingsStream(): Flow<Result<List<Booking>>> =
+        bookingDao.getAllBookings().map { it ->
+            Result.Success(it.toBookingList())
         }.catch { cause ->
-            Result.Failure(RepositoryException.DatabaseException("failed to fetch books", cause))
+            Result.Failure(RepositoryException.DatabaseException("failed to fetch bookings", cause))
         }
-    }
 
-    override fun getBookingsByUserIdStream(userId: String): Flow<Result<List<Booking>>> {
-        // To be implemented
-    }
+    override fun getBookingsByUserIdStream(userId: String): Flow<Result<List<Booking>>> =
+        bookingDao.getBookingsByUserId(userId).map { it ->
+            Result.Success(it.toBookingList())
+        }.catch { cause ->
+            Result.Failure(RepositoryException.DatabaseException("failed to fetch bookings", cause))
+        }
 
     override suspend fun insertBooking(booking: Booking): Result<Unit> {
         return try {
-            bookingDao.insertBooking(booking)
+            bookingDao.insertBooking(booking.toBookingEntity())
             Result.Success(Unit)
         } catch (e: Exception) {
             Result.Failure(RepositoryException.DatabaseException("Failed to insert a booking", e))

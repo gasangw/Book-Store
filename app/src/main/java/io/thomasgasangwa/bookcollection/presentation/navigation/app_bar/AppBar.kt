@@ -36,6 +36,7 @@ fun AppBar(
     currentScreen: AppNavigationScreens,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
+    deleteAccount: () -> Unit,
     navigateToProfile: () -> Unit,
     signOut: () -> Unit
 ) {
@@ -44,18 +45,21 @@ fun AppBar(
     val uiState by appBarViewModel.state.collectAsStateWithLifecycle()
     val currentUserInfo = LocalUserData.current
 
-        CenteredAppBar(
-            currentScreen = currentScreen,
-            currentUserInfo = currentUserInfo,
-            canNavigateBack = canNavigateBack,
-            navigateUp = navigateUp,
-            navigateToProfile = navigateToProfile,
-            signOut = signOut,
-            onClickSettingsButton = { appBarViewModel.expandDropdown() },
-            onClickDismissButton = { appBarViewModel.dismissDropdown() },
-            uiState = uiState,
-            modifier = modifier
-        )
+    CenteredAppBar(
+        currentScreen = currentScreen,
+        currentUserInfo = currentUserInfo,
+        canNavigateBack = canNavigateBack,
+        navigateUp = navigateUp,
+        deleteAccount = deleteAccount,
+        navigateToProfile = navigateToProfile,
+        signOut = signOut,
+        onClickSettingsButton = { appBarViewModel.expandDropdown() },
+        onClickDismissButton = { appBarViewModel.dismissDropdown() },
+        showDeleteDialog = {appBarViewModel.showDeleteDialog() },
+        hideDeleteDialog = {appBarViewModel.hideDeleteDialog()},
+        uiState = uiState,
+        modifier = modifier
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -66,10 +70,13 @@ fun CenteredAppBar(
     currentUserInfo: UserState,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
+    deleteAccount: () -> Unit,
     navigateToProfile: () -> Unit,
     signOut: () -> Unit,
     onClickSettingsButton: () -> Unit,
     onClickDismissButton: () -> Unit,
+    showDeleteDialog: () -> Unit,
+    hideDeleteDialog: () -> Unit,
     uiState: DropDownUiState
 ) {
     CenterAlignedTopAppBar(
@@ -93,8 +100,11 @@ fun CenteredAppBar(
                 DropDownMenu(
                     navigateToProfile = navigateToProfile,
                     signOut = signOut,
+                    deleteAccount = deleteAccount,
                     onClickSettingsButton = onClickSettingsButton,
                     onClickDismissButton = onClickDismissButton,
+                    showDeleteDialog = showDeleteDialog,
+                    hideDeleteDialog = hideDeleteDialog,
                     uiState = uiState
                 )
             }
@@ -107,8 +117,11 @@ fun DropDownMenu(
     modifier: Modifier = Modifier,
     navigateToProfile: () -> Unit,
     signOut: () -> Unit,
+    deleteAccount: () -> Unit,
     onClickSettingsButton: () -> Unit,
     onClickDismissButton: () -> Unit,
+    showDeleteDialog: () -> Unit,
+    hideDeleteDialog: () -> Unit,
     uiState: DropDownUiState
 ) {
     Box(
@@ -156,9 +169,18 @@ fun DropDownMenu(
                         tint = MaterialTheme.colorScheme.error
                     )
                 },
-                onClick = {/* Do something... */ }
+                onClick = { showDeleteDialog() }
             )
         }
+    }
+    if (uiState.showDeleteDialog){
+        DeleteAccountDialog(
+            onDismissRequest = hideDeleteDialog,
+            onConfirmation = deleteAccount,
+            dialogTitle = "Delete Account",
+            dialogText = "Are you sure you want to delete your account?",
+            icon = Icons.Default.RemoveModerator
+        )
     }
 }
 
@@ -172,8 +194,11 @@ private fun CenteredAppBarPreview() {
             canNavigateBack = false,
             navigateUp = {},
             signOut = {},
+            deleteAccount = {},
             onClickSettingsButton = {},
             onClickDismissButton = {},
+            showDeleteDialog = {},
+            hideDeleteDialog = {},
             uiState = DropDownUiState(),
             navigateToProfile = {}
         )
@@ -186,8 +211,11 @@ private fun DropDownMenuPreview() {
     BookStoreTheme {
         DropDownMenu(
             signOut = {},
+            deleteAccount = {},
             onClickSettingsButton = {},
             onClickDismissButton = {},
+            showDeleteDialog = {},
+            hideDeleteDialog = {},
             uiState = DropDownUiState(),
             navigateToProfile = {}
         )

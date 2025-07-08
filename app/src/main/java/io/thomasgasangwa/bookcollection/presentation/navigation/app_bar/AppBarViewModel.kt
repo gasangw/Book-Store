@@ -18,4 +18,14 @@ class AppBarViewModel : ViewModel() {
     fun dismissDropdown() {
         _state.update { state -> state.copy(isExpanded = false) }
     }
+
+    fun showDeleteDialog() {
+        _state.update { it.copy(showDeleteDialog = true) }
+    }
+    
+    fun hideDeleteDialog() {
+        _state.update { it.copy(showDeleteDialog = false) }
+    }
+
+
 }

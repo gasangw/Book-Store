@@ -31,6 +31,7 @@ fun BookApp(
                 currentScreen = currentScreen,
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp() },
+                deleteAccount = { authViewModel.deleteAccount() },
                 navigateToProfile = {
                     navController.navigate(AppNavigationScreens.Profile.name)
                 },
