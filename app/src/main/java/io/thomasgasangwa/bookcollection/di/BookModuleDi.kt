@@ -3,6 +3,7 @@ package io.thomasgasangwa.bookcollection.di
 import androidx.credentials.CredentialManager
 import com.google.firebase.auth.FirebaseAuth
 import io.thomasgasangwa.bookcollection.data.local.dao.BookDao
+import io.thomasgasangwa.bookcollection.data.local.dao.BookingDao
 import io.thomasgasangwa.bookcollection.data.local.database.BookDatabase
 import io.thomasgasangwa.bookcollection.data.remote.BookApiService
 import io.thomasgasangwa.bookcollection.data.remote.RetrofitClient
@@ -44,8 +45,9 @@ val localBookModule = module {
     single { BookDatabase.getDatabase(get()) }
 
     single<BookDao> { get<BookDatabase>().bookDao() }
+    single<BookingDao> { get<BookDatabase>().bookingDao() }
 
-    single<LocalRepository> { LocalRepositoryImpl(get()) }
+    single<LocalRepository> { LocalRepositoryImpl(get(), get()) }
 
     viewModel { BookListViewModel(get(), get()) }
     viewModel { AddBookViewModel(get()) }

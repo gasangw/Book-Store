@@ -26,3 +26,4 @@ fun Book.toBookEntity() = BookEntity(
     likes = likes,
     isFavorite = isFavorite
 )
+

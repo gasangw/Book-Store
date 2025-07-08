@@ -11,10 +11,11 @@ data class Book(
     val pages: Int,
     val cover: String,
     val likes: Int,
-    val isFavorite: Boolean
+    val isFavorite: Boolean,
 )
 
-fun Book.toBookParcelableData(): BookParcelableData = BookParcelableData(
+fun Book.toBookParcelableData(
+): BookParcelableData = BookParcelableData(
     id = id,
     title = title,
     releaseDate = releaseDate,
@@ -22,5 +23,5 @@ fun Book.toBookParcelableData(): BookParcelableData = BookParcelableData(
     pages = pages,
     cover = cover,
     likes = likes,
-    isFavorite = isFavorite
+    isFavorite = isFavorite,
 )
