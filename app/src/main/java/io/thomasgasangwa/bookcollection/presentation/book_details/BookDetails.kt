@@ -118,17 +118,19 @@ fun BookDetailsContent(
                                 .padding(10.dp)
                         )
                     }
-                    IconButton(
-                        onClick = { onEditBook(book.toBookParcelableData()) },
-                    ) {
-                        Icon(
-                            imageVector = Icons.Filled.Edit,
-                            contentDescription = "edit",
-                            tint = MaterialTheme.colorScheme.primary,
-                            modifier = Modifier
-                                .padding(10.dp)
-                                .size(20.dp)
-                        )
+                    if(currentUserInfo.user?.email?.isNotEmpty() == true) {
+                        IconButton(
+                            onClick = { onEditBook(book.toBookParcelableData()) },
+                        ) {
+                            Icon(
+                                imageVector = Icons.Filled.Edit,
+                                contentDescription = "edit",
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier
+                                    .padding(10.dp)
+                                    .size(20.dp)
+                            )
+                        }
                     }
                 }
 

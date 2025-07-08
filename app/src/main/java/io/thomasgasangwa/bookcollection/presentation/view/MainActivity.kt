@@ -16,6 +16,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import io.thomasgasangwa.bookcollection.common.state.UserState
 import io.thomasgasangwa.bookcollection.globalstate.UserStateHolder
 import org.koin.android.ext.android.inject
+import timber.log.Timber
 
 val LocalUserData = compositionLocalOf<UserState> { UserState() }
 
@@ -55,6 +56,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             BookStoreTheme {
                 val userState by userStateHolder.userState.collectAsState()
+                Timber.e("user ${userState.user}")
                 CompositionLocalProvider(
                     LocalUserData provides userState
                 ) {

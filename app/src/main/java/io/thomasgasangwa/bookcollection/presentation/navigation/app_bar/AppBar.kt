@@ -55,8 +55,8 @@ fun AppBar(
         signOut = signOut,
         onClickSettingsButton = { appBarViewModel.expandDropdown() },
         onClickDismissButton = { appBarViewModel.dismissDropdown() },
-        showDeleteDialog = {appBarViewModel.showDeleteDialog() },
-        hideDeleteDialog = {appBarViewModel.hideDeleteDialog()},
+        showDeleteDialog = { appBarViewModel.showDeleteDialog() },
+        hideDeleteDialog = { appBarViewModel.hideDeleteDialog() },
         uiState = uiState,
         modifier = modifier
     )
@@ -173,7 +173,7 @@ fun DropDownMenu(
             )
         }
     }
-    if (uiState.showDeleteDialog){
+    if (uiState.showDeleteDialog) {
         DeleteAccountDialog(
             onDismissRequest = hideDeleteDialog,
             onConfirmation = deleteAccount,

@@ -15,11 +15,6 @@ import io.thomasgasangwa.bookcollection.common.LoginFailedException
 import io.thomasgasangwa.bookcollection.common.Result
 import io.thomasgasangwa.bookcollection.domain.model.User
 import io.thomasgasangwa.bookcollection.domain.repository.AuthRepository
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.conflate
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.tasks.await
 
 class AuthRepositoryImpl(
@@ -27,14 +22,14 @@ class AuthRepositoryImpl(
     private val firebaseAuth: FirebaseAuth
 ) : AuthRepository {
 
-    override val currentUserIsLoggedIn: Flow<Boolean?> = callbackFlow {
-        trySend(firebaseAuth.currentUser != null)
-        val listener = FirebaseAuth.AuthStateListener { auth ->
-            trySend(auth.currentUser != null)
-        }
-        firebaseAuth.addAuthStateListener(listener)
-        awaitClose { firebaseAuth.removeAuthStateListener(listener) }
-    }.conflate().distinctUntilChanged()
+//    override val currentUserIsLoggedIn: Flow<Boolean?> = callbackFlow {
+//        trySend(firebaseAuth.currentUser != null)
+//        val listener = FirebaseAuth.AuthStateListener { auth ->
+//            trySend(auth.currentUser != null)
+//        }
+//        firebaseAuth.addAuthStateListener(listener)
+//        awaitClose { firebaseAuth.removeAuthStateListener(listener) }
+//    }.conflate().distinctUntilChanged()
 
     override suspend fun signInAnonymously(): Result<User> {
 
@@ -99,19 +94,19 @@ class AuthRepositoryImpl(
         return Result.Success(Unit)
     }
 
-
-    override suspend fun getCurrentUser(): Result<User?> {
-        val firebaseUser = firebaseAuth.currentUser
-        return firebaseUser?.let { user ->
-            val currentUser = User(
-                id = user.uid,
-                email = user.email ?: "",
-                photoUrl = user.photoUrl.toString(),
-                name = user.displayName ?: "Anonymous"
-            )
-            Result.Success(currentUser)
-        } ?: Result.Success(null)
-    }
+//
+//    override suspend fun getCurrentUser(): Result<User?> {
+//        val firebaseUser = firebaseAuth.currentUser
+//        return firebaseUser?.let { user ->
+//            val currentUser = User(
+//                id = user.uid,
+//                email = user.email ?: "",
+//                photoUrl = user.photoUrl.toString(),
+//                name = user.displayName ?: "Anonymous"
+//            )
+//            Result.Success(currentUser)
+//        } ?: Result.Success(null)
+//    }
 
 
     override suspend fun signIn(context: Context): Result<User?> {

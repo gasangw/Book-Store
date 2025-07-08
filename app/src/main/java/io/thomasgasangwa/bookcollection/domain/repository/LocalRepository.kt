@@ -2,7 +2,6 @@ package io.thomasgasangwa.bookcollection.domain.repository
 
 import io.thomasgasangwa.bookcollection.common.Result
 import io.thomasgasangwa.bookcollection.domain.model.Book
-import io.thomasgasangwa.bookcollection.domain.model.Booking
 import kotlinx.coroutines.flow.Flow
 
 interface LocalRepository {
@@ -21,8 +20,8 @@ interface LocalRepository {
     Here you'll find all the available methods for handling bookings.
  */
 
-    fun getAllBookingsStream(): Flow<Result<List<Booking>>>
-    fun getBookingsByUserIdStream(userId: String): Flow<Result<List<Booking>>>
-    suspend fun insertBooking(booking: Booking): Result<Unit>
-    suspend fun deleteBookingById(id: Int): Result<Unit>
+//    fun getAllBookingsStream(): Flow<Result<List<Booking>>>
+//    fun getBookingsByUserIdStream(userId: String): Flow<Result<List<Booking>>>
+//    suspend fun insertBooking(booking: Booking): Result<Unit>
+//    suspend fun deleteBookingById(id: Int): Result<Unit>
 }

@@ -2,9 +2,9 @@ package io.thomasgasangwa.bookcollection.presentation.book_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.thomasgasangwa.bookcollection.common.Result
 import io.thomasgasangwa.bookcollection.domain.repository.LocalRepository
 import io.thomasgasangwa.bookcollection.domain.usecase.GetAllBooksUseCase
-import io.thomasgasangwa.bookcollection.common.Result
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -28,10 +28,8 @@ class BookListViewModel(
     }
 
     private fun getAllBooks() {
-
         _state.update { BookListState.Loading(value = true) }
         viewModelScope.launch {
-            getAllBooksUseCase()
             localRepository.getAllBooksStream().collect { result ->
                 when (result) {
                     is Result.Success -> {
@@ -44,6 +42,18 @@ class BookListViewModel(
                 }
             }
 
+        }
+    }
+
+    fun getAllRemoteBooks() {
+        _state.update { BookListState.Loading(value = true) }
+        viewModelScope.launch {
+            try {
+                getAllBooksUseCase()
+                _state.update { BookListState.Loading(value = false) }
+            } catch (e: Exception) {
+                _state.update { BookListState.Error(exception = e) }
+            }
         }
     }
 

@@ -3,7 +3,7 @@
     <string name="edit">edit</string>
     <string name="delete">Delete</string>
     <string name="appBar_title">Book Store</string>
-    <string name="no_books_found">No books found</string>
+    <string name="fetch_books">Fetch all books</string>
     <string name="add_book_icon">Add Book Icon</string>
     <string name="add_book">Add Book</string>
     <string name="back_arrow">Back arrow</string>

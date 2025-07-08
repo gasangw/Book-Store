@@ -7,10 +7,8 @@ import io.thomasgasangwa.bookcollection.domain.model.User
 import io.thomasgasangwa.bookcollection.domain.repository.AuthRepository
 import io.thomasgasangwa.bookcollection.globalstate.UserStateHolder
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -24,11 +22,11 @@ class SignInViewModel(
     private val _formState = MutableStateFlow(LoginFormUiState())
     val formState: StateFlow<LoginFormUiState> = _formState.asStateFlow()
 
-    val currentUserIsLoggedIn: StateFlow<Boolean?> = authRepository.currentUserIsLoggedIn.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = null
-    )
+//    val currentUserIsLoggedIn: StateFlow<Boolean?> = authRepository.currentUserIsLoggedIn.stateIn(
+//        scope = viewModelScope,
+//        started = SharingStarted.WhileSubscribed(5_000),
+//        initialValue = null
+//    )
 
 //    init {
 //        currentUser()

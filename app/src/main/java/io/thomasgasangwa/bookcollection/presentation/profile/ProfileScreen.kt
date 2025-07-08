@@ -12,7 +12,6 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -20,17 +19,13 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookcollection.R
-import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInViewModel
-import org.koin.androidx.compose.koinViewModel
-import timber.log.Timber
+import io.thomasgasangwa.bookcollection.presentation.view.LocalUserData
 
 @Composable
 fun ProfileScreen(modifier: Modifier = Modifier) {
-    val authViewModel: SignInViewModel = koinViewModel()
-    val state by authViewModel.state.collectAsStateWithLifecycle()
-    val user = state.user
+
+    val currentUserInfo = LocalUserData.current
 
     Column(
         modifier = modifier
@@ -55,26 +50,26 @@ fun ProfileScreen(modifier: Modifier = Modifier) {
             )
         }
 
-        if(user?.email?.isNullOrEmpty() == true) {
+        if(currentUserInfo.user?.email?.isEmpty() == true) {
             Text(
                 text = "Anonymous User",
                 style = MaterialTheme.typography.titleLarge,
             )
         } else {
             Text(
-                text = user?.email?.split("@")[0] ?: "Anonymous User",
+                text = currentUserInfo.user?.email?.split("@")[0] ?: "Anonymous User",
                 style = MaterialTheme.typography.titleLarge,
             )
         }
 
-        if (user?.email?.isNullOrEmpty() == true) {
+        if (currentUserInfo.user?.email?.isEmpty() == true) {
             Text(
                 text = "example@gmail.com",
                 style = MaterialTheme.typography.bodyMedium,
             )
         } else {
             Text(
-                text = user?.email ?: "example@gmail.com",
+                text = currentUserInfo.user?.email ?: "example@gmail.com",
                 style = MaterialTheme.typography.bodyMedium,
             )
         }
