@@ -1,7 +1,7 @@
-package io.thomasgasangwa.bookcollection.domain.ApplicationStateStore
+package io.thomasgasangwa.bookcollection.globalstate
 
+import io.thomasgasangwa.bookcollection.common.state.UserState
 import io.thomasgasangwa.bookcollection.domain.model.User
-import io.thomasgasangwa.bookcollection.domain.model.UserState
 import kotlinx.coroutines.flow.StateFlow
 
 interface UserStateHolder {
