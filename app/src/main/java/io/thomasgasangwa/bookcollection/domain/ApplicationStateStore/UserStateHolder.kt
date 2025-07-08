@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookcollection.domain.repository
+package io.thomasgasangwa.bookcollection.domain.ApplicationStateStore
 
 import io.thomasgasangwa.bookcollection.domain.model.User
 import io.thomasgasangwa.bookcollection.domain.model.UserState
