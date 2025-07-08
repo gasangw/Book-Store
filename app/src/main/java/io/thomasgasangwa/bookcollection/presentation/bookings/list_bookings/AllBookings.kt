@@ -10,16 +10,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInUiState
 import io.thomasgasangwa.bookcollection.presentation.bookings.bookings
 import io.thomasgasangwa.bookcollection.presentation.bookings.userBookings
+import io.thomasgasangwa.bookcollection.presentation.view.LocalUserData
 
 @Composable
 fun AllBookings(
     modifier: Modifier = Modifier
 ) {
+    val currentUserInfo = LocalUserData.current
 
-    if (state.user?.email.isNullOrBlank()) {
+    if (currentUserInfo.user?.email.isNullOrBlank()) {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 300.dp),
             contentPadding = PaddingValues(15.dp),
@@ -57,8 +58,6 @@ fun AllBookings(
 @Composable
 private fun AllBookingsPreview() {
     BookStoreTheme {
-        AllBookings(
-            state = SignInUiState()
-        )
+        AllBookings()
     }
 }

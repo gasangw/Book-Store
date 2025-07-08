@@ -41,6 +41,7 @@ import io.thomasgasangwa.bookcollection.domain.model.toBookParcelableData
 import io.thomasgasangwa.bookcollection.presentation.borrow_dialog.BorrowDialog
 import io.thomasgasangwa.bookcollection.presentation.favorites.FavoriteViewModel
 import io.thomasgasangwa.bookcollection.presentation.update_book.BookParcelableData
+import io.thomasgasangwa.bookcollection.presentation.view.LocalUserData
 import io.thomasgasangwa.bookcollection.presentation.view.components.BookCover
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
@@ -86,6 +87,9 @@ fun BookDetailsContent(
     onShowDialogChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+
+    val currentUserInfo = LocalUserData.current
+
     Column(
         modifier = modifier
             .padding(10.dp)
@@ -167,7 +171,7 @@ fun BookDetailsContent(
                     verticalAlignment = Alignment.Bottom
 
                 ) {
-                    if (isBooked) {
+                    if (isBooked && currentUserInfo.user?.email?.isEmpty() == true) {
                         Text(
                             text = "This book has been borrowed and will be returned on 2023-01-01",
                             style = MaterialTheme.typography.labelMedium,

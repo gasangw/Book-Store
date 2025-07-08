@@ -42,7 +42,6 @@ fun AppBar(
 
     val appBarViewModel: AppBarViewModel = viewModel()
     val uiState by appBarViewModel.state.collectAsStateWithLifecycle()
-
     val currentUserInfo = LocalUserData.current
 
         CenteredAppBar(

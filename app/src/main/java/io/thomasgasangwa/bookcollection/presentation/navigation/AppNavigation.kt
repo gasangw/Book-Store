@@ -17,6 +17,7 @@ import io.thomasgasangwa.bookcollection.presentation.profile.ProfileScreen
 import io.thomasgasangwa.bookcollection.presentation.tab.Tabs
 import io.thomasgasangwa.bookcollection.presentation.update_book.BookParcelableData
 import io.thomasgasangwa.bookcollection.presentation.update_book.UpdateBook
+import io.thomasgasangwa.bookcollection.presentation.view.LocalUserData
 
 enum class AppNavigationScreens(@StringRes val title: Int) {
     SignIn(title = R.string.sign_in),
@@ -33,10 +34,11 @@ fun AppNavigation(
     modifier: Modifier = Modifier,
     navController: NavHostController
 ) {
+    val currentUserIsLoggedIn = LocalUserData.current.isLoggedIn
 
     NavHost(
         navController = navController,
-        startDestination = if (currentUserIsLoggedIn != null && currentUserIsLoggedIn) AppNavigationScreens.Tabs.name else AppNavigationScreens.SignIn.name,
+        startDestination = if (currentUserIsLoggedIn) AppNavigationScreens.Tabs.name else AppNavigationScreens.SignIn.name,
         modifier = modifier
     ) {
         composable(route = AppNavigationScreens.SignIn.name) {

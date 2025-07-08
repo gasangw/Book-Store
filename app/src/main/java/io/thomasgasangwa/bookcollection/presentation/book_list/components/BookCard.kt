@@ -29,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.thomasgasangwa.bookcollection.R
 import io.thomasgasangwa.bookcollection.domain.model.Book
+import io.thomasgasangwa.bookcollection.presentation.view.LocalUserData
 import io.thomasgasangwa.bookcollection.presentation.view.components.BookCover
 
 
@@ -46,6 +47,7 @@ fun BookCard(
 ) {
     val context = LocalContext.current
     var isLiked: Boolean by rememberSaveable { mutableStateOf(false) }
+    val currentUserInfo = LocalUserData.current
 
     Card(
         modifier = modifier,
@@ -93,12 +95,14 @@ fun BookCard(
                     contentDescription = "share"
                 )
             }
-            IconButton(onClick = { deleteBook(id) }) {
-                Icon(
-                    imageVector = Icons.Filled.Delete,
-                    contentDescription = "delete",
-                    tint = MaterialTheme.colorScheme.error
-                )
+            if (!currentUserInfo.user?.email.isNullOrEmpty()) {
+                IconButton(onClick = { deleteBook(id) }) {
+                    Icon(
+                        imageVector = Icons.Filled.Delete,
+                        contentDescription = "delete",
+                        tint = MaterialTheme.colorScheme.error
+                    )
+                }
             }
         }
     }
