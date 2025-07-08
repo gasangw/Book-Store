@@ -2,6 +2,7 @@ package io.thomasgasangwa.bookcollection.di
 
 import androidx.credentials.CredentialManager
 import com.google.firebase.auth.FirebaseAuth
+import io.thomasgasangwa.bookcollection.common.state.UserStateHolderImpl
 import io.thomasgasangwa.bookcollection.data.local.dao.BookDao
 import io.thomasgasangwa.bookcollection.data.local.dao.BookingDao
 import io.thomasgasangwa.bookcollection.data.local.database.BookDatabase
@@ -15,6 +16,7 @@ import io.thomasgasangwa.bookcollection.domain.repository.AuthRepository
 import io.thomasgasangwa.bookcollection.domain.repository.LocalRepository
 import io.thomasgasangwa.bookcollection.domain.repository.RemoteRepository
 import io.thomasgasangwa.bookcollection.domain.usecase.GetAllBooksUseCase
+import io.thomasgasangwa.bookcollection.globalstate.UserStateHolder
 import io.thomasgasangwa.bookcollection.presentation.add_book.AddBookViewModel
 import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInViewModel
 import io.thomasgasangwa.bookcollection.presentation.auth.sign_up.SignUpViewModel
@@ -48,6 +50,8 @@ val localBookModule = module {
     single<BookingDao> { get<BookDatabase>().bookingDao() }
 
     single<LocalRepository> { LocalRepositoryImpl(get(), get()) }
+
+    single<UserStateHolder> { UserStateHolderImpl() }
 
     viewModel { BookListViewModel(get(), get()) }
     viewModel { AddBookViewModel(get()) }
