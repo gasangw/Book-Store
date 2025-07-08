@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookcollection.presentation.bookings.list_bookings
+package io.thomasgasangwa.bookcollection.presentation.bookings.list_bookings.admin_bookings
 
 import BookStoreTheme
 import androidx.compose.foundation.layout.Arrangement

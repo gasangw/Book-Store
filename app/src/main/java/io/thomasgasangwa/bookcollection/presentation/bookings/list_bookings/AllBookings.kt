@@ -11,6 +11,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.thomasgasangwa.bookcollection.presentation.bookings.bookings
+import io.thomasgasangwa.bookcollection.presentation.bookings.list_bookings.admin_bookings.AdminsBookingScreen
+import io.thomasgasangwa.bookcollection.presentation.bookings.list_bookings.users_bookings.UsersBookingScreen
 import io.thomasgasangwa.bookcollection.presentation.bookings.userBookings
 import io.thomasgasangwa.bookcollection.presentation.view.LocalUserData
 

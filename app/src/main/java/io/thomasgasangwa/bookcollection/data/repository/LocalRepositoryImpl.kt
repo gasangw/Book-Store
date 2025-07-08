@@ -17,12 +17,24 @@ class LocalRepositoryImpl(
     private val itemDao: BookDao,
     private val bookingDao: BookingDao
 ) : LocalRepository {
+    // booking queries called.
+
     override fun getAllBooksStream(): Flow<Result<List<Book>>> =
-        itemDao.getAllBooks().map { it ->
+        itemDao.getAvailableBooks().map { it ->
             Result.Success(it.toBookList())
         }.catch { cause ->
             Result.Failure(RepositoryException.DatabaseException("failed to fetch books", cause))
         }
+
+    override fun getBooksWithBookingsStream(): Flow<Result<List<Book>>> =
+        itemDao.getBooksWithBookings().map { it ->
+            Result.Success(it.toBookList())
+        }.catch { cause ->
+            Result.Failure(RepositoryException.DatabaseException("failed to fetch books", cause))
+        }
+
+
+    // booking queries end.
 
     override fun getBookStream(id: Int): Flow<Result<Book>> =
         itemDao.getBookById(id).map { it ->

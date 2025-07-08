@@ -6,6 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface LocalRepository {
     fun getAllBooksStream(): Flow<Result<List<Book>>>
+
+    fun getBooksWithBookingsStream(): Flow<Result<List<Book>>>
     fun getBookStream(id: Int): Flow<Result<Book>>
     fun getFavoriteBooksStream(): Flow<Result<List<Book>>>
     suspend fun updateFavoriteStatus(id: Int, isFavorite: Boolean): Result<Unit>

@@ -1,4 +1,4 @@
-package io.thomasgasangwa.bookcollection.presentation.bookings.list_bookings
+package io.thomasgasangwa.bookcollection.presentation.bookings.list_bookings.users_bookings
 
 import BookStoreTheme
 import androidx.compose.foundation.background
@@ -79,19 +79,21 @@ fun UsersBookingScreen(
                         .padding(5.dp)
                 )
             }
-             when(status){
-                 BookingStatus.PENDING -> {
-                     Button(
-                         onClick = onCancelBooking,
-                         colors = ButtonDefaults.buttonColors(
-                             containerColor = MaterialTheme.colorScheme.error
-                         ),
-                         modifier = modifier.fillMaxWidth()
-                     ) {
-                         Text(text = "Cancel Booking")
-                     }
-                 } else -> null
-             }
+            when (status) {
+                BookingStatus.PENDING -> {
+                    Button(
+                        onClick = onCancelBooking,
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.error
+                        ),
+                        modifier = modifier.fillMaxWidth()
+                    ) {
+                        Text(text = "Cancel Booking")
+                    }
+                }
+
+                else -> null
+            }
 
         }
     }
