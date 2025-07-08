@@ -11,7 +11,6 @@ import androidx.navigation.navArgument
 import io.thomasgasangwa.bookcollection.R
 import io.thomasgasangwa.bookcollection.presentation.add_book.AddBook
 import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInScreen
-import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInUiState
 import io.thomasgasangwa.bookcollection.presentation.auth.sign_up.SignUpScreen
 import io.thomasgasangwa.bookcollection.presentation.book_details.BookDetails
 import io.thomasgasangwa.bookcollection.presentation.profile.ProfileScreen
@@ -32,8 +31,6 @@ enum class AppNavigationScreens(@StringRes val title: Int) {
 @Composable
 fun AppNavigation(
     modifier: Modifier = Modifier,
-//    state: SignInUiState,
-//    currentUserIsLoggedIn: Boolean?,
     navController: NavHostController
 ) {
 
@@ -70,8 +67,7 @@ fun AppNavigation(
         composable(route = AppNavigationScreens.Tabs.name) {
             Tabs(
                 onAddBookButtonClicked = { navController.navigate(AppNavigationScreens.AddBook.name) },
-                onBookClicked = { id -> navController.navigate("${AppNavigationScreens.BookDetails.name}/$id") },
-                state = state
+                onBookClicked = { id -> navController.navigate("${AppNavigationScreens.BookDetails.name}/$id") }
             )
         }
         composable(route = AppNavigationScreens.AddBook.name) {

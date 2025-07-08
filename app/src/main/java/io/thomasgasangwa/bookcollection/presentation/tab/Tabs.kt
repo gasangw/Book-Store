@@ -15,15 +15,15 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
-import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInUiState
+import io.thomasgasangwa.bookcollection.common.state.UserState
 import io.thomasgasangwa.bookcollection.presentation.book_list.BookListScreen
 import io.thomasgasangwa.bookcollection.presentation.bookings.list_bookings.AllBookings
 import io.thomasgasangwa.bookcollection.presentation.favorites.Favorites
+import io.thomasgasangwa.bookcollection.presentation.view.LocalUserData
 
 @Composable
 fun Tabs(
     modifier: Modifier = Modifier,
-    state: SignInUiState,
     onAddBookButtonClicked: () -> Unit,
     onBookClicked: (Int) -> Unit
 ) {
@@ -32,13 +32,15 @@ fun Tabs(
     val userTitles = listOf("Books", "Favorites", "Bookings")
     val adminTitles = listOf("Books", "Bookings")
 
+    val currentUserInfo = LocalUserData.current
+
 
     fun updateState(index: Int) {
         tabsState = if (index == 0) 0 else if (index == 1) 1 else 2
     }
 
     TabsDisplay(
-        state = state,
+        currentUserInfo = currentUserInfo,
         tabsState = tabsState,
         userTitles = userTitles,
         adminTitles = adminTitles,
@@ -53,7 +55,7 @@ fun Tabs(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun TabsDisplay(
-    state: SignInUiState,
+    currentUserInfo: UserState,
     tabsState: Int,
     userTitles: List<String>,
     adminTitles: List<String>,
@@ -66,7 +68,7 @@ private fun TabsDisplay(
 
     Column(modifier = modifier) {
 
-        if (state.user?.email.isNullOrEmpty()) {
+        if (currentUserInfo.user?.email.isNullOrEmpty()) {
             SecondaryTabRow(selectedTabIndex = tabsState) {
                 userTitles.forEachIndexed { index, title ->
                     Tab(
@@ -100,9 +102,7 @@ private fun TabsDisplay(
                 }
 
                 2 -> {
-                    AllBookings(
-                        state = state
-                    )
+                    AllBookings()
                 }
             }
         } else {
@@ -128,9 +128,7 @@ private fun TabsDisplay(
                 }
 
                 1 -> {
-                    AllBookings(
-                        state = state
-                    )
+                    AllBookings()
                 }
             }
         }
@@ -161,7 +159,7 @@ private fun TabsPreview() {
     var userTitles = listOf("Books", "Favorites", "Bookings")
     BookStoreTheme {
         TabsDisplay(
-            state = SignInUiState(),
+            currentUserInfo = UserState(),
             tabsState = tabsState,
             adminTitles = userTitles,
             userTitles = userTitles,

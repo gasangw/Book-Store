@@ -16,8 +16,7 @@ import io.thomasgasangwa.bookcollection.presentation.bookings.userBookings
 
 @Composable
 fun AllBookings(
-    modifier: Modifier = Modifier,
-    state: SignInUiState,
+    modifier: Modifier = Modifier
 ) {
 
     if (state.user?.email.isNullOrBlank()) {

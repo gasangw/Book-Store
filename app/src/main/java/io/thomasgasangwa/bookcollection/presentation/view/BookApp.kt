@@ -18,7 +18,6 @@ import org.koin.androidx.compose.koinViewModel
 fun BookApp(
     modifier: Modifier = Modifier
 ) {
-
     val authViewModel: SignInViewModel = koinViewModel()
     val navController: NavHostController = rememberNavController()
     val backStackEntry by navController.currentBackStackEntryAsState()
