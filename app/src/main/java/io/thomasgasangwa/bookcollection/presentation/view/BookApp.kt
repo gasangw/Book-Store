@@ -5,7 +5,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -16,16 +15,12 @@ import io.thomasgasangwa.bookcollection.presentation.navigation.app_bar.AppBar
 import org.koin.androidx.compose.koinViewModel
 
 @Composable
-fun BookApp(modifier: Modifier = Modifier) {
+fun BookApp(
+    modifier: Modifier = Modifier
+) {
 
     val authViewModel: SignInViewModel = koinViewModel()
-
-    val state by authViewModel.state.collectAsStateWithLifecycle()
-
-    val currentUserIsLoggedIn by authViewModel.currentUserIsLoggedIn.collectAsStateWithLifecycle()
-
     val navController: NavHostController = rememberNavController()
-
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = AppNavigationScreens.valueOf(
         backStackEntry?.destination?.route?.split("/")[0] ?: AppNavigationScreens.Tabs.name
@@ -35,7 +30,6 @@ fun BookApp(modifier: Modifier = Modifier) {
         topBar = {
             AppBar(
                 currentScreen = currentScreen,
-                currentUserIsLoggedIn = currentUserIsLoggedIn,
                 canNavigateBack = navController.previousBackStackEntry != null,
                 navigateUp = { navController.navigateUp() },
                 navigateToProfile = {
@@ -55,8 +49,6 @@ fun BookApp(modifier: Modifier = Modifier) {
     ) { innerPadding ->
         AppNavigation(
             navController = navController,
-            state = state,
-            currentUserIsLoggedIn = currentUserIsLoggedIn,
             modifier = modifier.padding(innerPadding)
         )
     }

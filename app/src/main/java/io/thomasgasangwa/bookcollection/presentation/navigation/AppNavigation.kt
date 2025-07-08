@@ -32,8 +32,8 @@ enum class AppNavigationScreens(@StringRes val title: Int) {
 @Composable
 fun AppNavigation(
     modifier: Modifier = Modifier,
-    state: SignInUiState,
-    currentUserIsLoggedIn: Boolean?,
+//    state: SignInUiState,
+//    currentUserIsLoggedIn: Boolean?,
     navController: NavHostController
 ) {
 

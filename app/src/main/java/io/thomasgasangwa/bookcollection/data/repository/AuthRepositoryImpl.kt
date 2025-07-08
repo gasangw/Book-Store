@@ -36,10 +36,20 @@ class AuthRepositoryImpl(
         awaitClose { firebaseAuth.removeAuthStateListener(listener) }
     }.conflate().distinctUntilChanged()
 
-    override suspend fun signInAnonymously(): Result<Unit> {
+    override suspend fun signInAnonymously(): Result<User> {
+
         return try {
-            firebaseAuth.signInAnonymously().await()
-            Result.Success(Unit)
+            val authResult = firebaseAuth.signInAnonymously().await()
+            val firebaseUser = authResult.user
+            return firebaseUser?.let { user ->
+                val user = User(
+                    id = user.uid,
+                    email = user.email ?: "",
+                    photoUrl = user.photoUrl.toString(),
+                    name = user.displayName ?: ""
+                )
+                Result.Success(user)
+            } ?: Result.Failure(Exception("Signing in anonymously failed"))
         } catch (e: Exception) {
             Result.Failure(e)
         }

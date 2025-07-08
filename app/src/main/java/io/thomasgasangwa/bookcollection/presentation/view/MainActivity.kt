@@ -7,10 +7,21 @@ import android.view.animation.OvershootInterpolator
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.compositionLocalOf
+import androidx.compose.runtime.getValue
 import androidx.core.animation.doOnEnd
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import io.thomasgasangwa.bookcollection.common.state.UserState
+import io.thomasgasangwa.bookcollection.globalstate.UserStateHolder
+import org.koin.android.ext.android.inject
+
+val LocalUserData = compositionLocalOf<UserState> { UserState() }
 
 class MainActivity : ComponentActivity() {
+    private val userStateHolder: UserStateHolder by inject()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -43,7 +54,12 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             BookStoreTheme {
-                BookApp()
+                val userState by userStateHolder.userState.collectAsState()
+                CompositionLocalProvider(
+                    LocalUserData provides userState
+                ) {
+                    BookApp()
+                }
             }
         }
     }

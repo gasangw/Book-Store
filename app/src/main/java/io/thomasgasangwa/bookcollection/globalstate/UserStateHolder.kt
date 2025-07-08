@@ -6,6 +6,6 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface UserStateHolder {
     val userState: StateFlow<UserState>
-    fun updateUser(user: User)
+    fun updateUser(user: User?)
     fun clearUser()
 }

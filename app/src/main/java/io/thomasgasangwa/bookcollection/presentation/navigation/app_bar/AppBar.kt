@@ -26,13 +26,14 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import io.thomasgasangwa.bookcollection.R
+import io.thomasgasangwa.bookcollection.common.state.UserState
 import io.thomasgasangwa.bookcollection.presentation.navigation.AppNavigationScreens
+import io.thomasgasangwa.bookcollection.presentation.view.LocalUserData
 
 @Composable
 fun AppBar(
     modifier: Modifier = Modifier,
     currentScreen: AppNavigationScreens,
-    currentUserIsLoggedIn: Boolean?,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     navigateToProfile: () -> Unit,
@@ -42,18 +43,20 @@ fun AppBar(
     val appBarViewModel: AppBarViewModel = viewModel()
     val uiState by appBarViewModel.state.collectAsStateWithLifecycle()
 
-    CenteredAppBar(
-        currentScreen = currentScreen,
-        currentUserIsLoggedIn = currentUserIsLoggedIn,
-        canNavigateBack = canNavigateBack,
-        navigateUp = navigateUp,
-        navigateToProfile = navigateToProfile,
-        signOut = signOut,
-        onClickSettingsButton = { appBarViewModel.expandDropdown() },
-        onClickDismissButton = { appBarViewModel.dismissDropdown() },
-        uiState = uiState,
-        modifier = modifier
-    )
+    val currentUserInfo = LocalUserData.current
+
+        CenteredAppBar(
+            currentScreen = currentScreen,
+            currentUserInfo = currentUserInfo,
+            canNavigateBack = canNavigateBack,
+            navigateUp = navigateUp,
+            navigateToProfile = navigateToProfile,
+            signOut = signOut,
+            onClickSettingsButton = { appBarViewModel.expandDropdown() },
+            onClickDismissButton = { appBarViewModel.dismissDropdown() },
+            uiState = uiState,
+            modifier = modifier
+        )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -61,7 +64,7 @@ fun AppBar(
 fun CenteredAppBar(
     modifier: Modifier = Modifier,
     currentScreen: AppNavigationScreens,
-    currentUserIsLoggedIn: Boolean?,
+    currentUserInfo: UserState,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     navigateToProfile: () -> Unit,
@@ -87,7 +90,7 @@ fun CenteredAppBar(
             }
         },
         actions = {
-            if (currentUserIsLoggedIn != null && currentUserIsLoggedIn) {
+            if (currentUserInfo.isLoggedIn && currentUserInfo.user?.id != null) {
                 DropDownMenu(
                     navigateToProfile = navigateToProfile,
                     signOut = signOut,
@@ -166,7 +169,7 @@ private fun CenteredAppBarPreview() {
     BookStoreTheme {
         CenteredAppBar(
             currentScreen = AppNavigationScreens.Tabs,
-            currentUserIsLoggedIn = true,
+            currentUserInfo = UserState(),
             canNavigateBack = false,
             navigateUp = {},
             signOut = {},

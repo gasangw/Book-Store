@@ -11,7 +11,7 @@ class UserStateHolderImpl : UserStateHolder {
     private val _userState = MutableStateFlow(UserState())
     override val userState: StateFlow<UserState> = _userState.asStateFlow()
 
-    override fun updateUser(user: User) {
+    override fun updateUser(user: User?) {
         _userState.update { current ->
             current.copy(
                 isLoggedIn = true,
