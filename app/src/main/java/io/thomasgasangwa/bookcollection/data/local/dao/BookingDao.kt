@@ -11,9 +11,6 @@ interface BookingDao {
     @Upsert
     suspend fun insertBooking(booking: BookingEntity)
 
-    @Query("SELECT * FROM bookings")
-    fun getAllBookings(): Flow<List<BookingEntity>>
-
     @Query("SELECT * FROM bookings WHERE userId = :userId")
     fun getBookingsByUserId(userId: String): Flow<List<BookingEntity>>
 
