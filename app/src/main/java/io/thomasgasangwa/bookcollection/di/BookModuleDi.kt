@@ -49,7 +49,7 @@ val localBookModule = module {
     single<BookDao> { get<BookDatabase>().bookDao() }
     single<BookingDao> { get<BookDatabase>().bookingDao() }
 
-    single<LocalRepository> { LocalRepositoryImpl(get(), get()) }
+    single<LocalRepository> { LocalRepositoryImpl(get()) }
 
     single<UserStateHolder> { UserStateHolderImpl() }
 

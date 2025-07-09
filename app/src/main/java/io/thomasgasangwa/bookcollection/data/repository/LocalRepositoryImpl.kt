@@ -3,7 +3,6 @@ package io.thomasgasangwa.bookcollection.data.repository
 import io.thomasgasangwa.bookcollection.common.RepositoryException
 import io.thomasgasangwa.bookcollection.common.Result
 import io.thomasgasangwa.bookcollection.data.local.dao.BookDao
-import io.thomasgasangwa.bookcollection.data.local.dao.BookingDao
 import io.thomasgasangwa.bookcollection.data.local.mapper.toBook
 import io.thomasgasangwa.bookcollection.data.local.mapper.toBookEntity
 import io.thomasgasangwa.bookcollection.data.local.mapper.toBookList
@@ -14,8 +13,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
 
 class LocalRepositoryImpl(
-    private val itemDao: BookDao,
-    private val bookingDao: BookingDao
+    private val itemDao: BookDao
 ) : LocalRepository {
     // booking queries called.
 
