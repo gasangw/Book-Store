@@ -20,7 +20,7 @@ import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun BorrowDialog(
+fun CalendarDialog(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
     onConfirm: () -> Unit
@@ -101,11 +101,11 @@ fun DateRangePickerModal(
     }
 }
 
-@Preview
+@Preview(showBackground = true)
 @Composable
 private fun BorrowDialogPreview() {
     BookStoreTheme {
-        BorrowDialog(
+        CalendarDialog(
             onDismiss = {},
             onConfirm = {}
         )

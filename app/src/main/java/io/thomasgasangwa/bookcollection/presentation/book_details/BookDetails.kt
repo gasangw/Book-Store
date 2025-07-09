@@ -38,7 +38,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookcollection.R
 import io.thomasgasangwa.bookcollection.domain.model.Book
 import io.thomasgasangwa.bookcollection.domain.model.toBookParcelableData
-import io.thomasgasangwa.bookcollection.presentation.borrow_dialog.BorrowDialog
+import io.thomasgasangwa.bookcollection.presentation.borrow_dialog.CalendarDialog
 import io.thomasgasangwa.bookcollection.presentation.favorites.FavoriteViewModel
 import io.thomasgasangwa.bookcollection.presentation.update_book.BookParcelableData
 import io.thomasgasangwa.bookcollection.presentation.view.LocalUserData
@@ -118,7 +118,7 @@ fun BookDetailsContent(
                                 .padding(10.dp)
                         )
                     }
-                    if(currentUserInfo.user?.email?.isNotEmpty() == true) {
+                    if (currentUserInfo.user?.email?.isNotEmpty() == true) {
                         IconButton(
                             onClick = { onEditBook(book.toBookParcelableData()) },
                         ) {
@@ -191,9 +191,12 @@ fun BookDetailsContent(
                 }
 
                 if (showDialog) {
-                    BorrowDialog(
+                    CalendarDialog(
                         onDismiss = { onShowDialogChange(!showDialog) },
-                        onConfirm = {}
+                        onConfirm = {
+                            onShowDialogChange(!showDialog)
+                            // here the logic of opening the borrow dialog should be implemented
+                        }
                     )
                 }
             }

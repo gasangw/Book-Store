@@ -41,6 +41,5 @@ class BookDetailsViewModel(
                 }
             }
         }
-        // _state.value = BookDetailsState.Loading(value = false)
     }
 }

@@ -1,8 +1,9 @@
-package io.thomasgasangwa.bookcollection.presentation.navigation.app_bar
+package io.thomasgasangwa.bookcollection.presentation.borrow_dialog
+
 
 import BookStoreTheme
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.RemoveModerator
+import androidx.compose.material.icons.filled.CheckCircleOutline
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -15,7 +16,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun DeleteAccountDialog(
+fun ConfirmBookingDialog(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
@@ -28,13 +29,13 @@ fun DeleteAccountDialog(
             Icon(
                 icon,
                 contentDescription = "remove moderator Icon",
-                tint = MaterialTheme.colorScheme.error
+                tint = MaterialTheme.colorScheme.surfaceTint
             )
         },
         title = {
             Text(
                 text = dialogTitle,
-                color = MaterialTheme.colorScheme.error
+                color = MaterialTheme.colorScheme.primary
             )
         },
         text = {
@@ -53,8 +54,7 @@ fun DeleteAccountDialog(
                 }
             ) {
                 Text(
-                    "Delete",
-                    color = MaterialTheme.colorScheme.error
+                    "Book"
                 )
             }
         },
@@ -64,7 +64,10 @@ fun DeleteAccountDialog(
                     onDismissRequest()
                 }
             ) {
-                Text("Dismiss")
+                Text(
+                    "Dismiss",
+                    color = MaterialTheme.colorScheme.error
+                )
             }
         },
         modifier = modifier
@@ -75,12 +78,12 @@ fun DeleteAccountDialog(
 @Composable
 private fun DeleteAccountDialogPreview() {
     BookStoreTheme {
-        DeleteAccountDialog(
+        ConfirmBookingDialog(
             onDismissRequest = {},
             onConfirmation = {},
-            dialogTitle = "Delete Account",
-            dialogText = "Are you sure you want to delete your account?",
-            icon = Icons.Default.RemoveModerator,
+            dialogTitle = "Confirm Booking",
+            dialogText = "You are booking \"Harry Potter and the Philosopher's Stone\"",
+            icon = Icons.Default.CheckCircleOutline,
         )
     }
 }
