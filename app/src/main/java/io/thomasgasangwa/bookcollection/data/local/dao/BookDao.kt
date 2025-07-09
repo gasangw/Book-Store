@@ -18,12 +18,12 @@ interface BookDao {
     @Update
     suspend fun update(book: BookEntity)
 
-//    @Query("SELECT * FROM books")
-//    fun getAllBooks(): Flow<List<BookEntity>>
+    @Query("SELECT * FROM books")
+    fun getAllBooks(): Flow<List<BookEntity>>
 
-    @Transaction
-    @Query("""SELECT * FROM books WHERE id NOT IN (SELECT bookId FROM bookings WHERE status IS NULL)""")
-    fun getAvailableBooks(): Flow<List<BookEntity>>
+//    @Transaction
+//    @Query("""SELECT * FROM books WHERE id NOT IN (SELECT bookId FROM bookings WHERE status IS NULL)""")
+//    fun getAvailableBooks(): Flow<List<BookEntity>>
 
     @Transaction
     @Query("""SELECT * FROM books WHERE id IN (SELECT bookId FROM bookings WHERE status IS NOT NULL AND status = 'PENDING')""")

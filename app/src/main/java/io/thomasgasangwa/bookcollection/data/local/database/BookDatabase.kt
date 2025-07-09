@@ -21,14 +21,14 @@ abstract class BookDatabase : RoomDatabase() {
     companion object {
 
         @Volatile
-        var Instance: BookDatabase? = null
+        var INSTANCE: BookDatabase? = null
 
         fun getDatabase(context: Context): BookDatabase {
-            return Instance ?: synchronized(this) {
+            return INSTANCE ?: synchronized(this) {
                 Room.databaseBuilder(context, BookDatabase::class.java, "book_database")
                     .fallbackToDestructiveMigration(true)
                     .build()
-                    .also { Instance = it }
+                    .also { INSTANCE = it }
             }
         }
 

@@ -14,8 +14,4 @@ interface LocalRepository {
     suspend fun updateBook(book: Book): Result<Unit>
     suspend fun deleteBookById(id: Int): Result<Unit>
     suspend fun updateLikes(id: Int, likes: Int): Result<Unit>
-
-//    fun getBookingsByUserIdStream(userId: String): Flow<Result<List<Booking>>>
-//    suspend fun insertBooking(booking: Booking): Result<Unit>
-//    suspend fun deleteBookingById(id: Int): Result<Unit>
 }

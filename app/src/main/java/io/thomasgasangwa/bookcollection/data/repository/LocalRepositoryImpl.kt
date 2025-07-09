@@ -15,10 +15,9 @@ import kotlinx.coroutines.flow.map
 class LocalRepositoryImpl(
     private val itemDao: BookDao
 ) : LocalRepository {
-    // booking queries called.
 
     override fun getAllBooksStream(): Flow<Result<List<Book>>> =
-        itemDao.getAvailableBooks().map { it ->
+        itemDao.getAllBooks().map { it ->
             Result.Success(it.toBookList())
         }.catch { cause ->
             Result.Failure(RepositoryException.DatabaseException("failed to fetch books", cause))
@@ -30,9 +29,6 @@ class LocalRepositoryImpl(
         }.catch { cause ->
             Result.Failure(RepositoryException.DatabaseException("failed to fetch books", cause))
         }
-
-
-    // booking queries end.
 
     override fun getBookStream(id: Int): Flow<Result<Book>> =
         itemDao.getBookById(id).map { it ->
@@ -88,43 +84,6 @@ class LocalRepositoryImpl(
     } catch (e: Exception) {
         Result.Failure(RepositoryException.DatabaseException("Failed to update likes of a book", e))
     }
-
-    /*
-    BELOW 👇👇👇👇👇👇👇
-    Here you'll find all the available methods for handling bookings.
-     */
-
-//    override fun getAllBookingsStream(): Flow<Result<List<Booking>>> =
-//        bookingDao.getAllBookings().map { it ->
-//            Result.Success(it.toBookingList())
-//        }.catch { cause ->
-//            Result.Failure(RepositoryException.DatabaseException("failed to fetch bookings", cause))
-//        }
-//
-//    override fun getBookingsByUserIdStream(userId: String): Flow<Result<List<Booking>>> =
-//        bookingDao.getBookingsByUserId(userId).map { it ->
-//            Result.Success(it.toBookingList())
-//        }.catch { cause ->
-//            Result.Failure(RepositoryException.DatabaseException("failed to fetch bookings", cause))
-//        }
-//
-//    override suspend fun insertBooking(booking: Booking): Result<Unit> {
-//        return try {
-//            bookingDao.insertBooking(booking.toBookingEntity())
-//            Result.Success(Unit)
-//        } catch (e: Exception) {
-//            Result.Failure(RepositoryException.DatabaseException("Failed to insert a booking", e))
-//        }
-//    }
-//
-//    override suspend fun deleteBookingById(id: Int): Result<Unit> {
-//        return try {
-//            bookingDao.deleteBookingById(id)
-//            Result.Success(Unit)
-//        } catch (e: Exception) {
-//            Result.Failure(RepositoryException.DatabaseException("Failed to delete a booking", e))
-//        }
-//    }
 }
 
 
