@@ -16,7 +16,7 @@ interface BookingRepository {
         status: BookingStatus
     ): Result<Unit>
 
-    fun getBookingsByUserId(userId: String): Flow<List<Booking>>
+    fun getBookingsByUserId(userId: String): Flow<Result<List<Booking>>>
 
     suspend fun deleteBookingById(bookingId: Int): Result<Unit>
 
