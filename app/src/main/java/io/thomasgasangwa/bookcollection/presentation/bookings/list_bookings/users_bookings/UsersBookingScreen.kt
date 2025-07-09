@@ -30,11 +30,12 @@ fun UsersBookingScreen(
     modifier: Modifier = Modifier,
     title: String,
     status: BookingStatus,
+    days: String,
     onCancelBooking: () -> Unit,
 ) {
     Row(
         modifier = modifier
-            .height(100.dp)
+            .height(120.dp)
             .fillMaxWidth(),
     ) {
         BookCover(
@@ -51,6 +52,12 @@ fun UsersBookingScreen(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 style = MaterialTheme.typography.bodyLarge
+            )
+
+            Text(
+                text = "Book needed for $days days",
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.primary
             )
 
             Row(
@@ -107,6 +114,7 @@ private fun UsersBookingScreenPreview() {
         UsersBookingScreen(
             title = "Sharks spears reading novels continue reading my guys",
             status = BookingStatus.PENDING,
+            days = "4",
             onCancelBooking = {}
         )
     }
