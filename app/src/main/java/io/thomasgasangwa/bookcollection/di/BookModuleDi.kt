@@ -9,10 +9,12 @@ import io.thomasgasangwa.bookcollection.data.local.database.BookDatabase
 import io.thomasgasangwa.bookcollection.data.remote.BookApiService
 import io.thomasgasangwa.bookcollection.data.remote.RetrofitClient
 import io.thomasgasangwa.bookcollection.data.repository.AuthRepositoryImpl
+import io.thomasgasangwa.bookcollection.data.repository.BookingRepositoryImpl
 import io.thomasgasangwa.bookcollection.data.repository.LocalRepositoryImpl
 import io.thomasgasangwa.bookcollection.data.repository.RemoteRepositoryImpl
 import io.thomasgasangwa.bookcollection.domain.model.Book
 import io.thomasgasangwa.bookcollection.domain.repository.AuthRepository
+import io.thomasgasangwa.bookcollection.domain.repository.BookingRepository
 import io.thomasgasangwa.bookcollection.domain.repository.LocalRepository
 import io.thomasgasangwa.bookcollection.domain.repository.RemoteRepository
 import io.thomasgasangwa.bookcollection.domain.usecase.GetAllBooksUseCase
@@ -50,6 +52,8 @@ val localBookModule = module {
     single<BookingDao> { get<BookDatabase>().bookingDao() }
 
     single<LocalRepository> { LocalRepositoryImpl(get()) }
+
+    single<BookingRepository> { BookingRepositoryImpl(get()) }
 
     single<UserStateHolder> { UserStateHolderImpl() }
 
