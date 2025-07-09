@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface LocalRepository {
     fun getAllBooksStream(): Flow<Result<List<Book>>>
-
     fun getBooksWithBookingsStream(): Flow<Result<List<Book>>>
     fun getBookStream(id: Int): Flow<Result<Book>>
     fun getFavoriteBooksStream(): Flow<Result<List<Book>>>
@@ -16,13 +15,6 @@ interface LocalRepository {
     suspend fun deleteBookById(id: Int): Result<Unit>
     suspend fun updateLikes(id: Int, likes: Int): Result<Unit>
 
-
-    /*
-    BELOW 👇👇👇👇👇
-    Here you'll find all the available methods for handling bookings.
- */
-
-//    fun getAllBookingsStream(): Flow<Result<List<Booking>>>
 //    fun getBookingsByUserIdStream(userId: String): Flow<Result<List<Booking>>>
 //    suspend fun insertBooking(booking: Booking): Result<Unit>
 //    suspend fun deleteBookingById(id: Int): Result<Unit>
