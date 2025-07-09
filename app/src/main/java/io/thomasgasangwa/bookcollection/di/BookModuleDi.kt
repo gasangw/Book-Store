@@ -24,6 +24,7 @@ import io.thomasgasangwa.bookcollection.presentation.auth.sign_in.SignInViewMode
 import io.thomasgasangwa.bookcollection.presentation.auth.sign_up.SignUpViewModel
 import io.thomasgasangwa.bookcollection.presentation.book_details.BookDetailsViewModel
 import io.thomasgasangwa.bookcollection.presentation.book_list.BookListViewModel
+import io.thomasgasangwa.bookcollection.presentation.bookings.list_bookings.BookingViewModel
 import io.thomasgasangwa.bookcollection.presentation.favorites.FavoriteViewModel
 import io.thomasgasangwa.bookcollection.presentation.update_book.UpdateBookViewModel
 import org.koin.android.ext.koin.androidContext
@@ -64,4 +65,5 @@ val localBookModule = module {
     viewModel { (book: Book) -> UpdateBookViewModel(book, get()) }
     viewModel { SignInViewModel(get(), get()) }
     viewModel { SignUpViewModel(get()) }
+    viewModel { (userId: String) -> BookingViewModel(get(), userId) }
 }

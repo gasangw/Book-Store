@@ -2,6 +2,7 @@ package io.thomasgasangwa.bookcollection.presentation.bookings.list_bookings
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import io.thomasgasangwa.bookcollection.common.Result
 import io.thomasgasangwa.bookcollection.domain.model.Booking
 import io.thomasgasangwa.bookcollection.domain.repository.BookingRepository
 import io.thomasgasangwa.bookcollection.presentation.bookings.BookingStatus
@@ -12,11 +13,47 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class BookingViewModel(
-    private val bookingRepository: BookingRepository
+    private val bookingRepository: BookingRepository,
+    private val userId: String
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(BookingUiState())
     val state: StateFlow<BookingUiState> = _state.asStateFlow()
+
+    init {
+        getBookingsByUserID()
+    }
+
+    fun getBookingsByUserID() {
+        try {
+            _state.update { it.copy(isLoading = true) }
+            viewModelScope.launch {
+                bookingRepository.getBookingsByUserId(userId).collect { result ->
+                    when (result) {
+                        is Result.Success -> {
+                            _state.update {
+                                it.copy(
+                                    usersBookings = result.value,
+                                    isLoading = false
+                                )
+                            }
+                        }
+
+                        is Result.Failure -> {
+                            _state.update {
+                                it.copy(
+                                    errorMessage = result.exception.message,
+                                    isLoading = false
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            _state.update { it.copy(errorMessage = e.message) }
+        }
+    }
 
 
     fun insertBooking(booking: Booking) {
