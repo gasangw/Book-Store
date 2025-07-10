@@ -1,6 +1,7 @@
 package io.thomasgasangwa.bookcollection.domain.repository
 
 import io.thomasgasangwa.bookcollection.common.Result
+import io.thomasgasangwa.bookcollection.domain.model.BookWithBooking
 import io.thomasgasangwa.bookcollection.domain.model.Booking
 import io.thomasgasangwa.bookcollection.presentation.bookings.BookingStatus
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +17,7 @@ interface BookingRepository {
         status: BookingStatus
     ): Result<Unit>
 
-    fun getBookingsByUserId(userId: String): Flow<Result<List<Booking>>>
+    fun getBooksWithUserBookings(userId: String): Flow<Result<List<BookWithBooking>>>
 
     suspend fun deleteBookingById(bookingId: Int): Result<Unit>
 

@@ -173,19 +173,21 @@ fun BookDetailsContent(
                     verticalAlignment = Alignment.Bottom
 
                 ) {
-                    if (isBooked && currentUserInfo.user?.email?.isEmpty() == true) {
-                        Text(
-                            text = "This book has been borrowed and will be returned on 2023-01-01",
-                            style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.error,
-                            textAlign = TextAlign.Center
-                        )
-                    } else {
-                        Button(
-                            onClick = { onShowDialogChange(!showDialog) },
-                            modifier = modifier
-                        ) {
-                            Text(text = "Borrow Now")
+                    if (currentUserInfo.user?.email?.isEmpty() == true) {
+                        if (isBooked) {
+                            Text(
+                                text = "This book has been borrowed and will be returned on 2023-01-01",
+                                style = MaterialTheme.typography.labelMedium,
+                                color = MaterialTheme.colorScheme.error,
+                                textAlign = TextAlign.Center
+                            )
+                        } else {
+                            Button(
+                                onClick = { onShowDialogChange(!showDialog) },
+                                modifier = modifier
+                            ) {
+                                Text(text = "Borrow Now")
+                            }
                         }
                     }
                 }

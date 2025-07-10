@@ -25,6 +25,9 @@ interface BookDao {
 //    @Query("""SELECT * FROM books WHERE id NOT IN (SELECT bookId FROM bookings WHERE status IS NULL)""")
 //    fun getAvailableBooks(): Flow<List<BookEntity>>
 
+    @Query("""SELECT * FROM books WHERE id IN (SELECT bookId FROM bookings WHERE userId =:userId)""")
+    fun getUserBookingBooks(userId: String): Flow<List<BookEntity>>
+
     @Transaction
     @Query("""SELECT * FROM books WHERE id IN (SELECT bookId FROM bookings WHERE status IS NOT NULL AND status = 'PENDING')""")
     fun getBooksWithBookings(): Flow<List<BookEntity>>

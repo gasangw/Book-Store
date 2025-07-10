@@ -3,8 +3,9 @@ package io.thomasgasangwa.bookcollection.data.repository
 import io.thomasgasangwa.bookcollection.common.RepositoryException
 import io.thomasgasangwa.bookcollection.common.Result
 import io.thomasgasangwa.bookcollection.data.local.dao.BookingDao
+import io.thomasgasangwa.bookcollection.data.local.mapper.toBookWithBookingList
 import io.thomasgasangwa.bookcollection.data.local.mapper.toBookingEntity
-import io.thomasgasangwa.bookcollection.data.local.mapper.toBookingList
+import io.thomasgasangwa.bookcollection.domain.model.BookWithBooking
 import io.thomasgasangwa.bookcollection.domain.model.Booking
 import io.thomasgasangwa.bookcollection.domain.repository.BookingRepository
 import io.thomasgasangwa.bookcollection.presentation.bookings.BookingStatus
@@ -45,9 +46,9 @@ class BookingRepositoryImpl(
         Result.Failure(RepositoryException.DatabaseException("Failed to update a booking", e))
     }
 
-    override fun getBookingsByUserId(userId: String): Flow<Result<List<Booking>>> =
-        bookingDao.getBookingsByUserId(userId).map { it ->
-            Result.Success(it.toBookingList())
+    override fun getBooksWithUserBookings(userId: String): Flow<Result<List<BookWithBooking>>> =
+        bookingDao.getBooksWithUserBookings(userId).map { it ->
+            Result.Success(it.toBookWithBookingList())
         }.catch { cause ->
             Result.Failure(RepositoryException.DatabaseException("failed to fetch bookings", cause))
         }

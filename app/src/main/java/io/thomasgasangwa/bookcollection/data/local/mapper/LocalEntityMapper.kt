@@ -3,6 +3,8 @@ package io.thomasgasangwa.bookcollection.data.local.mapper
 import io.thomasgasangwa.bookcollection.data.local.entity.BookEntity
 import io.thomasgasangwa.bookcollection.data.local.entity.BookingEntity
 import io.thomasgasangwa.bookcollection.domain.model.Book
+import io.thomasgasangwa.bookcollection.domain.model.BookWithBooking
+import io.thomasgasangwa.bookcollection.domain.model.BookWithBookings
 import io.thomasgasangwa.bookcollection.domain.model.Booking
 
 fun BookEntity.toBook() = Book(
@@ -29,7 +31,6 @@ fun Book.toBookEntity() = BookEntity(
     isFavorite = isFavorite
 )
 
-
 fun BookingEntity.toBooking() = Booking(
     bookingId = bookingId,
     bookId = bookId,
@@ -47,3 +48,10 @@ fun Booking.toBookingEntity() = BookingEntity(
     startDate = startDate,
     endDate = endDate
 )
+
+fun BookWithBookings.toBookWithBooking() = BookWithBooking(
+    book = book.toBook(),
+    bookings = bookings.toBookingList()
+)
+
+fun List<BookWithBookings>.toBookWithBookingList() = map { it.toBookWithBooking() }

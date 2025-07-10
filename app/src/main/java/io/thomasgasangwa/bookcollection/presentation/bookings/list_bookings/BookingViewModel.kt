@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 class BookingViewModel(
     private val bookingRepository: BookingRepository,
@@ -28,12 +29,13 @@ class BookingViewModel(
         try {
             _state.update { it.copy(isLoading = true) }
             viewModelScope.launch {
-                bookingRepository.getBookingsByUserId(userId).collect { result ->
+                bookingRepository.getBooksWithUserBookings(userId).collect { result ->
                     when (result) {
                         is Result.Success -> {
                             _state.update {
+                                Timber.e("results ${result.value}")
                                 it.copy(
-                                    usersBookings = result.value,
+                                    usersBookings = result.value.flatMap { it.bookings },
                                     isLoading = false
                                 )
                             }

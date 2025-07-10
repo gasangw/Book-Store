@@ -94,6 +94,14 @@ fun SigInComponents(
             color = MaterialTheme.colorScheme.tertiary
         )
         TextButton(onClick = { onSignUpButtonClick() }) {
+            if (signInUiState.isLoading) {
+                if (signInUiState.isLoading) {
+                    CircularProgressIndicator()
+                }
+            }
+            if (signInUiState.signInIsSuccessful) {
+                onSignInNavigateToHomeScreen()
+            }
             Text(
                 text = "SIGN UP",
                 style = MaterialTheme.typography.titleMedium,
@@ -102,26 +110,20 @@ fun SigInComponents(
         }
         Spacer(modifier = Modifier.height(18.dp))
 
-
-        if (signInUiState.isLoading) {
-            CircularProgressIndicator()
-        }
-        when (signInUiState) {
-            is SignInUiState -> {
-                if (signInUiState.signInIsSuccessful) {
-                    onSignInNavigateToHomeScreen()
-                }
-            }
-        }
-
         TextButton(onClick = {
             signInAnonymously()
-            onSignInNavigateToHomeScreen()
         }) {
-            Text(
-                text = "Continue without Signing In",
-                style = MaterialTheme.typography.bodyLarge
-            )
+            if (signInUiState.isLoading) {
+                CircularProgressIndicator()
+            } else {
+                Text(
+                    text = "Continue without Signing In",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
+            if (signInUiState.signInIsSuccessful) {
+                onSignInNavigateToHomeScreen()
+            }
         }
     }
 }
