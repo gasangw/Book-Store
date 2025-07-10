@@ -16,14 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CalendarDialog(
     modifier: Modifier = Modifier,
     onDismiss: () -> Unit,
-    onConfirm: () -> Unit
+    onConfirm: (startDate: Long?, endDate: Long?) -> Unit
 ) {
     BasicAlertDialog(
         modifier = modifier,
@@ -31,8 +30,8 @@ fun CalendarDialog(
     ) {
         DateRangePickerModal(
             onDismiss = onDismiss,
-            onDateRangeSelected = {
-                onConfirm()
+            onDateRangeSelected = { it ->
+                onConfirm(it.first, it.second)
             }
         )
     }
@@ -58,9 +57,6 @@ fun DateRangePickerModal(
             }
         }
     )
-
-    Timber.e("here is the start date ${dateRangePickerState.selectedStartDateMillis}")
-    Timber.e("here is the end date ${dateRangePickerState.selectedEndDateMillis}")
 
     DatePickerDialog(
         onDismissRequest = onDismiss,
@@ -107,7 +103,9 @@ private fun BorrowDialogPreview() {
     BookStoreTheme {
         CalendarDialog(
             onDismiss = {},
-            onConfirm = {}
+            onConfirm = {
+                startDate, endDate ->
+            }
         )
     }
 }

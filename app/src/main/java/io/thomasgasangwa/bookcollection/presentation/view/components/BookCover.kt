@@ -16,10 +16,14 @@ import coil3.request.ImageRequest
 import coil3.request.crossfade
 import io.thomasgasangwa.bookcollection.R
 import io.thomasgasangwa.bookcollection.presentation.book_list.components.BookStatusDisplay
-import io.thomasgasangwa.bookcollection.presentation.book_list.components.BookingStatus
+import io.thomasgasangwa.bookcollection.presentation.bookings.BookingStatus
 
 @Composable
-fun BookCover(modifier: Modifier = Modifier, bookCoverUrl: String) {
+fun BookCover(
+    modifier: Modifier = Modifier,
+    bookCoverUrl: String,
+    bookingStatus: BookingStatus?
+) {
     val context = LocalContext.current
     val imageRequest = ImageRequest.Builder(context)
         .data(bookCoverUrl)
@@ -37,7 +41,7 @@ fun BookCover(modifier: Modifier = Modifier, bookCoverUrl: String) {
             error = painterResource(R.drawable.placeholder)
         )
         BookStatusDisplay(
-            status = BookingStatus.AVAILABLE,
+            status = bookingStatus?.name ?: "available",
             modifier = Modifier
                 .align(
                     alignment = Alignment.TopEnd
@@ -52,6 +56,9 @@ fun BookCover(modifier: Modifier = Modifier, bookCoverUrl: String) {
 @Composable
 private fun BookCoverPreview() {
     BookStoreTheme {
-        BookCover(bookCoverUrl = "")
+        BookCover(
+            bookCoverUrl = "",
+            bookingStatus = BookingStatus.PENDING
+        )
     }
 }

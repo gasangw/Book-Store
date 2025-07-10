@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import io.thomasgasangwa.bookcollection.domain.model.Booking
 import io.thomasgasangwa.bookcollection.presentation.bookings.bookings
 import io.thomasgasangwa.bookcollection.presentation.bookings.list_bookings.admin_bookings.AdminsBookingScreen
 import io.thomasgasangwa.bookcollection.presentation.bookings.list_bookings.users_bookings.UsersBookingScreen
@@ -28,7 +29,7 @@ import timber.log.Timber
 
 @Composable
 fun AllBookings(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val currentUserInfo = LocalUserData.current
 
@@ -41,35 +42,35 @@ fun AllBookings(
     Timber.e("users bookings ${state.usersBookings}")
 
     if (currentUserInfo.user?.email.isNullOrBlank()) {
-         if(state.usersBookings.isEmpty()){
-             Column(
-                 modifier = modifier.fillMaxSize(),
-                 verticalArrangement = Arrangement.Center,
-                 horizontalAlignment = Alignment.CenterHorizontally
-             ){
-                 Text(
-                     text = "No Bookings Found",
-                     style = MaterialTheme.typography.bodyLarge,
-                     color = MaterialTheme.colorScheme.primary
-                 )
-             }
-         } else {
-             LazyVerticalGrid(
-                 columns = GridCells.Adaptive(minSize = 300.dp),
-                 contentPadding = PaddingValues(15.dp),
-                 verticalArrangement = Arrangement.spacedBy(15.dp),
-                 horizontalArrangement = Arrangement.spacedBy(15.dp)
-             ) {
-                 items(userBookings) { booking ->
-                     UsersBookingScreen(
-                         title = booking.title,
-                         status = booking.status,
-                         days = "4",
-                         onCancelBooking = {},
-                     )
-                 }
-             }
-         }
+        if (state.usersBookings.isEmpty()) {
+            Column(
+                modifier = modifier.fillMaxSize(),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = "No Bookings Found",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+        } else {
+            LazyVerticalGrid(
+                columns = GridCells.Adaptive(minSize = 300.dp),
+                contentPadding = PaddingValues(15.dp),
+                verticalArrangement = Arrangement.spacedBy(15.dp),
+                horizontalArrangement = Arrangement.spacedBy(15.dp)
+            ) {
+                items(userBookings) { booking ->
+                    UsersBookingScreen(
+                        title = booking.title,
+                        status = booking.status,
+                        days = "4",
+                        onCancelBooking = {},
+                    )
+                }
+            }
+        }
     } else {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 300.dp),

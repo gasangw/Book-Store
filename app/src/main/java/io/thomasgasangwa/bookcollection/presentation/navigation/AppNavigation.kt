@@ -1,5 +1,7 @@
 package io.thomasgasangwa.bookcollection.presentation.navigation
 
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -29,11 +31,13 @@ enum class AppNavigationScreens(@StringRes val title: Int) {
     EditBook(title = R.string.edit_book)
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AppNavigation(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
 ) {
+    val currentUserId = LocalUserData.current.user?.id ?: ""
     val currentUserIsLoggedIn = LocalUserData.current.isLoggedIn
 
     NavHost(
@@ -97,6 +101,7 @@ fun AppNavigation(
             val bookId = backStackEntry.arguments?.getInt("id")
             BookDetails(
                 bookId = bookId,
+                userId = currentUserId,
                 onEditBook = { book: BookParcelableData ->
                     navController.currentBackStackEntry?.savedStateHandle?.set<BookParcelableData>(
                         "book",

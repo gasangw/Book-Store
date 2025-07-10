@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.tooling.preview.Preview
 import io.thomasgasangwa.bookcollection.common.state.UserState
+import io.thomasgasangwa.bookcollection.domain.model.Booking
 import io.thomasgasangwa.bookcollection.presentation.book_list.BookListScreen
 import io.thomasgasangwa.bookcollection.presentation.bookings.list_bookings.AllBookings
 import io.thomasgasangwa.bookcollection.presentation.favorites.Favorites
@@ -102,7 +103,8 @@ private fun TabsDisplay(
                 }
 
                 2 -> {
-                    AllBookings()
+                    AllBookings(
+                    )
                 }
             }
         } else {

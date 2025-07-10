@@ -36,7 +36,8 @@ fun BookingEntity.toBooking() = Booking(
     bookId = bookId,
     userId = userId,
     startDate = startDate,
-    endDate = endDate
+    endDate = endDate,
+    status = status
 )
 
 fun List<BookingEntity>.toBookingList() = map { it.toBooking() }
@@ -46,7 +47,8 @@ fun Booking.toBookingEntity() = BookingEntity(
     bookId = bookId,
     userId = userId,
     startDate = startDate,
-    endDate = endDate
+    endDate = endDate,
+    status = status
 )
 
 fun BookWithBookings.toBookWithBooking() = BookWithBooking(

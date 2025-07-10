@@ -27,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import io.thomasgasangwa.bookcollection.R
 import io.thomasgasangwa.bookcollection.domain.model.Book
 import io.thomasgasangwa.bookcollection.presentation.view.LocalUserData
@@ -49,17 +50,18 @@ fun BookCard(
     var isLiked: Boolean by rememberSaveable { mutableStateOf(false) }
     val currentUserInfo = LocalUserData.current
 
+
     Card(
         modifier = modifier,
         shape = MaterialTheme.shapes.large,
         onClick = { onBookClicked(id) }
     ) {
-        BookCover(
-            modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(ratio = 2f),
-            bookCoverUrl = bookCoverUrl
-        )
+//        BookCover(
+//            modifier = Modifier
+//                .fillMaxWidth()
+//                .aspectRatio(ratio = 2f),
+//            bookCoverUrl = bookCoverUrl
+//        )
         Text(
             text = title,
             style = MaterialTheme.typography.headlineMedium,

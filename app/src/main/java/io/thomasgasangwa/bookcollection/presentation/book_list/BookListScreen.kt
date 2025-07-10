@@ -44,9 +44,18 @@ fun BookListScreen(
     onAddBookButtonClicked: () -> Unit,
     onBookClicked: (Int) -> Unit
 ) {
-    val bookViewModel: BookListViewModel = koinViewModel()
-    val booksState by bookViewModel.state.collectAsStateWithLifecycle()
     val currentUserInfo = LocalUserData.current
+    val bookViewModel: BookListViewModel = koinViewModel()
+
+    val booksState by bookViewModel.state.collectAsStateWithLifecycle()
+
+//    val bookingViewModel: BookingViewModel = koinViewModel(
+//        parameters = { parametersOf(currentUserInfo.user?.id) }
+//    )
+//
+//    val bookingState by bookingViewModel.state.collectAsStateWithLifecycle()
+//
+//    val bookingForThisBook = bookingState.usersBookings.find { it.bookId == bookId }
 
     BookListDisplay(
         currentUserInfo = currentUserInfo,

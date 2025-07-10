@@ -22,10 +22,10 @@ class BookingViewModel(
     val state: StateFlow<BookingUiState> = _state.asStateFlow()
 
     init {
-        getBookingsByUserID()
+        getBooksWithBookingsByUserID()
     }
 
-    fun getBookingsByUserID() {
+    fun getBooksWithBookingsByUserID() {
         try {
             _state.update { it.copy(isLoading = true) }
             viewModelScope.launch {
@@ -55,6 +55,14 @@ class BookingViewModel(
         } catch (e: Exception) {
             _state.update { it.copy(errorMessage = e.message) }
         }
+    }
+
+    fun openBookingDialog() {
+        _state.update { it.copy(bookingDialogIsOpen = true) }
+    }
+
+    fun closeBookingDialog() {
+        _state.update { it.copy(bookingDialogIsOpen = false) }
     }
 
 

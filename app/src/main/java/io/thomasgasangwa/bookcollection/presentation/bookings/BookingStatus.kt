@@ -6,11 +6,6 @@ enum class BookingStatus {
     REJECTED
 }
 
-enum class Role {
-    ADMIN,
-    USER
-}
-
 data class AdminBookings(
     val title: String,
     val userName: String,
@@ -39,6 +34,7 @@ data class UserBookings(
     val title: String,
     val status: BookingStatus,
 )
+
 val userBookings = listOf(
     UserBookings(
         title = "Boat ride on Lake Muhazi",
