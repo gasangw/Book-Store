@@ -24,7 +24,7 @@ interface BookingDao {
     @Transaction
     @Query("""SELECT * FROM books WHERE id IN (SELECT bookId FROM bookings WHERE userId =:userId) """)
     fun getBooksWithUserBookings(userId: String): Flow<List<BookWithBookings>>
-
+    
     @Query("DELETE FROM bookings WHERE bookingId = :bookingId")
     suspend fun deleteBookingById(bookingId: Int)
 }

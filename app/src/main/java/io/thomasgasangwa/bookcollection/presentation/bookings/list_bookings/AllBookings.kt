@@ -1,6 +1,8 @@
 package io.thomasgasangwa.bookcollection.presentation.bookings.list_bookings
 
 import BookStoreTheme
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -17,16 +19,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import io.thomasgasangwa.bookcollection.domain.model.Booking
+import io.thomasgasangwa.bookcollection.common.calculateDaysBetweenBookingDates
+import io.thomasgasangwa.bookcollection.domain.model.BookWithSingleBooking
 import io.thomasgasangwa.bookcollection.presentation.bookings.bookings
 import io.thomasgasangwa.bookcollection.presentation.bookings.list_bookings.admin_bookings.AdminsBookingScreen
 import io.thomasgasangwa.bookcollection.presentation.bookings.list_bookings.users_bookings.UsersBookingScreen
-import io.thomasgasangwa.bookcollection.presentation.bookings.userBookings
 import io.thomasgasangwa.bookcollection.presentation.view.LocalUserData
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
 fun AllBookings(
     modifier: Modifier = Modifier,
@@ -37,9 +39,15 @@ fun AllBookings(
         parameters = { parametersOf(currentUserInfo.user?.id) }
     )
 
-    val state by bookingViewModel.state.collectAsStateWithLifecycle()
+    val bookingState by bookingViewModel.state.collectAsStateWithLifecycle()
 
-    Timber.e("users bookings ${state.usersBookings}")
+    val flatBookings: List<BookWithSingleBooking> = bookingState.usersBookings.flatMap { bookWithBooking ->
+        bookWithBooking.bookings.map { booking ->
+            BookWithSingleBooking(book = bookWithBooking.book, booking = booking)
+        }
+    }
+
+    val state by bookingViewModel.state.collectAsStateWithLifecycle()
 
     if (currentUserInfo.user?.email.isNullOrBlank()) {
         if (state.usersBookings.isEmpty()) {
@@ -61,11 +69,17 @@ fun AllBookings(
                 verticalArrangement = Arrangement.spacedBy(15.dp),
                 horizontalArrangement = Arrangement.spacedBy(15.dp)
             ) {
-                items(userBookings) { booking ->
+                items(flatBookings) { booking ->
+                    val days = calculateDaysBetweenBookingDates(
+                        booking.booking.startDate,
+                        booking.booking.endDate
+
+                    )
                     UsersBookingScreen(
-                        title = booking.title,
-                        status = booking.status,
-                        days = "4",
+                        title = booking.book.title,
+                        status = booking.booking.status,
+                        bookCoverUrl = booking.book.cover,
+                        days = "$days",
                         onCancelBooking = {},
                     )
                 }

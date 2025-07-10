@@ -18,3 +18,8 @@ data class BookWithBooking(
     val book: Book,
     val bookings: List<Booking>
 )
+
+data class BookWithSingleBooking(
+    val book: Book,
+    val booking: Booking
+)

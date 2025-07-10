@@ -29,8 +29,9 @@ import io.thomasgasangwa.bookcollection.presentation.bookings.components.BookCov
 fun UsersBookingScreen(
     modifier: Modifier = Modifier,
     title: String,
-    status: BookingStatus,
+    status: BookingStatus?,
     days: String,
+    bookCoverUrl: String,
     onCancelBooking: () -> Unit,
 ) {
     Row(
@@ -39,7 +40,7 @@ fun UsersBookingScreen(
             .fillMaxWidth(),
     ) {
         BookCover(
-            bookCoverUrl = ""
+            bookCoverUrl = bookCoverUrl
         )
         Column(
             modifier = modifier
@@ -54,11 +55,29 @@ fun UsersBookingScreen(
                 style = MaterialTheme.typography.bodyLarge
             )
 
-            Text(
-                text = "Book needed for $days days",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.primary
-            )
+            if(status?.name == "PENDING"){
+                Text(
+                    text = "Book requested for $days days",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+
+            if(status?.name == "ACCEPTED"){
+                Text(
+                    text = "Booked for $days days",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.surfaceDim
+                )
+            }
+
+            if(status?.name == "REJECTED"){
+                Text(
+                    text = "Booking for $days days was rejected",
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = MaterialTheme.colorScheme.error
+                )
+            }
 
             Row(
                 modifier = modifier,
@@ -70,21 +89,23 @@ fun UsersBookingScreen(
                     textDecoration = TextDecoration.Underline,
                     style = MaterialTheme.typography.bodySmall
                 )
-                Text(
-                    text = status.name,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.White,
-                    modifier = Modifier
-                        .clip(MaterialTheme.shapes.medium)
-                        .background(
-                            color = when (status) {
-                                BookingStatus.PENDING -> Color.Gray
-                                BookingStatus.ACCEPTED -> Color(0xFF006400)
-                                BookingStatus.REJECTED -> Color.Red
-                            }
-                        )
-                        .padding(5.dp)
-                )
+                status?.name?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.White,
+                        modifier = Modifier
+                            .clip(MaterialTheme.shapes.medium)
+                            .background(
+                                color = when (status) {
+                                    BookingStatus.PENDING -> Color.Gray
+                                    BookingStatus.ACCEPTED -> Color(0xFF006400)
+                                    BookingStatus.REJECTED -> Color.Red
+                                }
+                            )
+                            .padding(5.dp)
+                    )
+                }
             }
             when (status) {
                 BookingStatus.PENDING -> {
@@ -115,6 +136,7 @@ private fun UsersBookingScreenPreview() {
             title = "Sharks spears reading novels continue reading my guys",
             status = BookingStatus.PENDING,
             days = "4",
+            bookCoverUrl = "",
             onCancelBooking = {}
         )
     }

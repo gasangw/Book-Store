@@ -54,7 +54,6 @@ import io.thomasgasangwa.bookcollection.presentation.view.LocalUserData
 import io.thomasgasangwa.bookcollection.presentation.view.components.BookCover
 import org.koin.androidx.compose.koinViewModel
 import org.koin.core.parameter.parametersOf
-import timber.log.Timber
 
 @RequiresApi(Build.VERSION_CODES.O)
 @Composable
@@ -82,21 +81,20 @@ fun BookDetails(
 
     val bookingState by bookingViewModel.state.collectAsStateWithLifecycle()
 
-    val isBooked = bookingState.usersBookings.any { it.bookId == bookId }
+    val isBooked = bookingState.usersBookings.any { it.book.id == bookId }
 
-    val bookingForThisBook = bookingState.usersBookings.find { it.bookId == bookId }
+    val currentBookWithBooking = bookingState.usersBookings.find { it -> it.book.id == bookId }
 
+    val currentBookingForThisBook = currentBookWithBooking?.bookings?.get(0)
 
     val booking = Booking(
         bookingId = 0,
         bookId = bookId ?: 0,
-        userId = userId ?: "",
+        userId = userId,
         startDate = selectedStartDate ?: 0,
         endDate = selectedEndDate ?: 0,
         status = BookingStatus.PENDING
     )
-
-    Timber.e("bookinng ${booking.status?.name}")
 
     BookDetailsContent(
         bookDetailState = bookDetailState,
@@ -113,7 +111,7 @@ fun BookDetails(
         onStartDateChange = { selectedStartDate = it },
         onEndDateChange = { selectedEndDate = it },
         onBookButtonClicked = { bookingViewModel.insertBooking(booking) },
-        bookingForThisBook = bookingForThisBook,
+        currentBookingForThisBook = currentBookingForThisBook,
         modifier = modifier
     )
 }
@@ -133,14 +131,17 @@ fun BookDetailsContent(
     onStartDateChange: (Long?) -> Unit,
     onEndDateChange: (Long?) -> Unit,
     onBookButtonClicked: () -> Unit,
-    bookingForThisBook: Booking?,
+    currentBookingForThisBook: Booking?,
     modifier: Modifier = Modifier,
 ) {
 
     val currentUserInfo = LocalUserData.current
 
     val dayOfBooking =
-        calculateDaysBetweenBookingDates(bookingForThisBook?.startDate, bookingForThisBook?.endDate)
+        calculateDaysBetweenBookingDates(
+            currentBookingForThisBook?.startDate,
+            currentBookingForThisBook?.endDate
+        )
 
     Column(
         modifier = modifier
@@ -188,7 +189,7 @@ fun BookDetailsContent(
                 BookCover(
                     modifier = Modifier.height(400.dp),
                     bookCoverUrl = book.cover,
-                    bookingStatus = bookingForThisBook?.status
+                    bookingStatus = currentBookingForThisBook?.status
                 )
                 Text(
                     text = book.title,
@@ -260,7 +261,8 @@ fun BookDetailsContent(
                     ConfirmBookingDialog(
                         onDismissRequest = { closeBookingDialog() },
                         onConfirmation = {
-                            onBookButtonClicked() },
+                            onBookButtonClicked()
+                        },
                         dialogTitle = "Confirm Booking",
                         dialogText = "You are booking \"${book.title}\"",
                         icon = Icons.Default.CheckCircleOutline,
@@ -319,7 +321,7 @@ private fun BookDetailsPreview() {
             onStartDateChange = {},
             onEndDateChange = {},
             onBookButtonClicked = {},
-            bookingForThisBook = booking,
+            currentBookingForThisBook = booking,
             modifier = Modifier
         )
     }

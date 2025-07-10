@@ -33,9 +33,8 @@ class BookingViewModel(
                     when (result) {
                         is Result.Success -> {
                             _state.update {
-                                Timber.e("results ${result.value}")
                                 it.copy(
-                                    usersBookings = result.value.flatMap { it.bookings },
+                                    usersBookings = result.value,
                                     isLoading = false
                                 )
                             }
