@@ -259,7 +259,8 @@ fun BookDetailsContent(
                 if (bookingState.bookingDialogIsOpen) {
                     ConfirmBookingDialog(
                         onDismissRequest = { closeBookingDialog() },
-                        onConfirmation = { onBookButtonClicked() },
+                        onConfirmation = {
+                            onBookButtonClicked() },
                         dialogTitle = "Confirm Booking",
                         dialogText = "You are booking \"${book.title}\"",
                         icon = Icons.Default.CheckCircleOutline,

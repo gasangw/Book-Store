@@ -2,6 +2,7 @@ package io.thomasgasangwa.bookcollection.presentation.borrow_dialog
 
 
 import BookStoreTheme
+import android.widget.Toast
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CheckCircleOutline
 import androidx.compose.material3.AlertDialog
@@ -12,6 +13,7 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 
@@ -24,6 +26,8 @@ fun ConfirmBookingDialog(
     dialogText: String,
     icon: ImageVector,
 ) {
+    val context = LocalContext.current
+
     AlertDialog(
         icon = {
             Icon(
@@ -51,6 +55,11 @@ fun ConfirmBookingDialog(
             TextButton(
                 onClick = {
                     onConfirmation()
+                    Toast.makeText(
+                        context, "This book is booked successfully \uD83D\uDC4F",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    onDismissRequest()
                 }
             ) {
                 Text(
